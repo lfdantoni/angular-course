@@ -1,0 +1,58 @@
+<p>
+  Interpolation:
+  <b>
+    {{title}}
+  </b>
+</p> 
+
+<p>
+  Template Expressions: 
+  <b>
+    {{ title + ' Template Expressions'}}
+  </b>
+</p>
+
+<p>
+  Template Statements: 
+  <b>
+    {{ greeting }}
+  </b>
+  <button (click)="sayHello()">Greeting</button>
+</p>
+
+<h2>Data Binding</h2>
+<p>
+  One-way data source -> view target: 
+  <br>
+  <b>
+    {{ title }}
+  </b>
+  <br>
+  <input [value]="title" />
+</p>
+<p>
+  One-way view target -> data source: 
+  <br>
+  <b>
+    {{ inputValue }}
+  </b>
+  <br>
+  <input (input)="onChange($event.target.value)" />
+</p>
+
+<p>
+  Two-way data binding: <b>[(property)]</b> "Banana in a box"
+</p>
+
+<h2>Directives</h2>
+
+<div appHighLight>Attribute directive</div>
+<br>
+
+<b>Structural directives</b>
+<br>
+<span *ngFor="let text of list">{{text + ' '}}</span><i>*ngFor</i>
+<br>
+<div *ngIf="!remove">Text to remove</div>
+<button (click)="onRemoveClick()">Remove</button>
+
