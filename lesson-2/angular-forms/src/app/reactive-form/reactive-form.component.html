@@ -4,5 +4,13 @@
   <br>
   Lastname: <input type="text" formControlName="lastName" />
   <br>
-  <button type="submit" [disabled]="!formGroup.valid">Enviar</button>
+  Email: <input type="email" formControlName="email" />
+  <br>
+
+  <button type="submit" [disabled]="!formGroup.valid">Send</button>
 </form>
+
+<div *ngIf="firstName.touched && !firstName.valid">
+  <div *ngIf="firstName.errors.required">Name is required</div>
+  <div *ngIf="firstName.errors.minlength">Name should have 4 characters minimum</div>
+</div>
