@@ -1,0 +1,10 @@
+<h2>Template-Driven Form</h2>
+
+<form #myForm="ngForm" (submit)="onSubmit(myForm.value)">
+  Name: <input type="text" ngModel name="firstName"/>
+  <br>
+  Lastname: <input type="text" ngModel name="lastName"/>
+
+  <br>
+  <button type="submit" [disabled]="!myForm.valid">Enviar</button>
+</form>
