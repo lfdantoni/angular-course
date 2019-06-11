@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { HighLightDirective } from './directives/high-light/high-light.directive';
+import { NewComponentComponent } from './new-component/new-component.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HighLightDirective
+    HighLightDirective,
+    NewComponentComponent
   ],
   imports: [
     BrowserModule
