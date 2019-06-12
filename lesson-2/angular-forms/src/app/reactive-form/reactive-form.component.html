@@ -6,6 +6,13 @@
   <br>
   Email: <input type="email" formControlName="email" />
   <br>
+  Phone Number: <input type="text" formControlName="phoneNumber" />
+  <div *ngIf="phoneNumber.touched && !phoneNumber.valid && phoneNumber.errors.phoneNumber">Invalid phone number</div>
+  <br>
+
+  Id: <input type="text" formControlName="id" />
+  <div *ngIf="id.touched && !id.valid && id.errors.idInvalid">Invalid id</div>
+  <br>
 
   <button type="submit" [disabled]="!formGroup.valid">Send</button>
 </form>
