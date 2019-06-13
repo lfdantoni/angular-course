@@ -9,6 +9,8 @@
   <br>
   Email: <input type="email" ngModel name="email" email required #email="ngModel"/>
   <span *ngIf="!email.valid && email.touched">Ingrese un nombre valido</span>
+  <br>
+  Comment: <input type="text" [(ngModel)]="myModel.comment" name="comment" required/>
 
   <br>
   <button type="submit" [disabled]="!myForm.valid">Enviar</button>

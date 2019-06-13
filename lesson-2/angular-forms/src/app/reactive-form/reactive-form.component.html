@@ -14,6 +14,10 @@
   <div *ngIf="id.touched && !id.valid && id.errors.idInvalid">Invalid id</div>
   <br>
 
+  Comment: <input type="text" formControlName="id" />
+  <div *ngIf="id.touched && !id.valid && id.errors.idInvalid">Invalid id</div>
+  <br>
+
   <button type="submit" [disabled]="!formGroup.valid">Send</button>
 </form>
 
