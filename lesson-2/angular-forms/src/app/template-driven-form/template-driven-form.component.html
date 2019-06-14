@@ -8,7 +8,8 @@
   <span *ngIf="!lastName.valid && lastName.touched">Ingrese un nombre valido</span>
   <br>
   Email: <input type="email" ngModel name="email" email required #email="ngModel"/>
-  <span *ngIf="!email.valid && email.touched">Ingrese un nombre valido</span>
+  <span *ngIf="!email.valid && email.touched && email.errors.email">Ingrese un email valido</span>
+  <span *ngIf="!email.valid && email.touched && email.errors.required">Ingrese un email</span>
   <br>
   Comment: <input type="text" [(ngModel)]="myModel.comment" name="comment" required/>
 
