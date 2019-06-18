@@ -1,0 +1,13 @@
+<div class="videos-wrapper">
+  <a class="video" 
+    *ngFor="let video of videos"
+    [href]="video.videoUrl"
+    target="blank"
+    appHighLight color="gray">
+
+    <img [src]="video.imageUrl" [alt]="video.name">
+    <div class="title">{{video.name}}</div>
+    <div class="description">{{video.description}}</div>
+    
+  </a>
+</div>
