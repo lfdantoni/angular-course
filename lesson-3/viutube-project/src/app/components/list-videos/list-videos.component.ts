@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Video from '../../models/video';
+import { VideoService } from 'src/app/services/video/video.service';
 
 @Component({
   selector: 'app-list-videos',
@@ -7,19 +8,12 @@ import Video from '../../models/video';
   styleUrls: ['./list-videos.component.css']
 })
 export class ListVideosComponent implements OnInit {
-  videos: Video[] = [
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-  ];
+  videos: Video[];
 
-  constructor() { }
+  constructor(private videoService: VideoService) {
+    // const videoService = new VideoService(); // new service instance, it is NOT the same of the load one
+    this.videos = videoService.videos;
+  }
 
   ngOnInit() {
   }

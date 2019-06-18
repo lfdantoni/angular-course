@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { VideoService } from 'src/app/services/video/video.service';
 
 @Component({
   selector: 'app-add-video-form',
@@ -11,13 +12,19 @@ export class AddVideoFormComponent implements OnInit {
 
   private urlPattern = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
   private urlImagePattern = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/;
-  constructor() {
+  
+  // private videoService: VideoService = new VideoService(); // new service instance, it is NOT the same of the list one
+  
+  constructor(private videoService: VideoService) {
     this.loadVideoFG = new FormGroup({
       'name': new FormControl('', [Validators.required, Validators.minLength(10)]),
       'description': new FormControl(''),
       'imageUrl': new FormControl('', [Validators.required, Validators.pattern(this.urlImagePattern)]),
       'videoUrl': new FormControl('', [Validators.required, Validators.pattern(this.urlPattern)])
-    })
+    });
+
+
+
   }
 
   ngOnInit() {
@@ -25,6 +32,9 @@ export class AddVideoFormComponent implements OnInit {
 
   saveVideo() {
     console.log(this.loadVideoFG.value);
+    
+    this.videoService.addVideo(this.loadVideoFG.value);
+
     this.loadVideoFG.reset();
   }
 
