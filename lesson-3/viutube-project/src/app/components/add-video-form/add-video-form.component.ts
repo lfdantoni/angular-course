@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { VideoService } from 'src/app/services/video/video.service';
+import { LoggerService } from 'src/app/services/logger/logger.service';
 
 @Component({
   selector: 'app-add-video-form',
@@ -15,7 +16,7 @@ export class AddVideoFormComponent implements OnInit {
   
   // private videoService: VideoService = new VideoService(); // new service instance, it is NOT the same of the list one
   
-  constructor(private videoService: VideoService) {
+  constructor(private videoService: VideoService, private logger: LoggerService) {
     this.loadVideoFG = new FormGroup({
       'name': new FormControl('', [Validators.required, Validators.minLength(10)]),
       'description': new FormControl(''),
@@ -23,8 +24,7 @@ export class AddVideoFormComponent implements OnInit {
       'videoUrl': new FormControl('', [Validators.required, Validators.pattern(this.urlPattern)])
     });
 
-
-
+    this.logger.log('AddVideoFormComponent created');
   }
 
   ngOnInit() {
