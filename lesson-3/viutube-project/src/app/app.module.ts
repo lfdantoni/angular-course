@@ -7,6 +7,12 @@ import { AddVideoFormComponent } from './components/add-video-form/add-video-for
 import { ListVideosComponent } from './components/list-videos/list-videos.component';
 import { HighLightDirective } from './directives/high-light/high-light.directive';
 import { LoggerService } from './services/logger/logger.service';
+import { PageProperties } from './models/PageProperties';
+
+const pageProperties: PageProperties = {
+  title: 'ViuTube',
+  description: 'Online Videos'
+}
 
 @NgModule({
   declarations: [
@@ -20,7 +26,8 @@ import { LoggerService } from './services/logger/logger.service';
     ReactiveFormsModule
   ],
   providers: [
-    LoggerService // It is the same "provideIn: 'root'"
+    LoggerService, // It is the same "provideIn: 'root'"
+    {provide: PageProperties, useValue: pageProperties} // set a page properties object as PageProperties class dependency
   ],
   bootstrap: [AppComponent]
 })
