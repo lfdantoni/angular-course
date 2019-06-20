@@ -5,8 +5,6 @@ import { LoggerService } from 'src/app/services/logger/logger.service';
 import { PageProperties } from 'src/app/models/PageProperties';
 import { TITLE } from 'src/app/services/injection-tokens';
 import { OptionalService } from 'src/app/services/optional/optional.service';
-import { pipe } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 // import { HttpClient } from '@angular/common/http'; // it should be in the service
 
@@ -22,6 +20,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ListVideosComponent implements OnInit {
   videos: Video[];
   isLoading = false;
+  messageError: string;
 
   constructor(private videoService: VideoService, 
               private logger: LoggerService,
@@ -70,6 +69,8 @@ export class ListVideosComponent implements OnInit {
 
   private handleError(error: HttpErrorResponse) {
     console.error(error);
+    this.messageError = `Status code: ${error.status} - message: ${error.message}`;
+    this.isLoading = false;
   }
 
 }
