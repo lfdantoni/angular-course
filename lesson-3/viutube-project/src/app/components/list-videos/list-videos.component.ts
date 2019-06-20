@@ -5,6 +5,7 @@ import { LoggerService } from 'src/app/services/logger/logger.service';
 import { PageProperties } from 'src/app/models/PageProperties';
 import { TITLE } from 'src/app/services/injection-tokens';
 import { OptionalService } from 'src/app/services/optional/optional.service';
+// import { HttpClient } from '@angular/common/http'; // it should be in the service
 
 @Component({
   selector: 'app-list-videos',
@@ -17,18 +18,23 @@ import { OptionalService } from 'src/app/services/optional/optional.service';
 })
 export class ListVideosComponent implements OnInit {
   videos: Video[];
+  isLoading = false;
 
   constructor(private videoService: VideoService, 
               private logger: LoggerService,
               private pageProperties: PageProperties,
               @Inject(TITLE) title: string,
-              @Optional() private optionalService: OptionalService) {
+              @Optional() private optionalService: OptionalService,
+              // private http: HttpClient
+  ) {
     // const videoService = new VideoService(); // new service instance, it is NOT the same of the load one
-    this.videos = videoService.videos;
-    this.logger.log({
-      description: 'ListVideosComponent constructor',
-      data: videoService.videos
-    })
+    
+    // we need to wait till get them from the http response
+    // this.videos = videoService.videos;
+    // this.logger.log({
+    //   description: 'ListVideosComponent constructor',
+    //   data: videoService.videos
+    // })
 
     console.log('ListVideosComponent constructor -> pageProperties: ', this.pageProperties);
     console.log('ListVideosComponent constructor -> TITLE: ', title);
@@ -38,6 +44,21 @@ export class ListVideosComponent implements OnInit {
     } else {
       console.log('Optional Service has not been initializing');
     }
+
+    // we shouldn't do that because we can't reuse it in other components
+    // this.http.get('http://demo7376228.mockable.io/api/videos')
+    //   .subscribe(data => {
+    //     console.log('Videos from http: ', data);
+    //   });
+
+
+    // getting videos from a http call
+    this.isLoading = true;
+    this.videoService.getVideos()
+      .subscribe(videos => {
+        this.isLoading = false;
+        this.videos = videos;
+      })
   }
 
   ngOnInit() {

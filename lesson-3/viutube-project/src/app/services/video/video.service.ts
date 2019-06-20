@@ -1,25 +1,21 @@
 import { Injectable } from '@angular/core';
 import Video from '../../models/video';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VideoService {
-  videos: Video[] = [
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-    { name: 'Test video 1', imageUrl: 'https://i.ytimg.com/vi/FiVw6zjgw24/hqdefault.jpg', videoUrl: 'https://www.youtube.com/watch?v=FiVw6zjgw24', description: 'Test Description'},
-  ];
+  private baseUrl = 'http://demo7376228.mockable.io/api';
   
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   addVideo(video: Video) {
-    this.videos.push(video);
+    // this.videos.push(video);
+  }
+
+  getVideos(): Observable<Video[]> {
+    return this.http.get<Video[]>(`${this.baseUrl}/videos`);
   }
 }
