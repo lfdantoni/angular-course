@@ -5,6 +5,9 @@ import { LoggerService } from 'src/app/services/logger/logger.service';
 import { PageProperties } from 'src/app/models/PageProperties';
 import { TITLE } from 'src/app/services/injection-tokens';
 import { OptionalService } from 'src/app/services/optional/optional.service';
+import { pipe } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 // import { HttpClient } from '@angular/common/http'; // it should be in the service
 
 @Component({
@@ -58,10 +61,15 @@ export class ListVideosComponent implements OnInit {
       .subscribe(videos => {
         this.isLoading = false;
         this.videos = videos;
-      })
+      },
+      error => this.handleError(error))
   }
 
   ngOnInit() {
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    console.error(error);
   }
 
 }

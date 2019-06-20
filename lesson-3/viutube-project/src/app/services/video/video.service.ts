@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import Video from '../../models/video';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
