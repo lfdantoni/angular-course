@@ -8,7 +8,8 @@ import { TITLE } from 'src/app/services/injection-tokens';
 @Component({
   selector: 'app-list-videos',
   templateUrl: './list-videos.component.html',
-  styleUrls: ['./list-videos.component.css']
+  styleUrls: ['./list-videos.component.css'],
+  providers: [{provide: TITLE, useValue: 'Change'}]
 })
 export class ListVideosComponent implements OnInit {
   videos: Video[];
