@@ -35,9 +35,27 @@ export class AddVideoFormComponent implements OnInit {
   saveVideo() {
     console.log(this.loadVideoFG.value);
     
-    this.videoService.addVideo(this.loadVideoFG.value);
+    this.videoService.addVideo(this.loadVideoFG.value)
+      .subscribe(data => {
+        console.log(data);
+        this.loadVideoFG.reset();
+      });
+  }
 
-    this.loadVideoFG.reset();
+  updateVideo() {
+    this.videoService.updateVideo(this.loadVideoFG.value)
+      .subscribe(data => {
+        console.log(data);
+        this.loadVideoFG.reset();
+      });
+  }
+
+  deleteVideo() {
+    this.videoService.removeVideo(this.name.value)
+    .subscribe(data => {
+      console.log(data);
+      this.loadVideoFG.reset();
+    });
   }
 
   get imageUrl(): AbstractControl {
