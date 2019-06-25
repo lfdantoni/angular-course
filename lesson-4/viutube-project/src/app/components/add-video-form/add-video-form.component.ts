@@ -11,13 +11,12 @@ import { DateLoggerService } from 'src/app/services/date-logger/date-logger.serv
   providers: [{provide: LoggerService, useClass: DateLoggerService}]
 })
 export class AddVideoFormComponent implements OnInit {
+  videoId: string;
   loadVideoFG: FormGroup;
 
   private urlPattern = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
   private urlImagePattern = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/;
-  
-  // private videoService: VideoService = new VideoService(); // new service instance, it is NOT the same of the list one
-  
+
   constructor(private videoService: VideoService, private logger: LoggerService) {
     this.loadVideoFG = new FormGroup({
       'name': new FormControl('', [Validators.required, Validators.minLength(10)]),

@@ -11,6 +11,15 @@
     max-width: 200px;
     margin-right: 10px;
     margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.video .actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 12px;
 }
 
 .video img {
@@ -26,4 +35,5 @@
 
 .video .title {
     font-weight: 600;
+    margin-bottom: 10px;
 }

@@ -1,5 +1,7 @@
 <h2>Load Video</h2>
 <form [formGroup]="loadVideoFG">
+  Video Id: {{videoId}}
+  <br>
   Name: <input type="text" class="input" formControlName="name">
   <span *ngIf="name.touched && name.invalid">Name is invalid</span>
   <br>
@@ -13,7 +15,7 @@
   <br>
   <button (click)="saveVideo()" [disabled]="loadVideoFG.invalid">Save Video</button>
   <br>
-  <button (click)="updateVideo()" [disabled]="loadVideoFG.invalid">Update Video</button>
+  <button (click)="updateVideo()" [disabled]="loadVideoFG.invalid || !videoId">Update Video</button>
   <br>
-  <button (click)="deleteVideo()" [disabled]="name.invalid">Delete Video</button>
+  <button (click)="deleteVideo()" [disabled]="!videoId">Delete Video</button>
 </form>
