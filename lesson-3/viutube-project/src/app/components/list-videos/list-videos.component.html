@@ -1,4 +1,4 @@
-<div class="videos-wrapper">
+<div class="videos-wrapper" *ngIf="!isLoading">
   <a class="video" 
     *ngFor="let video of videos"
     [href]="video.videoUrl"
@@ -10,4 +10,12 @@
     <div class="description">{{video.description}}</div>
     
   </a>
+</div>
+
+<div *ngIf="isLoading">
+  LOADING...
+</div>
+
+<div *ngIf="messageError">
+  {{messageError}}
 </div>

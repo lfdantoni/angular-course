@@ -12,4 +12,8 @@
   Description: <textarea class="input" formControlName="description"></textarea>
   <br>
   <button (click)="saveVideo()" [disabled]="loadVideoFG.invalid">Save Video</button>
+  <br>
+  <button (click)="updateVideo()" [disabled]="loadVideoFG.invalid">Update Video</button>
+  <br>
+  <button (click)="deleteVideo()" [disabled]="name.invalid">Delete Video</button>
 </form>
