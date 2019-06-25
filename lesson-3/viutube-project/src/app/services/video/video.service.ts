@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import Video from '../../models/video';
 import { HttpClient, HttpHeaders, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VideoService {
-  private baseUrl = 'http://demo7376228.mockable.io/api';
+  private baseUrl = environment.apiUrl;
   private httpOptions: any;
   
   constructor(private http: HttpClient) { 
@@ -20,7 +20,7 @@ export class VideoService {
   }
 
   addVideo(video: Video): Observable<HttpEvent<Video>> {
-    return this.http.post<Video>(`${this.baseUrl}/video`, video, this.httpOptions);
+    return this.http.post<Video>(`${this.baseUrl}/videos`, video, this.httpOptions);
   }
 
   getVideos(): Observable<Video[]> {
@@ -28,10 +28,10 @@ export class VideoService {
   }
 
   removeVideo(videoId: string): Observable<{}> {
-    return this.http.delete(`${this.baseUrl}/video/${videoId}`, this.httpOptions);
+    return this.http.delete(`${this.baseUrl}/videos/${videoId}`, this.httpOptions);
   }
 
   updateVideo(video: Video): Observable<HttpEvent<Video>> {
-    return this.http.put<Video>(`${this.baseUrl}/video`, video, this.httpOptions);
+    return this.http.put<Video>(`${this.baseUrl}/videos`, video, this.httpOptions);
   }
 }
