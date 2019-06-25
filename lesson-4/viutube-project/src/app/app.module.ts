@@ -8,13 +8,6 @@ import { AddVideoFormComponent } from './components/add-video-form/add-video-for
 import { ListVideosComponent } from './components/list-videos/list-videos.component';
 import { HighLightDirective } from './directives/high-light/high-light.directive';
 import { LoggerService } from './services/logger/logger.service';
-import { PageProperties } from './models/PageProperties';
-import { TITLE } from './services/injection-tokens';
-
-const pageProperties: PageProperties = {
-  title: 'ViuTube',
-  description: 'Online Videos'
-}
 
 @NgModule({
   declarations: [
@@ -29,9 +22,7 @@ const pageProperties: PageProperties = {
     HttpClientModule
   ],
   providers: [
-    LoggerService, // It is the same "provideIn: 'root'"
-    {provide: PageProperties, useValue: pageProperties}, // set a page properties object as PageProperties class dependency
-    {provide: TITLE, useValue: 'ViuTube'} // set a page title as constant dependency with TITLE as the token injection key
+    LoggerService
   ],
   bootstrap: [AppComponent]
 })
