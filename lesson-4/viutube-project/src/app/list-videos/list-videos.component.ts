@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import Video from '../../models/video';
-import { VideoService } from 'src/app/services/video/video.service';
-import { LoggerService } from 'src/app/services/logger/logger.service';
+import Video from '../shared/models/video';
+import { VideoService } from 'src/app/shared/services/video/video.service';
+import { LoggerService } from 'src/app/shared/services/logger/logger.service';
 import { HttpErrorResponse } from '@angular/common/http';
 // import { HttpClient } from '@angular/common/http'; // it should be in the service
 
