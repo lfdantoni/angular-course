@@ -2,5 +2,6 @@
 <button (click)="listVideos()">List Videos</button>
 <button (click)="loadVideo()">Load Video</button>
 
-<app-add-video-form *ngIf="showLoadVideo"></app-add-video-form>
-<app-list-videos *ngIf="showListVideos"></app-list-videos>
+<router-outlet></router-outlet>
+<!-- <app-add-video-form *ngIf="showLoadVideo"></app-add-video-form>
+<app-list-videos *ngIf="showListVideos"></app-list-videos> -->
