@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/fo
 import { VideoService } from 'src/app/shared/services/video/video.service';
 import { LoggerService } from 'src/app/shared/services/logger/logger.service';
 import { DateLoggerService } from 'src/app/shared/services/date-logger/date-logger.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-modify-video-form',
@@ -17,7 +18,8 @@ export class ModifyVideoFormComponent implements OnInit {
   private urlPattern = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
   private urlImagePattern = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/;
 
-  constructor(private videoService: VideoService, private logger: LoggerService) {
+  constructor(private videoService: VideoService, private logger: LoggerService,
+              private route: ActivatedRoute) {
     this.loadVideoFG = new FormGroup({
       'name': new FormControl('', [Validators.required, Validators.minLength(10)]),
       'description': new FormControl(''),
@@ -26,6 +28,8 @@ export class ModifyVideoFormComponent implements OnInit {
     });
 
     this.logger.log('AddVideoFormComponent created');
+
+    this.videoId = this.route.snapshot.params['id'];
   }
 
   ngOnInit() {

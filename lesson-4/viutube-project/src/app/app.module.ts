@@ -13,8 +13,10 @@ import { LoggerService } from './shared/services/logger/logger.service';
 
 
 const routes: Routes = [
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: 'home', component: ListVideosComponent}
+  {path: '', redirectTo: 'list', pathMatch: 'full'},
+  {path: 'list', component: ListVideosComponent},
+  {path: 'add', component: ModifyVideoFormComponent},
+  {path: 'modify/:id', component: ModifyVideoFormComponent}
 ]
 
 
