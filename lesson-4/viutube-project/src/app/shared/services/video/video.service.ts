@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import Video from '../../models/video';
 import { HttpClient, HttpHeaders, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {environment} from '../../../environments/environment';
+import {environment} from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

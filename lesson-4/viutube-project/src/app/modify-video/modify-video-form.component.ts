@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { VideoService } from 'src/app/services/video/video.service';
-import { LoggerService } from 'src/app/services/logger/logger.service';
-import { DateLoggerService } from 'src/app/services/date-logger/date-logger.service';
+import { VideoService } from 'src/app/shared/services/video/video.service';
+import { LoggerService } from 'src/app/shared/services/logger/logger.service';
+import { DateLoggerService } from 'src/app/shared/services/date-logger/date-logger.service';
 
 @Component({
-  selector: 'app-add-video-form',
-  templateUrl: './add-video-form.component.html',
-  styleUrls: ['./add-video-form.component.css'],
+  selector: 'app-modify-video-form',
+  templateUrl: './modify-video-form.component.html',
+  styleUrls: ['./modify-video-form.component.css'],
   providers: [{provide: LoggerService, useClass: DateLoggerService}]
 })
-export class AddVideoFormComponent implements OnInit {
+export class ModifyVideoFormComponent implements OnInit {
   videoId: string;
   loadVideoFG: FormGroup;
 

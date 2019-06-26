@@ -6,10 +6,10 @@ import { HttpClientModule } from '@angular/common/http';
 import {Routes, RouterModule} from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { AddVideoFormComponent } from './components/add-video-form/add-video-form.component';
-import { ListVideosComponent } from './components/list-videos/list-videos.component';
-import { HighLightDirective } from './directives/high-light/high-light.directive';
-import { LoggerService } from './services/logger/logger.service';
+import { ModifyVideoFormComponent } from './modify-video/modify-video-form.component';
+import { ListVideosComponent } from './list-videos/list-videos.component';
+import { HighLightDirective } from './shared/directives/high-light/high-light.directive';
+import { LoggerService } from './shared/services/logger/logger.service';
 
 
 const routes: Routes = [
@@ -21,7 +21,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    AddVideoFormComponent,
+    ModifyVideoFormComponent,
     ListVideosComponent,
     HighLightDirective
   ],
