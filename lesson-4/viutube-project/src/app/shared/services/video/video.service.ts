@@ -4,9 +4,7 @@ import { HttpClient, HttpHeaders, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {environment} from '../../../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class VideoService {
   private baseUrl = environment.apiUrl;
   private httpOptions: any;

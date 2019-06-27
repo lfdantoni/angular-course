@@ -4,12 +4,14 @@ import { ListVideosComponent } from './list-videos/list-videos.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ManageVideosRoutingModule } from './manage-videos-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        ManageVideosRoutingModule
+        ManageVideosRoutingModule,
+        SharedModule
     ],
     declarations: [
         ModifyVideoFormComponent,
