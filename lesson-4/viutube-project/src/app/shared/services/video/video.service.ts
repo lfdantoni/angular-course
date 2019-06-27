@@ -21,6 +21,10 @@ export class VideoService {
     return this.http.post<Video>(`${this.baseUrl}/videos`, video, this.httpOptions);
   }
 
+  getVideoById(videoId: string): Observable<Video> {
+    return this.http.get<Video>(`${this.baseUrl}/videos/${videoId}`);
+  }
+
   getVideos(): Observable<Video[]> {
     return this.http.get<Video[]>(`${this.baseUrl}/videos`);
   }
