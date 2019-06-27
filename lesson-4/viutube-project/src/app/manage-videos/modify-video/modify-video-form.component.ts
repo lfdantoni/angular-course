@@ -29,7 +29,9 @@ export class ModifyVideoFormComponent implements OnInit {
 
     this.logger.log('AddVideoFormComponent created');
 
-    this.videoId = this.route.snapshot.params['id'];
+    this.route.params.subscribe((params) => {
+      this.videoId = params['id'];
+    });
   }
 
   ngOnInit() {

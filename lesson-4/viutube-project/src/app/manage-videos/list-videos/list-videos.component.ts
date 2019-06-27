@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import Video from '../shared/models/video';
+import Video from '../../shared/models/video';
 import { VideoService } from 'src/app/shared/services/video/video.service';
 import { LoggerService } from 'src/app/shared/services/logger/logger.service';
 import { HttpErrorResponse } from '@angular/common/http';
