@@ -22,7 +22,6 @@ const routes: Routes = [
     BrowserModule,
     HttpClientModule,
     ManageVideosModule,
-    SharedModule,
     RouterModule.forRoot(routes)
   ],
   bootstrap: [AppComponent]
