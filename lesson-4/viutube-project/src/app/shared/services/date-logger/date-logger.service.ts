@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LoggerService } from '../logger/logger.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DateLoggerService extends LoggerService {
 
   constructor() { 

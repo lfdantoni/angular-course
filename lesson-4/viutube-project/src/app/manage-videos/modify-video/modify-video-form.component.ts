@@ -3,6 +3,9 @@ import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/fo
 import { VideoService } from 'src/app/shared/services/video/video.service';
 import { LoggerService } from 'src/app/shared/services/logger/logger.service';
 import { DateLoggerService } from 'src/app/shared/services/date-logger/date-logger.service';
+import { ActivatedRoute } from '@angular/router';
+import { pipe } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-modify-video-form',
@@ -17,7 +20,8 @@ export class ModifyVideoFormComponent implements OnInit {
   private urlPattern = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
   private urlImagePattern = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/;
 
-  constructor(private videoService: VideoService, private logger: LoggerService) {
+  constructor(private videoService: VideoService, private logger: LoggerService,
+              private route: ActivatedRoute) {
     this.loadVideoFG = new FormGroup({
       'name': new FormControl('', [Validators.required, Validators.minLength(10)]),
       'description': new FormControl(''),
@@ -26,6 +30,26 @@ export class ModifyVideoFormComponent implements OnInit {
     });
 
     this.logger.log('AddVideoFormComponent created');
+
+    this.route.params.subscribe((params) => {
+      this.videoId = params['id'];
+
+      if(this.videoId) {
+        this.videoService.getVideoById(this.videoId)
+        .pipe(first())
+        .subscribe(video => {
+
+          // I can't set the video object directly because of it has the _id property and 
+          // the form doesn't have this one
+          this.loadVideoFG.setValue({
+            name: video.name,
+            description: video.description,
+            imageUrl: video.imageUrl,
+            videoUrl: video.videoUrl
+          }); // load video to the form
+        })
+      }
+    });
   }
 
   ngOnInit() {
