@@ -1,3 +1,9 @@
+# angular-course
+Angular Course
+
+# Slides
+https://docs.google.com/presentation/d/18NkTkDc2mKRa5yNrP_ad6vN1QCYTOJftvc00pwVowgQ/edit?usp=sharing
+
 # ViutubeProject
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.1.
