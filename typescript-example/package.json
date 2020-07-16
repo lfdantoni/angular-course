@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc main.ts --outDir dist --target es5 --module commonjs"
+    "start": "tsc main.ts --outDir dist --target es5"
   },
   "keywords": [],
   "author": "",
