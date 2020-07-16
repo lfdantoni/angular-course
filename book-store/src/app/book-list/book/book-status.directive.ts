@@ -6,7 +6,6 @@ import { Directive, Input, ElementRef } from '@angular/core';
 export class BookStatusDirective {
   @Input()
   set stock(value: number) {
-    console.log(value)
     if (value < 5) {
       this.el.nativeElement.classList.add('low-stock');
     } else if (value < 10) {
