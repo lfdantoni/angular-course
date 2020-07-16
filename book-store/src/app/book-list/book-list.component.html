@@ -1,0 +1,16 @@
+<div class="wrapper">
+  <app-book *ngFor="let book of books"
+    [coverImage]="book.cover"
+    [title]="book.title"
+    [author]="book.author"
+    [id]="book.id"
+    [stock]="book.stock">
+  </app-book>
+
+  <!-- <app-book></app-book>
+  <app-book></app-book>
+  <app-book></app-book>
+  <app-book></app-book>
+  <app-book></app-book> -->
+</div>
+
