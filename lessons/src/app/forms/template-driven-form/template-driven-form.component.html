@@ -1,0 +1,18 @@
+<h2>Template-Driven Form</h2>
+
+<form #myForm="ngForm" (submit)="onSubmit(myForm.value)">
+  Name: <input type="text" ngModel name="firstName" required #firstName="ngModel"/>
+  <span *ngIf="!firstName.valid && firstName.touched">Name invalid</span>
+  <br>
+  Last Name: <input type="text" ngModel name="lastName" required #lastName="ngModel"/>
+  <span *ngIf="!lastName.valid && lastName.touched">Last Name invalid</span>
+  <br>
+  Email: <input type="email" ngModel name="email" email required #email="ngModel"/>
+  <span *ngIf="!email.valid && email.touched && email.errors.email">Email Invalid</span>
+  <span *ngIf="!email.valid && email.touched && email.errors.required">Email is empty</span>
+  <br>
+  Comment: <input type="text" [(ngModel)]="myModel.comment" name="comment" required/>
+
+  <br>
+  <button type="submit" [disabled]="!myForm.valid">Send</button>
+</form>
