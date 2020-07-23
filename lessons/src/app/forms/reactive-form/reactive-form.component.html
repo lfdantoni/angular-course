@@ -23,7 +23,6 @@
   <br>
 
   Comment: <input type="text" formControlName="comment" />
-  <div *ngIf="id.touched && !id.valid && id.errors.idInvalid">Invalid id</div>
   <br>
 
   <button type="submit" [disabled]="!formGroup.valid">Send</button>
