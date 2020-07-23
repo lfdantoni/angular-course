@@ -1,7 +1,7 @@
 <div class="wrapper" appBookStatus [stock]="stock">
   <div class="cover" [style.backgroundImage]="bgImageUrl">
     <div class="actions">
-      <span class="material-icons" (click)="onAddCart()">add_shopping_cart</span>
+      <span class="material-icons" *ngIf="stock > 0" (click)="onAddCart()">add_shopping_cart</span>
     </div>
   </div>
   <div class="title">{{title}}</div>
