@@ -1,0 +1,72 @@
+.wrapper,
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.field {
+  margin-bottom: 1em;
+}
+
+input[type="text"] {
+  border: .1em solid gray;
+  padding: 1.225em 1.725em;
+  line-height: 1.5em;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+input[type="text"].ng-touched.ng-invalid:not(:focus) {
+  border: 0.1em solid red;
+  color: red;
+}
+
+input + .error {
+  color: red;
+  margin-top: .2em;
+}
+
+input + .error div::before {
+  content: '*';
+  padding: 0 .1em;
+  color: red;
+}
+
+input[type="text"]:focus {
+  border: .2em solid #06eaf3;
+  padding: 1.125em 1.625em;
+  outline: none;
+}
+
+input[type="text"] + img {
+  margin: 1em auto 0;
+  width: 50%;
+  display: block;
+}
+
+input[type="submit"] {
+  color: #0ce682;
+  border: .7em solid #0ce682;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  padding: 0 1.6em;
+  text-align: center;
+  background-color: transparent;
+  font-weight: bold;
+  line-height: 3.2857em;
+}
+
+input[type="submit"]:hover:not(:disabled) {
+  background-color: #0ce682;
+  color: white;
+  cursor: pointer;
+}
+
+input[type="submit"]:focus {
+  outline: none;
+}

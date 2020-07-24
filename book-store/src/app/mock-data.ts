@@ -1,6 +1,7 @@
 export default [
   {
     id: '1',
+    isbn: '978-3-16-148410-0',
     title: 'Everybody\'s Fool: A novel',
     author: 'BYRON KELLY',
     cover: 'http://loremipsum.themerex.net/wp-content/uploads/2016/07/product-5.jpg',
@@ -9,6 +10,7 @@ export default [
   },
   {
     id: '2',
+    isbn: '978-3-16-148410-2',
     title: 'Everyone Brave is Forgiven',
     author: 'STEPHANIE MORENO',
     cover: 'http://loremipsum.themerex.net/wp-content/uploads/2016/07/product-6.jpg',
@@ -16,6 +18,7 @@ export default [
   },
   {
     id: '3',
+    isbn: '978-3-16-148410-5',
     title: 'Garden Design and Landscaping',
     author: 'Russell Reynolds',
     cover: 'http://loremipsum.themerex.net/wp-content/uploads/2016/06/product-2.jpg',
@@ -24,6 +27,7 @@ export default [
   },
   {
     id: '4',
+    isbn: '978-3-16-148410-6',
     title: 'How To Be An Explorer of The World',
     author: 'Diane Washington',
     cover: 'http://loremipsum.themerex.net/wp-content/uploads/2016/07/product-10.jpg',
@@ -32,6 +36,7 @@ export default [
   },
   {
     id: '5',
+    isbn: '978-3-16-148410-7',
     title: 'The Designer\'s Cookbook:  12 Colors, 12 Menus',
     author: 'Byron Kelly',
     cover: 'http://loremipsum.themerex.net/wp-content/uploads/2016/07/product-4.jpg',
@@ -40,6 +45,7 @@ export default [
   },
   {
     id: '6',
+    isbn: '978-3-16-148413-0',
     title: 'The Naked Cookbook',
     author: 'Yvonne Flemming',
     cover: 'http://loremipsum.themerex.net/wp-content/uploads/2016/07/product-7.jpg',
@@ -48,6 +54,7 @@ export default [
   },
   {
     id: '7',
+    isbn: '978-3-16-149410-0',
     title: 'The Independent One: A Billionaire Bride Pact Romance',
     author: 'Katherine Spencer',
     cover: 'http://loremipsum.themerex.net/wp-content/uploads/2016/07/product-8.jpg',

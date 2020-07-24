@@ -1,0 +1,43 @@
+<div class="wrapper">
+  <form [formGroup]="formGroup" (submit)="onSubmit()">
+    <div class="field">
+      <input type="text" placeholder="Title*" formControlName="title"/>
+      <div class="error" *ngIf="title.touched && !title.valid">
+        <div *ngIf="title.errors.required">Title is required</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <input type="text" placeholder="ISBN*" formControlName="isbn"/>
+      <div class="error" *ngIf="isbn.touched && !isbn.valid">
+        <div *ngIf="isbn.errors.required">ISBN is required</div>
+        <div *ngIf="isbn.errors.pattern">ISBN is invalid</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <input type="text" placeholder="Author*" formControlName="author"/>
+      <div class="error" *ngIf="author.touched && !author.valid">
+        <div *ngIf="author.errors.required">Author is required</div>
+        <div *ngIf="author.errors.author">Author is invalid</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <input type="text" placeholder="Comment" formControlName="comment"/>
+    </div>
+
+    <div class="field">
+      <input type="text" placeholder="Cover Image Url*" formControlName="cover"/>
+      <div class="error" *ngIf="cover.touched && !cover.valid">
+        <div *ngIf="cover.errors.required">Cover image url is required</div>
+        <div *ngIf="cover.errors.imageUrlInvalid">Cover image url is invalid</div>
+      </div>
+      <img *ngIf="cover.valid" [src]="cover.value"/>
+    </div>
+
+    <input type="submit" value="Create" [disabled]="!formGroup.valid"/>
+  </form>
+
+</div>
+
