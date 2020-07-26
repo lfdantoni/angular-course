@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import {countries} from '../../mock-data/countries';
 
 class MyModel {
   comment?: string;
+  countryCode: string;
+  age: number;
+  gender: string;
+  tc: boolean;
 }
 
 @Component({
@@ -10,15 +15,17 @@ class MyModel {
   styleUrls: ['./template-driven-form.component.css']
 })
 export class TemplateDrivenFormComponent implements OnInit {
-  myModel: MyModel = {};
+  myModel: MyModel = { countryCode: '', age: 0, gender: '', tc: false };
+  countries = countries;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  onSubmit(value: any) {
-    console.log(value);
-    console.log(this.myModel);
+  // receiving the form value is optional if we are using model binding (myModel)
+  onSubmit(value: any): void {
+    console.log('Form value: ', value);
+    console.log('myModel: ', this.myModel);
   }
 }

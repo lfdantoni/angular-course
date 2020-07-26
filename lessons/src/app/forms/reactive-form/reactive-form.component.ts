@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, ValidatorFn, Validators, FormGroup } from '@angular/forms';
 import {idValidator} from '../../validators/id-validator';
+import {countries} from '../../mock-data/countries';
 
 @Component({
   selector: 'app-reactive-form',
@@ -10,6 +11,7 @@ import {idValidator} from '../../validators/id-validator';
 export class ReactiveFormComponent implements OnInit {
 
   formGroup: FormGroup;
+  countries = countries;
 
   constructor() { }
 
@@ -26,7 +28,11 @@ export class ReactiveFormComponent implements OnInit {
       ]),
       phoneNumber: new FormControl('', this.telephoneValidator(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)),
       id: new FormControl('', idValidator),
-      comment: new FormControl('')
+      comment: new FormControl({value: 'comment text', disabled: false}),
+      country: new FormControl('', Validators.required),
+      age: new FormControl(0, [Validators.required, Validators.min(18)]),
+      gender: new FormControl('', Validators.required),
+      tc: new FormControl(false, [Validators.requiredTrue]),
     });
   }
 
@@ -52,6 +58,14 @@ export class ReactiveFormComponent implements OnInit {
 
   get id(): AbstractControl {
     return this.formGroup.get('id');
+  }
+
+  get age(): AbstractControl {
+    return this.formGroup.get('age');
+  }
+
+  get tc(): AbstractControl {
+    return this.formGroup.get('tc');
   }
 
 }

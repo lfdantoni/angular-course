@@ -22,8 +22,29 @@
   <div *ngIf="id.touched && !id.valid && id.errors.idInvalid">Invalid id</div>
   <br>
 
-  Comment: <input type="text" formControlName="comment" />
+  Comment: <input type="text" formControlName="comment"/>
   <br>
 
+  <label for="country">Country</label>
+  <select formControlName="country" id="country">
+    <option *ngFor="let country of countries" [value]="country.code">
+      {{country.name}}
+    </option>
+  </select>
+  <br>
+
+  Age: <input type="number" formControlName="age" />
+  <div *ngIf="age.touched && !age.valid && age.errors.min">Age should be 18+</div>
+  <br>
+
+  Gender:
+  <input type="radio" value="male" formControlName="gender"> Male
+  <input type="radio" value="female" formControlName="gender"> Female
+  <br>
+
+  Terms & Conditions: <input type="checkbox" formControlName="tc">
+  <div *ngIf="tc.touched && !tc.valid && tc.errors.required">Terms & Conditions should be accepted</div>
+
+  <br>
   <button type="submit" [disabled]="!formGroup.valid">Send</button>
 </form>
