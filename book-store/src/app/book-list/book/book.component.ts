@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Book } from 'src/app/models/Book';
 
 @Component({
   selector: 'app-book',
@@ -6,20 +7,13 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./book.component.css']
 })
 export class BookComponent implements OnInit {
-  // @Input() coverImage: string = 'http://loremipsum.themerex.net/wp-content/uploads/2016/07/product-5.jpg';
-  // @Input() title: string = 'Everybodys Fool: A novel';
-  // @Input() author: string = 'Byron Kelly';
-  // @Input() id: string = '123asd213';
-  // @Input() stock: number = 10;
-  @Input() coverImage: string;
-  @Input() title: string;
-  @Input() author: string;
-  @Input() id: string;
-  @Input() stock: number;
+  @Input() book: Book;
+
+  @Output() addBookToCartEvent: EventEmitter<Book> = new EventEmitter();
 
   // bgImageUrl: string;
   get bgImageUrl(): string {
-    return `url('${this.coverImage}')`;
+    return `url('${this.book.cover}')`;
   }
 
 
@@ -30,7 +24,8 @@ export class BookComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onAddCart() {
-    console.log('added' + this.id);
+  onAddCart(): void {
+    console.log('BookComponent added ', this.book);
+    this.addBookToCartEvent.emit(this.book);
   }
 }
