@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, InjectionToken } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { BookComponent } from './data-binding/book/book.component';
@@ -17,9 +17,16 @@ import { LoggerUseFactoryService } from './services/logger-usefactory/logger-use
 import { LoggerProductionService } from './services/logger-production/logger-production.service';
 import { LoggerDevelopmentService } from './services/logger-development/logger-development.service';
 import { LoggerOptionalService } from './services/logger-optional/logger-optional.service';
+import { AppConfig } from './models/app-config';
+import { APP_CONFIG_TOKEN } from './services/injector-tokens';
 import { environment } from 'src/environments/environment';
 
 const loggerUseValueService = new LoggerUseValueService();
+
+const appConfig: AppConfig = {
+  apiUrl: 'http://test.com/api',
+  title: 'Lesson App'
+};
 
 @NgModule({
   declarations: [
@@ -49,6 +56,7 @@ const loggerUseValueService = new LoggerUseValueService();
       return new LoggerDevelopmentService();
     }},
     LoggerOptionalService, // it can be removed and ServiceExampleComponent won't fail due it is using @Optional()
+    {provide: APP_CONFIG_TOKEN, useValue: appConfig}
   ],
   bootstrap: [AppComponent]
 })
