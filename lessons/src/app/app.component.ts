@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css'] // component styles
 })
 export class AppComponent {
-  screen = 'forms';
+  screen = 'service-example';
 }
