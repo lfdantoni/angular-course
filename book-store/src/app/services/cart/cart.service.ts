@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CartSummarize } from '../../models/CartSummarize';
-import { BookCategory } from '../..//models/BookCategory';
-import { CategoryList } from '../../mock-data';
 import { Book } from 'src/app/models/Book';
 
 @Injectable({
@@ -14,10 +12,6 @@ export class CartService {
 
   addBook(book: Book): void {
     this.items.push(book);
-  }
-
-  getCategories(): BookCategory[] {
-    return CategoryList;
   }
 
   getSummarize(): CartSummarize {

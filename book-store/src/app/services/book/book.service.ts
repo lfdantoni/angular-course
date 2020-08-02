@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Book } from 'src/app/models/Book';
-import { BookList } from 'src/app/mock-data';
+import { BookList, CategoryList } from 'src/app/mock-data';
+import { BookCategory } from 'src/app/models/BookCategory';
 
 @Injectable()
 export class BookService {
@@ -9,5 +10,9 @@ export class BookService {
 
   getBooks(): Book[] {
     return BookList;
+  }
+
+  getCategories(): BookCategory[] {
+    return CategoryList;
   }
 }

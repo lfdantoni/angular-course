@@ -40,7 +40,7 @@ export class BookListComponent implements OnInit {
   }
 
   get categories(): BookCategory[] {
-    return this.cartService.getCategories();
+    return this.bookService.getCategories();
   }
 
   get cartSummarize(): CartSummarize {
