@@ -1,13 +1,17 @@
 <div class="wrapper">
-  <app-filter
-    [categories]="categories"
-    [cartSummarize]="cartSummarize"
-  ></app-filter>
+  <div *ngIf="isLoading">Loading...</div>
 
-  <app-book *ngFor="let book of books"
-    [book]="book"
-    (addBookToCartEvent)="addBookToCart($event)">
-  </app-book>
+  <ng-container *ngIf="!isLoading">
+    <app-filter
+      [categories]="categories"
+      [cartSummarize]="cartSummarize"
+    ></app-filter>
+
+    <app-book *ngFor="let book of books"
+      [book]="book"
+      (addBookToCartEvent)="addBookToCart($event)">
+    </app-book>
+  </ng-container>
 
   <!-- <app-book></app-book>
   <app-book></app-book>
