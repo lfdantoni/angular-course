@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { imageUrlValidator } from '../validators/image-url-validator';
 import { BookService } from '../services/book/book.service';
+import { first } from 'rxjs/operators';
 
 
 export interface CategoryItemModel{
@@ -32,13 +33,17 @@ export class AddBookComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const categories = this.bookService.getCategories();
+    // TODO add a loading
 
-    this.categoryList = categories.map(cat => ({
-      value: cat.code,
-      display: cat.display,
-      checked: false
-    }));
+    this.bookService.getCategories()
+      .pipe(first())
+      .subscribe(categories => {
+        this.categoryList = categories.map(cat => ({
+          value: cat.code,
+          display: cat.display,
+          checked: false
+        }));
+      });
   }
 
   onSubmit(): void {
