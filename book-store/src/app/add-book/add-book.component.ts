@@ -20,7 +20,7 @@ export class AddBookComponent implements OnInit {
 
   constructor(private bookService: BookService) {
     this.formGroup = new FormGroup({
-      id: new FormControl('', Validators.required),
+      id: new FormControl(''),
       title: new FormControl('', Validators.required),
       isbn: new FormControl('', [Validators.required, Validators.pattern(/[0-9]*[-| ][0-9]*[-| ][0-9]*[-| ][0-9]*[-| ][0-9]*/)]),
       author: new FormControl('', [Validators.required, this.authorValidator]),

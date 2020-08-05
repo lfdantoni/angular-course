@@ -1,7 +1,7 @@
 <div class="wrapper">
   <form [formGroup]="formGroup" (submit)="onSubmit()">
     <div class="field">
-      <input type="text" placeholder="Id*" formControlName="id"/>
+      <input type="text" placeholder="Id" formControlName="id"/>
       <div class="error" *ngIf="id.touched && !id.valid">
         <div *ngIf="id.errors.required">Id is required</div>
       </div>
