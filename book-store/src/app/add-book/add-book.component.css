@@ -13,7 +13,8 @@ form {
   margin-bottom: 1em;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="number"] {
   border: .1em solid gray;
   padding: 1.225em 1.725em;
   line-height: 1.5em;
@@ -21,7 +22,8 @@ input[type="text"] {
   width: 100%;
 }
 
-input[type="text"].ng-touched.ng-invalid:not(:focus) {
+input[type="text"].ng-touched.ng-invalid:not(:focus),
+input[type="number"].ng-touched.ng-invalid:not(:focus) {
   border: 0.1em solid red;
   color: red;
 }
@@ -37,13 +39,15 @@ input + .error div::before {
   color: red;
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus,
+input[type="number"]:focus {
   border: .2em solid #06eaf3;
   padding: 1.125em 1.625em;
   outline: none;
 }
 
-input[type="text"] + img {
+input[type="text"] + img,
+input[type="number"] + img  {
   margin: 1em auto 0;
   width: 50%;
   display: block;
