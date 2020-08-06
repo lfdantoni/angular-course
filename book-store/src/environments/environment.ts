@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  API_URL: 'https://book-store-server2020.herokuapp.com/'
+  API_URL: 'https://book-store-server2020.herokuapp.com/',
+  // API_URL: 'http://localhost:3010/' // TO RUN LOCALLY
 };
 
 /*
