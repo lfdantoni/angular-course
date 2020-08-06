@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Book } from 'src/app/models/Book';
 import { BookCategory } from 'src/app/models/BookCategory';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -13,22 +13,28 @@ export class BookService {
   constructor(private http: HttpClient) { }
 
   getBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(this.url);
+    return this.http.get<Book[]>(this.url, {headers: this.headers});
   }
 
   getCategories(): Observable<BookCategory[]> {
-    return this.http.get<BookCategory[]>(this.urlCategory);
+    return this.http.get<BookCategory[]>(this.urlCategory, {headers: this.headers});
   }
 
   saveNewBook(book: Book): Observable<Book> {
-    return this.http.post<Book>(this.url, book);
+    return this.http.post<Book>(this.url, book, {headers: this.headers});
   }
 
   saveEditBook(book: Book): Observable<Book> {
-    return this.http.put<Book>(`${this.url}/${book.id}`, book);
+    return this.http.put<Book>(`${this.url}/${book.id}`, book, {headers: this.headers});
   }
 
   deleteBook(bookId: string): Observable<Book> {
     return this.http.delete<Book>(`${this.url}/${bookId}`);
+  }
+
+  private get headers(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
   }
 }
