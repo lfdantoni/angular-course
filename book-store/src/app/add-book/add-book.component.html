@@ -71,7 +71,12 @@
       <img *ngIf="cover.valid" [src]="cover.value"/>
     </div>
 
-    <input type="submit" value="Create" [disabled]="!formGroup.valid"/>
+    <div class="error" *ngIf="showError">
+      <div>{{errorMessage}}</div>
+    </div>
+
+    <input type="submit" value="Save" [disabled]="!formGroup.valid"/>
+    <input type="button" value="Delete" [disabled]="!id.value" (click)="onDeleteBook()"/>
   </form>
 
 </div>

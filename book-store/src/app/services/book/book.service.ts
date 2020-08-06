@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Book } from 'src/app/models/Book';
-// import { BookList, CategoryList } from 'src/app/mock-data';
 import { BookCategory } from 'src/app/models/BookCategory';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -15,11 +14,21 @@ export class BookService {
 
   getBooks(): Observable<Book[]> {
     return this.http.get<Book[]>(this.url);
-    // BookList;
   }
 
   getCategories(): Observable<BookCategory[]> {
     return this.http.get<BookCategory[]>(this.urlCategory);
-    // CategoryList;
+  }
+
+  saveNewBook(book: Book): Observable<Book> {
+    return this.http.post<Book>(this.url, book);
+  }
+
+  saveEditBook(book: Book): Observable<Book> {
+    return this.http.put<Book>(`${this.url}/${book.id}`, book);
+  }
+
+  deleteBook(bookId: string): Observable<Book> {
+    return this.http.delete<Book>(`${this.url}/${bookId}`);
   }
 }

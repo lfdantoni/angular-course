@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { imageUrlValidator } from '../validators/image-url-validator';
 import { BookService } from '../services/book/book.service';
-import { first } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 export interface CategoryItemModel{
@@ -18,6 +19,8 @@ export interface CategoryItemModel{
 export class AddBookComponent implements OnInit {
   formGroup: FormGroup;
   categoryList: CategoryItemModel[] = [];
+  showError = false;
+  errorMessage = '';
 
   constructor(private bookService: BookService) {
     this.formGroup = new FormGroup({
@@ -34,6 +37,7 @@ export class AddBookComponent implements OnInit {
 
   ngOnInit(): void {
     // TODO add a loading
+    // TODO add handle error
 
     this.bookService.getCategories()
       .pipe(first())
@@ -44,13 +48,73 @@ export class AddBookComponent implements OnInit {
           checked: false
         }));
       });
+
+    // Transform observable response
+    // this.bookService.getCategories()
+    //   .pipe(
+    //     first(),
+    //     map(cats => cats.map(cat => cat.code))
+    //   ).subscribe(categories => {
+    //     console.log(categories);
+    //   });
   }
 
   onSubmit(): void {
     console.log('Submit ', this.formGroup.value);
+    // TODO show loading
+
+    if (this.id.value) {
+      this.bookService.saveEditBook(this.formGroup.value)
+        .pipe(first())
+        .subscribe((book) => {
+          this.resetForm();
+        },
+        (error) => this.handleError(error));
+    } else {
+      this.bookService.saveNewBook(this.formGroup.value)
+        .pipe(first())
+        .subscribe((book) => {
+          this.resetForm();
+        },
+        (error) => this.handleError(error));
+    }
+  }
+
+  onDeleteBook(): void {
+    // TODO add loading
+    if (this.id.value) {
+      this.bookService.deleteBook(this.id.value)
+      .pipe(first())
+      .subscribe(book => {
+        this.resetForm();
+      },
+      (error) => this.handleError(error));
+    }
+  }
+
+  handleError(error: HttpErrorResponse): void {
+    this.showError = true;
+
+    switch(error.status) {
+      case 404:
+        this.errorMessage = 'Book does not exist';
+        break;
+      case 400:
+        this.errorMessage = `Invalid information. ${error.error.message}`;
+        break;
+      case 500:
+        this.errorMessage = 'Unexpected error, try again later please.';
+        break;
+      default:
+        this.errorMessage = 'Something went wrong try again later.';
+    }
+  }
+
+  resetForm(): void {
     this.formGroup.reset();
     this.categories.setValue([]);
     this.categoryList.forEach(cat => cat.checked = false);
+    this.showError = false;
   }
 
   authorValidator(control: FormControl): ValidationErrors {

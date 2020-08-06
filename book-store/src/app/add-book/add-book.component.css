@@ -29,14 +29,17 @@ input[type="number"].ng-touched.ng-invalid:not(:focus) {
 }
 
 input + .error {
-  color: red;
   margin-top: .2em;
+}
+
+.error,
+.error::before {
+  color: red;
 }
 
 input + .error div::before {
   content: '*';
   padding: 0 .1em;
-  color: red;
 }
 
 input[type="text"]:focus,
@@ -53,24 +56,28 @@ input[type="number"] + img  {
   display: block;
 }
 
-input[type="submit"] {
+input[type="submit"],
+input[type="button"] {
   color: #0ce682;
   border: .7em solid #0ce682;
   transition: all 0.3s;
   text-transform: uppercase;
   padding: 0 1.6em;
+  margin: 1em 0;
   text-align: center;
   background-color: transparent;
   font-weight: bold;
   line-height: 3.2857em;
 }
 
-input[type="submit"]:hover:not(:disabled) {
+input[type="submit"]:hover:not(:disabled),
+input[type="button"]:hover:not(:disabled) {
   background-color: #0ce682;
   color: white;
   cursor: pointer;
 }
 
-input[type="submit"]:focus {
+input[type="submit"]:focus,
+input[type="button"]:focus {
   outline: none;
 }
