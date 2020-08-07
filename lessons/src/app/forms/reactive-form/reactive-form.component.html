@@ -42,6 +42,24 @@
   <input type="radio" value="female" formControlName="gender"> Female
   <br>
 
+  Password: <input type="text" formControlName="password" />
+
+  <div *ngIf="password.touched && !password.valid">
+    <div *ngIf="password.errors.required">Password is required</div>
+  </div>
+  <br>
+
+  Repeat Password: <input type="text" formControlName="repeatPassword" />
+
+  <div *ngIf="repeatPassword.touched && !repeatPassword.valid">
+    <div *ngIf="repeatPassword.errors.required">Repeat Password is required</div>
+  </div>
+
+  <div *ngIf="formGroup.errors">
+    <div *ngIf=" formGroup.errors.matchFields">{{formGroup.errors.matchFields}}</div>
+  </div>
+  <br>
+
   Terms & Conditions: <input type="checkbox" formControlName="tc">
   <div *ngIf="tc.touched && !tc.valid && tc.errors.required">Terms & Conditions should be accepted</div>
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, ValidatorFn, Validators, FormGroup } from '@angular/forms';
 import {idValidator} from '../../validators/id-validator';
+import {matchFields} from '../../validators/match-fields';
 import {countries} from '../../mock-data/countries';
 
 @Component({
@@ -16,27 +17,32 @@ export class ReactiveFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.formGroup = new FormGroup({
-      firstName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(4)
-      ]),
-      lastName: new FormControl('', Validators.required), // array is not necessary for one validator
-      email: new FormControl('', [
-        Validators.required,
-        Validators.email
-      ]),
-      phoneNumber: new FormControl('', this.telephoneValidator(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)),
-      id: new FormControl('', idValidator),
-      comment: new FormControl({value: 'comment text', disabled: false}),
-      country: new FormControl('', Validators.required),
-      age: new FormControl(0, [Validators.required, Validators.min(18)]),
-      gender: new FormControl('', Validators.required),
-      tc: new FormControl(false, [Validators.requiredTrue]),
-    });
+    this.formGroup = new FormGroup(
+      {
+        firstName: new FormControl('', [
+          Validators.required,
+          Validators.minLength(4)
+        ]),
+        lastName: new FormControl('', Validators.required), // array is not necessary for one validator
+        email: new FormControl('', [
+          Validators.required,
+          Validators.email
+        ]),
+        phoneNumber: new FormControl('', this.telephoneValidator(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)),
+        id: new FormControl('', idValidator),
+        comment: new FormControl({value: 'comment text', disabled: false}),
+        country: new FormControl('', Validators.required),
+        age: new FormControl(0, [Validators.required, Validators.min(18)]),
+        gender: new FormControl('', Validators.required),
+        tc: new FormControl(false, [Validators.requiredTrue]),
+        password: new FormControl('', Validators.required),
+        repeatPassword: new FormControl('', Validators.required),
+      },
+      [matchFields('password', 'repeatPassword', 'Passwords are not matching.')] // add validators to validate the form as a whole
+    );
   }
 
-  onSubmit() {
+  onSubmit(): void {
     console.log(this.formGroup.value);
     console.log(this.firstName.errors);
   }
@@ -66,6 +72,14 @@ export class ReactiveFormComponent implements OnInit {
 
   get tc(): AbstractControl {
     return this.formGroup.get('tc');
+  }
+
+  get password(): AbstractControl {
+    return this.formGroup.get('password');
+  }
+
+  get repeatPassword(): AbstractControl {
+    return this.formGroup.get('repeatPassword');
   }
 
 }
