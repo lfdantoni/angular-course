@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { imageUrlValidator } from '../validators/image-url-validator';
 import { BookService } from '../services/book/book.service';
-import { first, map } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 
 
@@ -48,15 +48,6 @@ export class AddBookComponent implements OnInit {
           checked: false
         }));
       });
-
-    // Transform observable response
-    // this.bookService.getCategories()
-    //   .pipe(
-    //     first(),
-    //     map(cats => cats.map(cat => cat.code))
-    //   ).subscribe(categories => {
-    //     console.log(categories);
-    //   });
   }
 
   onSubmit(): void {
@@ -95,7 +86,7 @@ export class AddBookComponent implements OnInit {
   handleError(error: HttpErrorResponse): void {
     this.showError = true;
 
-    switch(error.status) {
+    switch (error.status) {
       case 404:
         this.errorMessage = 'Book does not exist';
         break;

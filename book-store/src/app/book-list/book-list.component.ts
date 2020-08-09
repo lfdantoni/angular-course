@@ -6,7 +6,7 @@ import { Book } from '../models/Book';
 import { BookService } from '../services/book/book.service';
 import { LoggerService } from '../services/logger/logger.service';
 import { LoggerFormatService } from '../services/logger-format/logger-format.service';
-import { Subscription, forkJoin } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -18,7 +18,6 @@ import { first } from 'rxjs/operators';
 export class BookListComponent implements OnInit, OnDestroy {
   books: Book[] = [];
   categories: BookCategory[] = [];
-  isLoading = true;
   bookSubscription: Subscription;
 
   constructor(
@@ -37,41 +36,31 @@ export class BookListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // TODO show loading
+
     // this.bookSubscription = this.bookService.getBooks()
     //   .subscribe(books => {
     //     this.books = books;
     //   });
 
-    // this.bookService.getBooks()
-    //   .pipe(first())
-    //   .subscribe(books => {
-    //     this.books = books;
-    //   });
+    this.bookService.getBooks()
+      .pipe(first())
+      .subscribe(books => {
+        this.books = books;
+      });
 
-    // this.bookService.getCategories()
-    //   .pipe(first())
-    //   .subscribe(data => {
-    //     this.categories = data;
-    //   });
-
-    forkJoin([
-      this.bookService.getBooks(),
-      this.bookService.getCategories()
-    ])
-    .pipe(first())
-    .subscribe(([books, categories]) => {
-      this.books = books;
-      this.categories = categories;
-
-      this.isLoading = false;
-    });
+    this.bookService.getCategories()
+      .pipe(first())
+      .subscribe(data => {
+        this.categories = data;
+      });
 
   }
 
   ngOnDestroy(): void {
-    if (this.bookSubscription) {
-      this.bookSubscription.unsubscribe();
-    }
+    // if (this.bookSubscription) {
+    //   this.bookSubscription.unsubscribe();
+    // }
   }
 
   addBookToCart(book: Book): void {
