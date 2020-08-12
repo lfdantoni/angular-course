@@ -6,4 +6,5 @@
   </div>
   <div class="title">{{book.title}}</div>
   <div class="author">{{book.author}}</div>
+   <a [routerLink]="['/edit', book.id]">Edit</a>  <!-- it starts with '/' to avoid relative path like /list/edit/1 -->
 </div>

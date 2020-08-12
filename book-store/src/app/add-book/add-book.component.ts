@@ -4,6 +4,9 @@ import { imageUrlValidator } from '../validators/image-url-validator';
 import { BookService } from '../services/book/book.service';
 import { first } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BookCategory } from '../models/BookCategory';
+import { Book } from '../models/Book';
 
 
 export interface CategoryItemModel{
@@ -22,7 +25,7 @@ export class AddBookComponent implements OnInit {
   showError = false;
   errorMessage = '';
 
-  constructor(private bookService: BookService) {
+  constructor(private bookService: BookService, private activatedRoute: ActivatedRoute, private router: Router) {
     this.formGroup = new FormGroup({
       id: new FormControl(''),
       title: new FormControl('', Validators.required),
@@ -39,15 +42,57 @@ export class AddBookComponent implements OnInit {
     // TODO add a loading
     // TODO add handle error
 
+    // this.bookService.getCategories()
+    //   .pipe(first())
+    //   .subscribe(categories => {
+    //     this.categoryList = categories.map(cat => ({
+    //       value: cat.code,
+    //       display: cat.display,
+    //       checked: false
+    //     }));
+    //   });
+
+    // Transform observable response
     this.bookService.getCategories()
-      .pipe(first())
-      .subscribe(categories => {
-        this.categoryList = categories.map(cat => ({
-          value: cat.code,
-          display: cat.display,
-          checked: false
-        }));
+      .pipe(
+        first(),
+        map(cats => this.transformBookCategories(cats))
+      ).subscribe(categories => {
+        this.categoryList = categories;
+        this.checkSelectedCategories();
       });
+
+    this.activatedRoute.params.subscribe(params => {
+      const bookId = params.id;
+
+      if (bookId) {
+        // Get Book by Id
+        this.bookService.getBookById(bookId)
+          .pipe(first())
+          .subscribe(book => {
+            this.formGroup.setValue(book);
+            this.checkSelectedCategories();
+          });
+      }
+    });
+  }
+
+  private checkSelectedCategories(): void {
+    const currentCategories: string[] = this.categories.value;
+
+    if (currentCategories.length > 0) {
+      this.categoryList.forEach(cat => {
+        cat.checked = currentCategories.indexOf(cat.value) >= 0;
+      });
+    }
+  }
+
+  private transformBookCategories(categories: BookCategory[]): CategoryItemModel[] {
+    return categories.map(cat => ({
+      value: cat.code,
+      display: cat.display,
+      checked: false
+    }));
   }
 
   onSubmit(): void {
@@ -59,6 +104,7 @@ export class AddBookComponent implements OnInit {
         .pipe(first())
         .subscribe((book) => {
           this.resetForm();
+          this.router.navigate(['']);
         },
         (error) => this.handleError(error));
     } else {
@@ -66,6 +112,7 @@ export class AddBookComponent implements OnInit {
         .pipe(first())
         .subscribe((book) => {
           this.resetForm();
+          this.router.navigate(['']);
         },
         (error) => this.handleError(error));
     }
@@ -78,6 +125,7 @@ export class AddBookComponent implements OnInit {
       .pipe(first())
       .subscribe(book => {
         this.resetForm();
+        this.router.navigate(['']);
       },
       (error) => this.handleError(error));
     }

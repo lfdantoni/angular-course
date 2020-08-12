@@ -17,12 +17,21 @@ import { PayPalConfig } from './models/PayPalConfig';
 import { environment } from 'src/environments/environment';
 import { LoggerService } from './services/logger/logger.service';
 import { SilentLoggerService } from './services/silent-logger/silent-logger.service';
+import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth/auth.guard';
 
 const payPalToken: PayPalConfig = {
   clientId: '12312qeqwe',
   secretId: '13123123asdasd',
   url: ''
 };
+
+const routes: Routes = [
+  { path: 'list', component: BookListComponent },
+  { path: 'add', component: AddBookComponent, canActivate: [AuthGuard] },
+  { path: 'edit/:id', component: AddBookComponent, canActivate: [AuthGuard]},
+  { path: '', redirectTo: 'list', pathMatch: 'full' }
+];
 
 @NgModule({
   declarations: [
@@ -38,7 +47,8 @@ const payPalToken: PayPalConfig = {
   imports: [
     BrowserModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule.forRoot(routes)
   ],
   providers: [
     BookService,
