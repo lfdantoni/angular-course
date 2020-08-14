@@ -36,22 +36,36 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
+
+    // Once use -> Core
     MenuComponent,
     HeaderComponent,
+
+    // Book functionality (module)
     FilterComponent,
     BookListComponent,
     BookComponent,
     BookStatusDirective,
     AddBookComponent
+
+    // Shared module
+    // ButtonComponent for example
   ],
   imports: [
     BrowserModule,
+    RouterModule.forRoot(routes),
+    BookModule,
+
+    // Could be used in many places -> SharedModule
     ReactiveFormsModule,
-    HttpClientModule,
-    RouterModule.forRoot(routes)
+    HttpClientModule
   ],
   providers: [
-    BookService,
+    // Only used by Book feature as singleton -> BookModule
+    // BookService,
+
+    // Used as singletons in many places -> CoreModule
+
     // {provide: BookService, useClass: BookService} // it is the same as before
     {provide: PayPalToken, useValue: payPalToken}, // {provide: 'PayPalToken', useValue: payPalToken} is similar but useless
     {provide: LoggerService, useFactory: () => {
