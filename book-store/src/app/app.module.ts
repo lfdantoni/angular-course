@@ -61,7 +61,7 @@ const routes: Routes = [
   ],
   providers: [
     // Only used by Book feature as singleton -> BookModule
-    // BookService,
+    BookService,
 
     // Used as singletons in many places -> CoreModule
 
