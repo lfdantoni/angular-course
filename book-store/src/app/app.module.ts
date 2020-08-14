@@ -54,7 +54,6 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes),
-    BookModule,
 
     // Could be used in many places -> SharedModule
     ReactiveFormsModule,
