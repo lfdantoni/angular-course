@@ -19,6 +19,7 @@ import { LoggerService } from './services/logger/logger.service';
 import { SilentLoggerService } from './services/silent-logger/silent-logger.service';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth/auth.guard';
+import { SharedModule } from './shared/shared.module';
 
 const payPalToken: PayPalConfig = {
   clientId: '12312qeqwe',
@@ -54,6 +55,7 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes),
+    SharedModule,
 
     // Could be used in many places -> SharedModule
     ReactiveFormsModule,
