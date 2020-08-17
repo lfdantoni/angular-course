@@ -1,0 +1,21 @@
+<div class="wrapper">
+  <!-- app-button from SharedModule -->
+  <app-button></app-button>
+
+  <app-filter
+    [categories]="categories"
+    [cartSummarize]="cartSummarize"
+  ></app-filter>
+
+  <app-book *ngFor="let book of books"
+    [book]="book"
+    (addBookToCartEvent)="addBookToCart($event)">
+  </app-book>
+
+  <!-- <app-book></app-book>
+  <app-book></app-book>
+  <app-book></app-book>
+  <app-book></app-book>
+  <app-book></app-book> -->
+</div>
+
