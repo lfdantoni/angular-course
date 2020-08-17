@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { imageUrlValidator } from '../validators/image-url-validator';
+import { imageUrlValidator } from '../../shared/validators/image-url-validator';
 import { BookService } from '../services/book/book.service';
 import { first, map } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookCategory } from '../models/BookCategory';
-import { Book } from '../models/Book';
-
 
 export interface CategoryItemModel{
   value: string;

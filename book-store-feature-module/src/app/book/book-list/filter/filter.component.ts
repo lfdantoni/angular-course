@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { CategoryList } from 'src/app/mock-data';
 import { CartSummarize } from '../../models/CartSummarize';
 
 @Component({

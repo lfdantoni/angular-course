@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Book } from 'src/app/models/Book';
-import { BookCategory } from 'src/app/models/BookCategory';
+import { Book } from 'src/app/book/models/Book';
+import { BookCategory } from '../../models/BookCategory';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';

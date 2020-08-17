@@ -4,10 +4,10 @@ import { BookCategory } from '../models/BookCategory';
 import { CartSummarize } from '../models/CartSummarize';
 import { Book } from '../models/Book';
 import { BookService } from '../services/book/book.service';
-import { LoggerService } from '../services/logger/logger.service';
-import { LoggerFormatService } from '../services/logger-format/logger-format.service';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { LoggerFormatService } from '../../core/services/logger-format/logger-format.service';
+import { LoggerService } from '../../core/services/logger/logger.service';
 
 @Component({
   selector: 'app-book-list',
