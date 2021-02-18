@@ -10,6 +10,9 @@ export class DataBindingComponent {
   inputValue: string = 'test input';
   greeting: string = '';
 
+  list: string[] = ['hello', 'world', '!'];
+  remove = false;
+
   constructor() { }
 
   onChange(input: string) {
@@ -18,5 +21,13 @@ export class DataBindingComponent {
 
   sayHello() {
     this.greeting = 'Hello world!';
+  }
+
+  onRemoveClick() {
+    this.remove = true;
+  }
+
+  onAddText() {
+    this.list.push(new Date().getTime().toString());
   }
 }

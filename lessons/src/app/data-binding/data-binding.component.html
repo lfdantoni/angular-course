@@ -58,3 +58,19 @@
   <h2>New Book Component</h2>
   <app-book></app-book>
 </div>
+
+<div class="box">
+  <h2>Directives</h2>
+
+  <div appHighLight>Attribute directive</div>
+  <hr>
+
+  <b>Structural directives</b>
+  <br>
+  <span *ngFor="let text of list">{{text + ' '}}</span><i>*ngFor</i>
+  <br>
+  <button (click)="onAddText()">Add Text</button>
+  <hr>
+  <div *ngIf="!remove">Text to remove</div>
+  <button (click)="onRemoveClick()">Remove</button>
+</div>
