@@ -7,6 +7,18 @@ import { AddBookComponent } from './add-book/add-book.component';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookComponent } from './book-list/book/book.component';
 import { BookStatusDirective } from './book-list/book/book-status.directive';
+import { BookService } from './services/book/book.service';
+import { PayPalToken } from './services/injector-token';
+import { PayPalConfig } from './models/PayPalConfig';
+import { LoggerService } from './services/logger/logger.service';
+import { environment } from 'src/environments/environment';
+import { SilentLoggerService } from './services/silent-logger/silent-logger.service';
+
+const payPalToken: PayPalConfig = {
+  clientId: '12312qeqwe',
+  secretId: '13123123asdasd',
+  url: ''
+};
 
 @NgModule({
   declarations: [
@@ -20,7 +32,18 @@ import { BookStatusDirective } from './book-list/book/book-status.directive';
     BrowserModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    BookService,
+    // {provide: BookService, useClass: BookService}
+    {provide: PayPalToken, useValue: payPalToken},
+    {provide: LoggerService, useFactory: () => {
+      if(environment.production) {
+        return new SilentLoggerService();
+      }
+
+      return new LoggerService();
+    }}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
