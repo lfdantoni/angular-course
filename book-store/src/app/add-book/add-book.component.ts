@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { CategoryList } from '../mock-data';
+import { Book } from '../models/Book';
 import { BookCategory } from '../models/BookCategory';
+import { BookService } from '../services/book/book.service';
 import { imageUrlValidator } from '../validators/image-url-validator';
 
 export interface CategoryItemModel {
@@ -21,7 +22,7 @@ export class AddBookComponent implements OnInit {
   showError = false;
   categoryList: CategoryItemModel[] = [];
 
-  constructor() {
+  constructor(private bookService: BookService) {
     this.formGroup = new FormGroup({
       id: new FormControl(''),
       title: new FormControl('', Validators.required),
@@ -35,7 +36,7 @@ export class AddBookComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.categoryList = this.transformBookCategories(CategoryList);
+    this.categoryList = this.transformBookCategories(this.bookService.getCategories());
   }
 
   private transformBookCategories(categories: BookCategory[]): CategoryItemModel[] {
@@ -47,11 +48,31 @@ export class AddBookComponent implements OnInit {
   }
 
   onSubmit() {
-
+    const book: Book = this.formGroup.value;
+    this.bookService.addBook(book);
   }
 
   onCategoryChange(category: CategoryItemModel) {
+    category.checked = !category.checked;
 
+    if(category.checked) {
+      const categories: string[] = (this.categories.value as string[]).concat([]);
+
+      categories.push(category.value);
+
+      this.categories.setValue(categories);
+
+      console.log(this.formGroup.value);
+    } else {
+      const categories: string[] = (this.categories.value as string[]).concat([]);
+
+      const index = categories.indexOf(category.value);
+
+      categories.splice(index, 1);
+
+      this.categories.setValue(categories);
+      console.log(this.formGroup.value);
+    }
   }
 
   authorValidator(control: FormControl): ValidationErrors {

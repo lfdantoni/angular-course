@@ -1,13 +1,25 @@
 import { Injectable } from '@angular/core';
-import { BookList } from 'src/app/mock-data';
+import { BookList, CategoryList } from 'src/app/mock-data';
 import { Book } from 'src/app/models/Book';
+import { BookCategory } from 'src/app/models/BookCategory';
 
 @Injectable()
 export class BookService {
+  private bookList: Book[];
 
-  constructor() { }
+  constructor() {
+    this.bookList = BookList;
+   }
 
   getBooks(): Book[] {
-    return BookList;
+    return this.bookList;
+  }
+
+  addBook(book: Book) {
+    this.bookList.push(book);
+  }
+
+  getCategories(): BookCategory[] {
+    return CategoryList;
   }
 }

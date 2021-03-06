@@ -16,10 +16,6 @@ export class CartService {
     this.items.push(book);
   }
 
-  getCategories(): BookCategory[] {
-    return CategoryList;
-  }
-
   getSummarize(): CartSummarize {
     if (this.items.length) {
       return {
