@@ -34,7 +34,7 @@ const payPalToken: PayPalConfig = {
   ],
   providers: [
     BookService,
-    // {provide: BookService, useClass: BookService}
+    // {provide: BookService, useClass: BookService}, // Helpful to override logic with an inherited class
     {provide: PayPalToken, useValue: payPalToken},
     {provide: LoggerService, useFactory: () => {
       if(environment.production) {
