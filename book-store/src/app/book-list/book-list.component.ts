@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { Component, Inject, Injector, OnInit, Optional } from '@angular/core';
 // import { BookList } from '../mock-data';
 import { Book } from '../models/Book';
 import { PayPalConfig } from '../models/PayPalConfig';
@@ -24,9 +24,12 @@ export class BookListComponent implements OnInit {
     private bookService: BookService,
     // @Inject(PayPalToken) private paypalConfig: PayPalConfig,
     private loggerService: LoggerService,
-    @Optional() private loggerFormat: LoggerFormatService
+    private injector: Injector,
+    @Optional() private loggerFormat: LoggerFormatService,
     ) {
     // this.books = BookList;
+
+
 
     this.cartManualService = new CartManualService();
 
@@ -38,6 +41,8 @@ export class BookListComponent implements OnInit {
     if(this.loggerFormat) {
       this.loggerFormat.log('test2!');
     }
+
+    console.log('CartService compare:', this.injector.get(CartService) === this.cartSummarize); // the same service instance
 
   }
 
