@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AddBookComponent } from './add-book/add-book.component';
@@ -13,6 +14,7 @@ import { PayPalConfig } from './models/PayPalConfig';
 import { LoggerService } from './services/logger/logger.service';
 import { environment } from 'src/environments/environment';
 import { SilentLoggerService } from './services/silent-logger/silent-logger.service';
+
 
 const payPalToken: PayPalConfig = {
   clientId: '12312qeqwe',
@@ -30,7 +32,8 @@ const payPalToken: PayPalConfig = {
   ],
   imports: [
     BrowserModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
     BookService,

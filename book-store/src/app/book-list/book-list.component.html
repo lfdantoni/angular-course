@@ -1,8 +1,15 @@
 <div class="wrapper">
-  <app-book *ngFor="let book of books"
-    [book]="book"
-    (addBookToCartEvent)="addBookToCart($event)">
-  </app-book>
+
+  <div *ngIf="isLoading">Loading...</div>
+
+  <ng-container *ngIf="!isLoading">
+
+    <app-book *ngFor="let book of books"
+      [book]="book"
+      (addBookToCartEvent)="addBookToCart($event)">
+    </app-book>
+
+  </ng-container>
 
   <!-- <app-book></app-book>
   <app-book></app-book>

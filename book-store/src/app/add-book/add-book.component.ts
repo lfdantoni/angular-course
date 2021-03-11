@@ -1,5 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
 import { Book } from '../models/Book';
 import { BookCategory } from '../models/BookCategory';
 import { BookService } from '../services/book/book.service';
@@ -36,7 +38,13 @@ export class AddBookComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.categoryList = this.transformBookCategories(this.bookService.getCategories());
+    // this.categoryList = this.transformBookCategories(this.bookService.getCategories());
+
+    this.bookService.getCategories()
+      .pipe(first())
+      .subscribe(categories => {
+        this.categoryList = this.transformBookCategories(categories)
+      })
   }
 
   private transformBookCategories(categories: BookCategory[]): CategoryItemModel[] {
@@ -48,8 +56,43 @@ export class AddBookComponent implements OnInit {
   }
 
   onSubmit() {
-    const book: Book = this.formGroup.value;
-    this.bookService.addBook(book);
+    console.log('Submit ', this.formGroup.value);
+    // TODO show loading
+
+    if(this.id.value) {
+      this.bookService.saveEditBook(this.formGroup.value)
+      .pipe(first())
+      .subscribe((book) => {
+        this.resetForm();
+      },
+      (error) => this.handleError(error));
+    } else {
+      this.bookService.saveNewBook(this.formGroup.value)
+        .pipe(first())
+        .subscribe((book) => {
+          this.resetForm();
+        },
+        (error) => this.handleError(error));
+    }
+  }
+
+  resetForm(): void {
+    this.formGroup.reset();
+    this.categories.setValue([]);
+    this.categoryList.forEach(cat => cat.checked = false);
+    this.showError = false;
+  }
+
+  onDeleteBook(): void {
+    // TODO add loading
+    if (this.id.value) {
+      this.bookService.deleteBook(this.id.value)
+      .pipe(first())
+      .subscribe(book => {
+        this.resetForm();
+      },
+      (error) => this.handleError(error));
+    }
   }
 
   onCategoryChange(category: CategoryItemModel) {
@@ -80,10 +123,27 @@ export class AddBookComponent implements OnInit {
     return !valid ? {author: control.value} : null;
   }
 
+  handleError(error: HttpErrorResponse): void {
+    this.showError = true;
+
+    switch(error.status) {
+      case 404:
+        this.errorMessage = 'Book does not exist';
+        break;
+      case 400:
+        this.errorMessage = `Invalid information. ${error.error.message}`;
+        break;
+      case 500:
+        this.errorMessage = 'Unexpected error, try again later please.';
+        break;
+      default:
+        this.errorMessage = 'Something went wrong try again later.';
+    }
+  }
+
   get title(): AbstractControl {
     return this.formGroup.get('title');
   }
-
 
   get isbn(): AbstractControl {
     return this.formGroup.get('isbn');
