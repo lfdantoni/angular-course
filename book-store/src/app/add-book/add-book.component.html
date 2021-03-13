@@ -75,6 +75,8 @@
       <div>{{errorMessage}}</div>
     </div>
 
+    <div *ngIf="isLoading">Loading...</div>
+
     <input type="submit" value="Save" [disabled]="!formGroup.valid"/>
     <input type="button" value="Delete" [disabled]="!id.value" (click)="onDeleteBook()"/>
   </form>

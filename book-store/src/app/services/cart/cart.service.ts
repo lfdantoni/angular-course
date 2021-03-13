@@ -20,7 +20,7 @@ export class CartService {
     if (this.items.length) {
       return {
         itemsCount: this.items.length,
-        totalPrice: this.items.map(item => item.price).reduce((prev, current) => prev + current)
+        totalPrice: this.items.map(item => item.price).reduce((prev, current) => prev + current, 0)
       };
     }
 

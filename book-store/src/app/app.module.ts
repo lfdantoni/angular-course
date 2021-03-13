@@ -33,7 +33,7 @@ const payPalToken: PayPalConfig = {
   imports: [
     BrowserModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     BookService,
