@@ -14,6 +14,8 @@ import { PayPalConfig } from './models/PayPalConfig';
 import { LoggerService } from './services/logger/logger.service';
 import { environment } from 'src/environments/environment';
 import { SilentLoggerService } from './services/silent-logger/silent-logger.service';
+import { HeaderComponent } from './header/header.component';
+import { MenuComponent } from './menu/menu.component';
 
 
 const payPalToken: PayPalConfig = {
@@ -28,7 +30,9 @@ const payPalToken: PayPalConfig = {
     AddBookComponent,
     BookListComponent,
     BookComponent,
-    BookStatusDirective
+    BookStatusDirective,
+    HeaderComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,

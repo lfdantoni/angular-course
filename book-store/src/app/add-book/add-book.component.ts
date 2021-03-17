@@ -23,6 +23,7 @@ export class AddBookComponent implements OnInit {
   errorMessage = '';
   showError = false;
   categoryList: CategoryItemModel[] = [];
+  isLoading = true;
 
   constructor(private bookService: BookService) {
     this.formGroup = new FormGroup({
@@ -39,10 +40,12 @@ export class AddBookComponent implements OnInit {
 
   ngOnInit(): void {
     // this.categoryList = this.transformBookCategories(this.bookService.getCategories());
+    this.isLoading = true;
 
     this.bookService.getCategories()
       .pipe(first())
       .subscribe(categories => {
+        this.isLoading = false;
         this.categoryList = this.transformBookCategories(categories)
       })
   }
