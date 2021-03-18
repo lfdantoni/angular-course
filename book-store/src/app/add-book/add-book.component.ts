@@ -1,7 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { first, map } from 'rxjs/operators';
 import { Book } from '../models/Book';
 import { BookCategory } from '../models/BookCategory';
 import { BookService } from '../services/book/book.service';
@@ -25,7 +26,7 @@ export class AddBookComponent implements OnInit {
   categoryList: CategoryItemModel[] = [];
   isLoading = true;
 
-  constructor(private bookService: BookService) {
+  constructor(private bookService: BookService, private activateRoute: ActivatedRoute, private router: Router) {
     this.formGroup = new FormGroup({
       id: new FormControl(''),
       title: new FormControl('', Validators.required),
@@ -43,11 +44,37 @@ export class AddBookComponent implements OnInit {
     this.isLoading = true;
 
     this.bookService.getCategories()
-      .pipe(first())
+      .pipe(
+        first(),
+        map(cats => this.transformBookCategories(cats)))
       .subscribe(categories => {
         this.isLoading = false;
-        this.categoryList = this.transformBookCategories(categories)
+        this.categoryList = categories;
+        this.checkSelectedCategories();
+      });
+
+    this.activateRoute.params.subscribe(params => {
+      const bookId = params.id;
+
+      if(bookId) {
+        this.bookService.getBookById(bookId)
+          .pipe(first())
+          .subscribe(book => {
+            this.formGroup.setValue(book);
+            this.checkSelectedCategories();
+          })
+      }
+    })
+  }
+
+  private checkSelectedCategories() {
+    const currentCategories: string[] = this.categories.value;
+
+    if(currentCategories.length) {
+      this.categoryList.forEach(c => {
+        c.checked = currentCategories.indexOf(c.value) >= 0;
       })
+    }
   }
 
   private transformBookCategories(categories: BookCategory[]): CategoryItemModel[] {
@@ -67,6 +94,7 @@ export class AddBookComponent implements OnInit {
       .pipe(first())
       .subscribe((book) => {
         this.resetForm();
+        this.router.navigate(['']);
       },
       (error) => this.handleError(error));
     } else {
@@ -74,6 +102,7 @@ export class AddBookComponent implements OnInit {
         .pipe(first())
         .subscribe((book) => {
           this.resetForm();
+          this.router.navigate(['']);
         },
         (error) => this.handleError(error));
     }

@@ -1,5 +1,12 @@
-app-book-list {
+::ng-deep router-outlet + * {
   display: flex;
   justify-content: center;
   width: 100%;
+}
+
+app-header::before {
+  content: '';
+  clear: both;
+  display: block;
+  margin-top: 100px;
 }

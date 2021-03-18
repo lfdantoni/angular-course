@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { AddBookComponent } from './add-book/add-book.component';
@@ -24,6 +25,13 @@ const payPalToken: PayPalConfig = {
   url: ''
 };
 
+const routes: Routes = [
+  {path: 'list', component: BookListComponent},
+  {path: 'add', component: AddBookComponent},
+  {path: 'edit/:id', component: AddBookComponent},
+  {path: '', redirectTo: 'list', pathMatch: 'full'}
+]
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +46,7 @@ const payPalToken: PayPalConfig = {
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
+    RouterModule.forRoot(routes),
   ],
   providers: [
     BookService,

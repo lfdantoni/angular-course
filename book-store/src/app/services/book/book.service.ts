@@ -34,6 +34,10 @@ export class BookService {
     return this.http.delete<Book>(`${this.url}/${bookId}`);
   }
 
+  getBookById(bookId: string): Observable<Book> {
+    return this.http.get<Book>(`${this.url}/${bookId}`);
+  }
+
   private get headers(): HttpHeaders {
     return new HttpHeaders({
       'Content-Type': 'application/json'
