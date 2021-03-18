@@ -17,6 +17,7 @@ import { environment } from 'src/environments/environment';
 import { SilentLoggerService } from './services/silent-logger/silent-logger.service';
 import { HeaderComponent } from './header/header.component';
 import { MenuComponent } from './menu/menu.component';
+import { AuthGuard } from './guards/auth/auth.guard';
 
 
 const payPalToken: PayPalConfig = {
@@ -27,8 +28,8 @@ const payPalToken: PayPalConfig = {
 
 const routes: Routes = [
   {path: 'list', component: BookListComponent},
-  {path: 'add', component: AddBookComponent},
-  {path: 'edit/:id', component: AddBookComponent},
+  {path: 'add', component: AddBookComponent, canActivate: [AuthGuard]},
+  {path: 'edit/:id', component: AddBookComponent, canActivate: [AuthGuard]},
   {path: '', redirectTo: 'list', pathMatch: 'full'}
 ]
 
