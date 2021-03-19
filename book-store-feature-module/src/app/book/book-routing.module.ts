@@ -12,12 +12,10 @@ const routes: Routes = [
     component: BookPageComponent,
     children: [
       { path: '', component: BookListComponent, pathMatch: 'full' },
-      { path: 'add', component: AddBookComponent },
+      { path: 'add', component: AddBookComponent, canActivate: [AuthGuard] },
       { path: 'edit/:id', component: AddBookComponent, canActivate: [AuthGuard]},
     ]
   },
-  // { path: '/add', component: AddBookComponent, canActivate: [AuthGuard] },
-  // { path: 'edit/:id', component: AddBookComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
