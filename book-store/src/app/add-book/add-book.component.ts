@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first, map } from 'rxjs/operators';
+import { first, map, takeWhile } from 'rxjs/operators';
 import { Book } from '../models/Book';
 import { BookCategory } from '../models/BookCategory';
 import { BookService } from '../services/book/book.service';
@@ -19,12 +19,13 @@ export interface CategoryItemModel {
   templateUrl: './add-book.component.html',
   styleUrls: ['./add-book.component.css']
 })
-export class AddBookComponent implements OnInit {
+export class AddBookComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
   errorMessage = '';
   showError = false;
   categoryList: CategoryItemModel[] = [];
   isLoading = true;
+  alive = true;
 
   constructor(private bookService: BookService, private activateRoute: ActivatedRoute, private router: Router) {
     this.formGroup = new FormGroup({
@@ -53,18 +54,24 @@ export class AddBookComponent implements OnInit {
         this.checkSelectedCategories();
       });
 
-    this.activateRoute.params.subscribe(params => {
-      const bookId = params.id;
+    this.activateRoute.params
+      .pipe(takeWhile(() => this.alive))
+      .subscribe(params => {
+        const bookId = params.id;
 
-      if(bookId) {
-        this.bookService.getBookById(bookId)
-          .pipe(first())
-          .subscribe(book => {
-            this.formGroup.setValue(book);
-            this.checkSelectedCategories();
-          })
-      }
-    })
+        if(bookId) {
+          this.bookService.getBookById(bookId)
+            .pipe(first())
+            .subscribe(book => {
+              this.formGroup.setValue(book);
+              this.checkSelectedCategories();
+            })
+        }
+      })
+  }
+
+  ngOnDestroy() {
+    this.alive = true;
   }
 
   private checkSelectedCategories() {
