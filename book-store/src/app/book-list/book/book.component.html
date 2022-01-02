@@ -1,9 +1,0 @@
-  <div class="wrapper" appBookStatus [stock]="book.stock">
-  <div class="cover" [style.backgroundImage]="bgImageUrl">
-    <div class="actions">
-      <span class="material-icons" *ngIf="book.stock > 0" (click)="onAddCart()">add_shopping_cart</span>
-    </div>
-  </div>
-  <div class="title">{{book.title}}</div>
-  <div class="author">{{book.author}}</div>
-</div>
