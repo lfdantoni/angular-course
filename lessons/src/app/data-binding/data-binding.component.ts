@@ -31,4 +31,8 @@ export class DataBindingComponent {
     this.list.push(new Date().getTime().toString());
   }
 
+  logValue(value: string) {
+    console.log('Value:', value)
+  }
+
 }

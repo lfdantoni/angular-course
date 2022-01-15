@@ -1,0 +1,67 @@
+<h2>Reactive Form</h2>
+<form [formGroup]="formGroup" (submit)="onSubmit()">
+  Name: <input type="text" formControlName="firstName" />
+
+  <div *ngIf="firstName?.touched && !firstName?.valid">
+    <div *ngIf="firstName?.errors?.['required']">Name is required</div>
+    <div *ngIf="firstName?.errors?.['minlength']">Name should have 4 characters minimum</div>
+  </div>
+  <br>
+
+  Lastname: <input type="text" formControlName="lastName" />
+  <br>
+
+  Email: <input type="email" formControlName="email" />
+  <br>
+
+  Phone Number: <input type="text" formControlName="phoneNumber" />
+  <div *ngIf="phoneNumber?.touched && !phoneNumber?.valid && phoneNumber?.errors?.['phoneNumber']">Invalid phone number</div>
+  <br>
+
+  Id: <input type="text" formControlName="id" />
+  <div *ngIf="id?.touched && !id?.valid && id?.errors?.['idInvalid']">Invalid id</div>
+  <br>
+
+  Comment: <input type="text" formControlName="comment"/>
+  <br>
+
+  <label for="country">Country</label>
+  <select formControlName="country" id="country">
+    <option *ngFor="let country of countries" [value]="country.code">
+      {{country.name}}
+    </option>
+  </select>
+  <br>
+
+  Age: <input type="number" formControlName="age" />
+  <div *ngIf="age?.touched && !age?.valid && age?.errors?.['min']">Age should be 18+</div>
+  <br>
+
+  Gender:
+  <input type="radio" value="male" formControlName="gender"> Male
+  <input type="radio" value="female" formControlName="gender"> Female
+  <br>
+
+  Password: <input type="password" formControlName="password" />
+
+  <div *ngIf="password?.touched && !password?.valid">
+    <div *ngIf="password?.errors?.['required']">Password is required</div>
+  </div>
+  <br>
+
+  Repeat Password: <input type="password" formControlName="repeatPassword" />
+
+  <div *ngIf="repeatPassword?.touched && !repeatPassword?.valid">
+    <div *ngIf="repeatPassword?.errors?.['required']">Repeat Password is required</div>
+  </div>
+
+  <div *ngIf="formGroup.errors">
+    <div *ngIf="formGroup.errors?.['matchFields']">{{formGroup.errors?.['matchFields']}}</div>
+  </div>
+  <br>
+
+  Terms & Conditions: <input type="checkbox" formControlName="tc">
+  <div *ngIf="tc?.touched && !tc?.valid && tc?.errors?.['required']">Terms & Conditions should be accepted</div>
+
+  <br>
+  <button type="submit" [disabled]="!formGroup.valid">Send</button>
