@@ -9,6 +9,20 @@ import { HighLightDirective } from './directives/high-light.directive';
 import { TemplateDrivenFormComponent } from './forms/template-driven-form/template-driven-form.component';
 import { FormsComponent } from './forms/forms.component';
 import { ReactiveFormComponent } from './forms/reactive-form/reactive-form.component';
+import { BookService } from './services/book/book.service';
+import { PayPalConfig } from './models/paypal-config';
+import { PayPalToken } from './services/injector-tokens';
+import { LoggerService } from './services/logger/logger.service';
+import { environment } from 'src/environments/environment';
+import { SilentLoggerService } from './services/silent-logger/silent-logger.service';
+import { CategoryComponent } from './data-binding/category/category.component';
+import { FilterComponent } from './data-binding/filter/filter.component';
+
+const payPalToken: PayPalConfig = {
+  clientId: '12312qeqwe',
+  secretId: '13123123asdasd',
+  url: ''
+};
 
 @NgModule({
   declarations: [
@@ -18,14 +32,27 @@ import { ReactiveFormComponent } from './forms/reactive-form/reactive-form.compo
     HighLightDirective,
     TemplateDrivenFormComponent,
     FormsComponent,
-    ReactiveFormComponent
+    ReactiveFormComponent,
+    CategoryComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    BookService,
+    // {provide: BookService, useClass: BookService},  // Helpful to override logic with an inherited class
+    {provide: PayPalToken, useValue: payPalToken},
+    {provide: LoggerService, useFactory: () => {
+      if(environment.production) {
+        return new SilentLoggerService();
+      }
+
+      return new LoggerService()
+    }}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
