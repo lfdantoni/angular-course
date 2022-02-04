@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-forms',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FormsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private activateRoute: ActivatedRoute ) { }
 
   ngOnInit(): void {
+    console.log(this.activateRoute.snapshot.queryParams)
   }
 
 }

@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { first, map, takeWhile } from 'rxjs/operators';
 import { Book } from '../models/book';
 import { BookCategory } from '../models/book-category';
 import { BookService } from '../services/book/book.service';
@@ -15,12 +17,19 @@ export class BookListComponent implements OnInit, OnDestroy {
   bookCategories: BookCategory[] = [];
   isLoading = false;
   isBooksLoading = false;
+  alive = true;
   bookSubscription: Subscription;
+  categoryControl = new FormControl('all');
 
-  constructor(private bookService: BookService) { }
+  constructor(
+    private bookService: BookService,
+    private activateRoute: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.isBooksLoading = true;
+
 
     // this.bookSubscription = this.bookService.getBooks()
     //   .subscribe(books => {
@@ -51,21 +60,57 @@ export class BookListComponent implements OnInit, OnDestroy {
     //   },
     //   error => console.log('ERROR!', error))
 
-    forkJoin([ this.bookService.getBooks(),  this.bookService.getCategories()])
+    // forkJoin([ this.bookService.getBooks(),  this.bookService.getCategories()])
+    //   .pipe(first())
+    //   .subscribe({
+    //     next: ([books, categories]) => {
+    //       this.bookList = books;
+    //       this.bookCategories = categories;
+    //       this.isLoading = false;
+    //     },
+    //     error: error => console.log('ERROR!', error),
+    //     complete: () => console.log('Execution complete!'),
+    //   })
+
+
+    this.bookService.getCategories()
       .pipe(first())
       .subscribe({
-        next: ([books, categories]) => {
-          this.bookList = books;
-          this.bookCategories = categories;
-          this.isLoading = false;
-        },
-        error: error => console.log('ERROR!', error),
-        complete: () => console.log('Execution complete!'),
+        next: categories => {
+        this.bookCategories = categories;
+        this.isLoading = false;
+        this.addCategoryParamListener()
+      },
+      error: error => console.log('ERROR!', error),
+      complete: () => console.log('Execution complete!'),
+    })
+
+  }
+
+  addCategoryParamListener() {
+    // Router example
+    this.activateRoute.params
+      .pipe(takeWhile(() => this.alive))
+      .subscribe(params => {
+        const category = params['category'];
+        console.log('category', category)
+
+        this.isBooksLoading = true;
+        this.bookService.getBooksByCategory(category || '')
+          .pipe(first())
+          .subscribe(books => {
+            console.log('addCategoryParamListener',books)
+            this.categoryControl.setValue(category || 'all')
+            this.bookList = books;
+            this.isBooksLoading = false;
+          })
+
       })
   }
 
   ngOnDestroy(): void {
     // this.bookSubscription?.unsubscribe();
+    this.alive = false;
   }
 
   addBookToCart(book: Book) {
@@ -79,14 +124,15 @@ export class BookListComponent implements OnInit, OnDestroy {
     console.log('onFilterChange', value)
     if(!value) return;
 
-    this.isBooksLoading = true;
+    this.router.navigate(['book-list', valueToFilter])
+    // this.isBooksLoading = true;
 
-    this.bookService.getBooksByCategory(valueToFilter)
-      .pipe(first())
-      .subscribe(books => {
-        this.bookList = books;
-        this.isBooksLoading = false;
-      })
+    // this.bookService.getBooksByCategory(valueToFilter)
+    //   .pipe(first())
+    //   .subscribe(books => {
+    //     this.bookList = books;
+    //     this.isBooksLoading = false;
+    //   })
 
       // Map example
       // this.bookService.getBooksByCategory(valueToFilter)

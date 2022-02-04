@@ -4,7 +4,7 @@
 
   <ng-container *ngIf="!isLoading">
     <div class="app-filter">
-      <select (change)="onFilterChange($event.target)">
+      <select [formControl]="categoryControl" (change)="onFilterChange($event.target)">
         <option value="all">All</option>
         <option *ngFor="let category of bookCategories" [value]="category.code">{{category.display}}</option>
       </select>
