@@ -23,6 +23,7 @@ import { BookComponent } from './book-list/book/book.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { SharedModule } from './shared/shared.module';
 
 const payPalToken: PayPalConfig = {
   clientId: '12312qeqwe',
@@ -60,7 +61,8 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule.forRoot(routes, {anchorScrolling: 'enabled'})
+    RouterModule.forRoot(routes, {anchorScrolling: 'enabled'}),
+    SharedModule,
   ],
   providers: [
     BookService,
