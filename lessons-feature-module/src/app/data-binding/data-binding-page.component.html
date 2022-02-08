@@ -1,0 +1,90 @@
+<div appHighLight>HighLight DIRECTIVE!!!</div>
+
+
+<div class="box">
+  <h2>Service singleton examples</h2>
+  <app-filter></app-filter>
+  <app-category></app-category>
+</div>
+
+<div class="box">
+  <h2>Data Binding</h2>
+  <p>
+    Interpolation:
+    <b>
+      {{title}}
+    </b>
+  </p>
+  <hr>
+
+  <p>
+    Template Expressions:
+    <b>
+      {{ title + ' Template Expressions'}}
+    </b>
+  </p>
+  <hr>
+
+  <p>
+    Template Statements:
+    <b>
+      {{ greeting }}
+    </b>
+    <button (click)="sayHello()">Greeting</button>
+  </p>
+
+  <hr>
+  <p>
+    One-way data source:
+    <br>
+    <b>
+      {{ title }}
+    </b>
+    <br>
+    <input [value]="title" />
+  </p>
+  <hr>
+
+  <p>
+    Event binding
+    <br>
+    <b>
+      {{ inputValue }}
+    </b>
+    <br>
+    <input (input)="onChange($event.target)" />
+  </p>
+  <hr>
+
+  <p>
+    Two-way data binding: <b>[(property)]</b> "Banana in a box"
+    <br>
+    <i>We will see it on the Form example</i>
+  </p>
+</div>
+
+<div class="box">
+  <h2>New Book Component</h2>
+  <!-- <app-book name="test book name" (valueChanged)="logValue($event)"></app-book> -->
+</div>
+
+<div class="box">
+  <h2>Directives</h2>
+
+  <div appHighLight>Attribute directive</div>
+  <hr>
+
+  <b>Structural directives</b>
+  <br>
+  <span *ngFor="let text of list">{{text + ' '}}</span><i>*ngFor</i>
+  <br>
+  <button (click)="onAddText()">Add Text</button>
+  <hr>
+  <div *ngIf="!remove">Text to remove</div>
+  <button (click)="onRemoveClick()">Remove</button>
+</div>
+
+
+
+<router-outlet></router-outlet>
+
