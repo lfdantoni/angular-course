@@ -1,0 +1,8 @@
+- npm init --y
+- npm install -save-dev typescript
+- "start": "tsc main.ts --outDir dist --target es5"
+- Create main.ts
+- Create Person interface
+- Create Kid class which implements Person interface
+- Create a file index.html and link it with dist/main.js
+- Build and check index.html on a web browser
