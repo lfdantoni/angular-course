@@ -54,9 +54,9 @@
   </p>
 </div>
 
-<div class="box">
-  <h2>New Book Component</h2>
-  <app-book name="test book name" (valueChanged)="logValue($event)"></app-book>
+<div class="box" id="child-component">
+  <h2>Child Component</h2>
+  <app-child name="test book name" (valueChanged)="logValue($event)"></app-child>
 </div>
 
 <div class="box">
@@ -76,3 +76,7 @@
   <div *ngIf="!remove">Text to remove</div>
   <button (click)="onRemoveClick()">Remove</button>
 </div>
+
+<div class="long-hight"></div>
+
+<div id="fragment">Fragment</div>
