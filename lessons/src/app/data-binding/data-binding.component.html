@@ -56,7 +56,7 @@
 
 <div class="box">
   <h2>New Book Component</h2>
-  <app-book></app-book>
+  <app-book name="test book name" (valueChanged)="logValue($event)"></app-book>
 </div>
 
 <div class="box">
@@ -67,6 +67,8 @@
 
   <b>Structural directives</b>
   <br>
+  <!-- https://angular.io/api/common/NgFor#description -->
+  <!-- ngFor performance -->
   <span *ngFor="let text of list">{{text + ' '}}</span><i>*ngFor</i>
   <br>
   <button (click)="onAddText()">Add Text</button>

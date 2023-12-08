@@ -30,4 +30,8 @@ export class DataBindingComponent {
   onAddText() {
     this.list.push(new Date().getTime().toString());
   }
+
+  logValue(value: string) {
+    console.log('Value:', value)
+  }
 }
