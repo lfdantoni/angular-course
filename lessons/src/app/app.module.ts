@@ -6,17 +6,26 @@ import { AppComponent } from './app.component';
 import { DataBindingComponent } from './data-binding/data-binding.component';
 import { BookComponent } from './data-binding/book/book.component';
 import { HighLightDirective } from './directives/high-light.directive';
+import { FormsComponent } from './forms/forms.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TemplateDrivenFormComponent } from './forms/template-driven-form/template-driven-form.component';
+import { ReactiveFormComponent } from './forms/reactive-form/reactive-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DataBindingComponent,
     BookComponent,
-    HighLightDirective
+    HighLightDirective,
+    FormsComponent,
+    TemplateDrivenFormComponent,
+    ReactiveFormComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
