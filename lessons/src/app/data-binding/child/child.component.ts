@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-book',
-  templateUrl: './book.component.html',
-  styleUrls: ['./book.component.css']
+  selector: 'app-child',
+  templateUrl: './child.component.html',
+  styleUrls: ['./child.component.css']
 })
-export class BookComponent implements OnInit {
+export class ChildComponent implements OnInit {
   @Input() name: string = '';
   @Output() valueChanged = new EventEmitter<string>();
 
