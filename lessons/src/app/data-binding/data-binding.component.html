@@ -1,82 +1,84 @@
-<div class="box">
-  <h2>Data Binding</h2>
-  <p>
-    Interpolation:
-    <b>
-      {{title}}
-    </b>
-  </p>
-  <hr>
+<div class="wrapper">
+  <div class="box">
+    <h2>Data Binding</h2>
+    <p>
+      Interpolation:
+      <b>
+        {{title}}
+      </b>
+    </p>
+    <hr>
 
-  <p>
-    Template Expressions:
-    <b>
-      {{ title + ' Template Expressions'}}
-    </b>
-  </p>
-  <hr>
+    <p>
+      Template Expressions:
+      <b>
+        {{ title + ' Template Expressions'}}
+      </b>
+    </p>
+    <hr>
 
-  <p>
-    Template Statements:
-    <b>
-      {{ greeting }}
-    </b>
-    <button (click)="sayHello()">Greeting</button>
-  </p>
+    <p>
+      Template Statements:
+      <b>
+        {{ greeting }}
+      </b>
+      <button (click)="sayHello()">Greeting</button>
+    </p>
 
-  <hr>
-  <p>
-    One-way data source:
-    <br>
-    <b>
-      {{ title }}
-    </b>
-    <br>
-    <input [value]="title" />
-  </p>
-  <hr>
+    <hr>
+    <p>
+      One-way data source:
+      <br>
+      <b>
+        {{ title }}
+      </b>
+      <br>
+      <input [value]="title" />
+    </p>
+    <hr>
 
-  <p>
-    Event binding
-    <br>
-    <b>
-      {{ inputValue }}
-    </b>
-    <br>
-    <input (keyup)="onKeyup($event)" />
-  </p>
-  <hr>
+    <p>
+      Event binding
+      <br>
+      <b>
+        {{ inputValue }}
+      </b>
+      <br>
+      <input (keyup)="onKeyup($event)" />
+    </p>
+    <hr>
 
-  <p>
-    Two-way data binding: <b>[(property)]</b> "Banana in a box"
+    <p>
+      Two-way data binding: <b>[(property)]</b> "Banana in a box"
+      <br>
+      <i>We will see it on the Form example</i>
+    </p>
+  </div>
+
+  <div class="box" id="child-component">
+    <h2>Child Component</h2>
+    <app-child name="test book name" (valueChanged)="logValue($event)"></app-child>
+  </div>
+
+  <div class="box">
+    <h2>Directives</h2>
+
+    <div appHighLight>Attribute directive</div>
+    <hr>
+
+    <b>Structural directives</b>
     <br>
-    <i>We will see it on the Form example</i>
-  </p>
+    <!-- https://angular.io/api/common/NgFor#description -->
+    <!-- ngFor performance -->
+    <span *ngFor="let text of list">{{text + ' '}}</span><i>*ngFor</i>
+    <br>
+    <button (click)="onAddText()">Add Text</button>
+    <hr>
+    <div *ngIf="!remove">Text to remove</div>
+    <button (click)="onRemoveClick()">Remove</button>
+  </div>
+
+  <div class="long-hight"></div>
+
+  <div id="fragment">Fragment</div>
 </div>
-
-<div class="box" id="child-component">
-  <h2>Child Component</h2>
-  <app-child name="test book name" (valueChanged)="logValue($event)"></app-child>
-</div>
-
-<div class="box">
-  <h2>Directives</h2>
-
-  <div appHighLight>Attribute directive</div>
-  <hr>
-
-  <b>Structural directives</b>
-  <br>
-  <!-- https://angular.io/api/common/NgFor#description -->
-  <!-- ngFor performance -->
-  <span *ngFor="let text of list">{{text + ' '}}</span><i>*ngFor</i>
-  <br>
-  <button (click)="onAddText()">Add Text</button>
-  <hr>
-  <div *ngIf="!remove">Text to remove</div>
-  <button (click)="onRemoveClick()">Remove</button>
-</div>
-
-<div class="long-hight"></div>
-
-<div id="fragment">Fragment</div>

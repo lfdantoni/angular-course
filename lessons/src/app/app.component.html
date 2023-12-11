@@ -3,8 +3,8 @@ App Component
 <a class="link" routerLinkActive="active-link" routerLink="forms">Forms</a>
 <a class="link" routerLinkActive="active-link" routerLink="data-binding">Data Binding</a>
 <a class="link" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" routerLink="book-list">Book List</a>
-<a class="link" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['book-list', 'art-photo']">Art & Photography books</a>
-<a class="link" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" routerLink="book-list" [queryParams]="{test: '1234sss'}">Book List with query params</a>
+<a class="link" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['book-list', '2']">Book Id 2</a>
+<a class="link" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" routerLink="book-list" [queryParams]="{category: 'art-photo'}">Art & Photography books</a>
 <!-- for autoscrolling, anchorScrolling router option should be enabled -->
 <a class="link" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" routerLink="data-binding" fragment="fragment">Data biding with fragment</a>
 

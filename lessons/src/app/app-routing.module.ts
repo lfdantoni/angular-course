@@ -8,7 +8,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 const routes: Routes = [
   { path: 'data-binding', component: DataBindingComponent, canActivate: [AuthGuard] },
   { path: 'book-list', component: BookListComponent },
-  { path: 'book-list/:category', component: BookListComponent},
+  { path: 'book-list/:id', component: BookListComponent},
   { path: '404', component: NotFoundComponent },
   { path: '', redirectTo: 'book-list', pathMatch: 'full' },
   { path: '**', redirectTo: '/404' }
