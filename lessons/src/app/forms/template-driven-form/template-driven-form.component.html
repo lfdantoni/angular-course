@@ -35,7 +35,12 @@
 
   Terms & Conditions: <input type="checkbox" [(ngModel)]="myModel.tc" name="tc" #tc="ngModel" required>
   <div *ngIf="tc.touched && !tc.valid && tc.errors?.['required']">Terms & Conditions should be accepted</div>
+  <br>
+  <br>
 
+  <!-- custom directive validator -->
+  Custom validator: <input type="text" ngModel name="customValidator" appForbiddenValue="test" #customValidator="ngModel" />
+  <div *ngIf="customValidator.touched && !customValidator.valid && customValidator.errors?.['forbiddenValue']">Custom directive validator error!</div>
 
   <br>
   <button type="submit" [disabled]="!myForm.valid">Send</button>

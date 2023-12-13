@@ -34,6 +34,7 @@ export class ReactiveFormComponent {
         tc: new FormControl(false, [Validators.requiredTrue]),
         password: new FormControl('', Validators.required),
         repeatPassword: new FormControl('', Validators.required),
+        customValidator: new FormControl(''),
       },
       [matchFields('password', 'repeatPassword', 'Passwords are not matching.')] // add validators to validate the form as a whole
     )
@@ -77,5 +78,9 @@ export class ReactiveFormComponent {
 
   get repeatPassword():  AbstractControl|null {
     return this.formGroup.get('repeatPassword');
+  }
+
+  get customValidator():  AbstractControl|null {
+    return this.formGroup.get('customValidator');
   }
 }

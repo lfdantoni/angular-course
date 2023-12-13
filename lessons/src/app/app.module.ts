@@ -14,6 +14,7 @@ import { SharedModule } from './shared/shared.module';
 import { BookListComponent } from './book-list/book-list.component';
 import { ChildComponent } from './data-binding/child/child.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { CustomForbiddenValueValidatorDirective } from './directives/validators/custom-forbidden-value-validator';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ChildComponent,
     HighLightDirective,
     BookListComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    CustomForbiddenValueValidatorDirective,
   ],
   imports: [
     BrowserModule,
