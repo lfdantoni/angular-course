@@ -15,6 +15,18 @@ import { BookListComponent } from './book-list/book-list.component';
 import { ChildComponent } from './data-binding/child/child.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { CustomForbiddenValueValidatorDirective } from './directives/validators/custom-forbidden-value-validator';
+import { BookService } from './services/book/book.service';
+import { PayPalToken } from './services/injector-tokens';
+import { PayPalConfig } from './models/paypal-config';
+import { LoggerService } from './services/logger/logger.service';
+import { environment } from '../environments/environment';
+import { SilentLoggerService } from './services/silent-logger/silent-logger.service';
+
+const payPalToken: PayPalConfig = {
+  clientId: '12312qeqwe',
+  secretId: '13123123asdasd',
+  url: ''
+};
 
 @NgModule({
   declarations: [
@@ -38,7 +50,18 @@ import { CustomForbiddenValueValidatorDirective } from './directives/validators/
     ReactiveFormsModule,
     SharedModule
   ],
-  providers: [],
+  providers: [
+    BookService,
+    // {provide: BookService, useClass: BookService},  // Helpful to override logic with an inherited class
+    {provide: PayPalToken, useValue: payPalToken},
+    {provide: LoggerService, useFactory: () => {
+      if(environment.isProd) {
+        return new SilentLoggerService();
+      }
+
+      return new LoggerService()
+    }}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
