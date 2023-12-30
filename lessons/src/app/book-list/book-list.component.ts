@@ -1,6 +1,6 @@
 import { Component, Inject, OnDestroy, OnInit, Optional } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest, takeWhile, Observable } from 'rxjs';
 import { booksMock } from '../mock-data/books';
 import { Book } from '../models/book';
 import { PayPalConfig } from '../models/paypal-config';
@@ -24,8 +24,11 @@ import { LoggerService } from '../services/logger/logger.service';
 export class BookListComponent implements OnInit, OnDestroy {
   // bookList: Book[] = booksMock;
   bookList: Book[] = [];
+  bookListObs: Observable<Book[]> = this.bookService.getBooks();
   card: Book[] = [];
-  getBookIdSubscription?: Subscription;
+  // getBookIdSubscription?: Subscription;
+  isBooksLoading = false;
+  alive = true;
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -38,43 +41,103 @@ export class BookListComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    console.log('params', this.activateRoute.snapshot.params)
-    console.log('queryParams', this.activateRoute.snapshot.queryParams)
+    // console.log('params', this.activateRoute.snapshot.params)
+    // console.log('queryParams', this.activateRoute.snapshot.queryParams)
     // const id: string = this.activateRoute.snapshot.params['id'];
     // const category: string = this.activateRoute.snapshot.queryParams['category'];
 
-    console.log('paypalConfig', this.paypalConfig)
-    console.log('optional logger format service', this.loggerFormatService)
+    // console.log('paypalConfig', this.paypalConfig)
+    // console.log('optional logger format service', this.loggerFormatService)
 
+    // Be aware that combineLatest will not emit an initial value until each observable emits at least one value.
+    // https://www.learnrxjs.io/learn-rxjs/operators/combination/combinelatest
+    combineLatest([
+      this.activateRoute.params,
+      this.activateRoute.queryParams
+    ])
+    .pipe(takeWhile(() => this.alive))
+    .subscribe(([params, queryParams]) => {
+      const id = params['id'];
 
-    this.activateRoute.params
-      .subscribe((params: Params) => {
-        const id = params['id'];
+      if(id) {
+        this.isBooksLoading = true;
 
-        if(id) {
-          this.getBookIdSubscription = this.bookService.getBookById(id)
-          .subscribe((book: Book|undefined) => {
-            this.bookList = book ? [book] : []
+        // this.getBookIdSubscription = this.bookService.getBookById(id)
+        // this.bookService.getBookById(id)
+        //   .pipe(takeWhile(() => this.alive))
+        //   .subscribe((book: Book|undefined) => {
+        //     this.bookList = book ? [book] : []
+        //     this.isBooksLoading = false;
+        //   })
+
+        this.bookService.getBookById(id)
+          .pipe(takeWhile(() => this.alive))
+          .subscribe({
+            next: (book: Book|undefined) => {
+              this.bookList = book ? [book] : []
+              this.isBooksLoading = false;
+            },
+            error: error => console.log('ERROR!', error),
+            complete: () => console.log('Execution complete!'), // no error and there is no next values (next method wont be called anymore)
           })
 
-          return;
-        }
-      })
+        return;
+      }
+
+      const category = queryParams['category'];
+
+      if(category) {
+        this.isBooksLoading = true;
+
+        this.bookService.getBooksByCategory(category)
+          .pipe(takeWhile(() => this.alive))
+          .subscribe((books: Book[]) => {
+            this.bookList = books;
+            this.isBooksLoading = false;
+          })
+
+        return;
+      }
+
+      this.isBooksLoading = true;
+
+      this.bookService.getBooks()
+        .pipe(takeWhile(() => this.alive))
+        .subscribe(books => {
+          this.bookList = books;
+          this.isBooksLoading = false;
+        })
+    })
+
+    // this.activateRoute.params
+    //   .subscribe((params: Params) => {
+    //     const id = params['id'];
+
+    //     if(id) {
+    //       this.getBookIdSubscription = this.bookService.getBookById(id)
+    //       .subscribe((book: Book|undefined) => {
+    //         this.bookList = book ? [book] : []
+    //       })
+
+    //       return;
+    //     }
+    //   })
 
 
-    this.activateRoute.queryParams
-      .subscribe((queryParams: Params) => {
-        const category = queryParams['category'];
+    // this.activateRoute.queryParams
+    //   .subscribe((queryParams: Params) => {
+    //     const category = queryParams['category'];
 
-        if(category) {
-          this.bookService.getBooksByCategory(category)
-            .subscribe((books: Book[]) => {
-              this.bookList = books;
-            })
+    //     if(category) {
+    //       this.bookService.getBooksByCategory(category)
+    //         .subscribe((books: Book[]) => {
+    //           this.bookList = books;
+    //         })
 
-          return;
-        }
-      })
+    //       return;
+    //     }
+    //   })
+
 
     // if(id) {
       // const book = booksMock.find(book => book.id === id);
@@ -111,10 +174,26 @@ export class BookListComponent implements OnInit, OnDestroy {
     //   .subscribe(books => {
     //     this.bookList = books;
     //   })
+
+    this.bookService.getBooksResponse()
+    .pipe(takeWhile(() => this.alive))
+    .subscribe(resp => {
+      console.log('getBooksResponse', resp)
+
+      const keys = resp.headers.keys()
+      console.log('getBooksResponse keys', keys)
+
+      const headers = keys.map(key => {
+        return `${key}: ${resp.headers.get(key)}`
+      })
+
+      console.log('getBooksResponse headers', headers)
+    })
   }
 
   ngOnDestroy(): void {
-    this.getBookIdSubscription?.unsubscribe();
+    // this.getBookIdSubscription?.unsubscribe();
+    this.alive = false;
   }
 
   addBookToCart(book: Book) {

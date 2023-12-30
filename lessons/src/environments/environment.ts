@@ -1,4 +1,4 @@
 export const environment = {
   isProd: true,
-  apiUrl: 'http://apiurl.com'
+  API_URL: 'https://book-store-server-lemon.vercel.app/'
 };

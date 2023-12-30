@@ -1,6 +1,22 @@
 <div class="wrapper">
-  <app-book *ngFor="let book of bookList"
-    [book]="book"
-    (addBookToCartEvent)="addBookToCart($event)">
-  </app-book>
+  <div *ngIf="isBooksLoading" class="loading">Loading...</div>
+
+  <ng-container *ngIf="!isBooksLoading">
+    <app-book *ngFor="let book of bookList"
+      [book]="book"
+      (addBookToCartEvent)="addBookToCart($event)">
+    </app-book>
+  </ng-container>
+
+
+  <div>
+    <h2>Observable book list - async pipe</h2>
+    <br>
+    <h2>MonthText pipe default value: {{ 2|monthText }}</h2>
+    <br>
+    <h2>{{ 2|monthText:'short' }}</h2>
+    <br>
+  </div>
+
+  <div *ngFor="let book of bookListObs | async">{{ book|json }}</div>
 </div>

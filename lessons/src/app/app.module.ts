@@ -21,6 +21,8 @@ import { PayPalConfig } from './models/paypal-config';
 import { LoggerService } from './services/logger/logger.service';
 import { environment } from '../environments/environment';
 import { SilentLoggerService } from './services/silent-logger/silent-logger.service';
+import { HttpClientModule } from '@angular/common/http';
+import { MonthTextPipe } from './pipes/month-text/month-text.pipe';
 
 const payPalToken: PayPalConfig = {
   clientId: '12312qeqwe',
@@ -42,13 +44,15 @@ const payPalToken: PayPalConfig = {
     BookListComponent,
     NotFoundComponent,
     CustomForbiddenValueValidatorDirective,
+    MonthTextPipe,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    HttpClientModule
   ],
   providers: [
     BookService,
