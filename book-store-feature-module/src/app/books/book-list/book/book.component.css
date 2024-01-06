@@ -1,0 +1,81 @@
+.wrapper {
+  min-height: 450px;
+  width: 100%;
+  box-sizing: border-box;
+  display: inline-block;
+  text-align: center;
+  margin: 0.5em 0;
+  position: relative;
+}
+.wrapper .cover {
+  min-height: 400px;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.wrapper .cover .actions {
+  position: absolute;
+  z-index: 2;
+  top: 45%;
+  left: 40%;
+  opacity: 0;
+  transition: 0.3s linear;
+}
+
+.wrapper .cover .actions .material-icons {
+  font-size: 2.3em;
+  border: 5px solid white;
+  padding: 0.3em;
+  cursor: pointer;
+  background-color: gray;
+  color: white;
+}
+
+.wrapper .cover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  z-index: 1;
+  transition: 0.3s linear;
+}
+
+.wrapper.low-stock .cover::before {
+  background-color: red;
+}
+
+.wrapper.medium-stock .cover::before {
+  background-color: orange;
+}
+
+.wrapper.high-stock .cover::before {
+  background-color: yellow;
+}
+
+.wrapper:hover .cover::before {
+  content: '';
+  opacity: 0.5;
+}
+
+.wrapper:hover .cover .actions {
+  opacity: 1;
+  transform: translateY(-30px);
+}
+
+.wrapper .title {
+  font-size: 0.9em;
+  font-weight: bold;
+  margin-top: 0.5em;
+}
+
+.wrapper .author {
+  color: #00bfc5;
+  font-size: 0.8em;
+  font-weight: bold;
+  margin-top: 0.5em;
+}

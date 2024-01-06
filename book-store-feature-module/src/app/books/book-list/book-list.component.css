@@ -1,0 +1,46 @@
+app-filter {
+  width: 100%;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.wrapper app-book {
+  width: 24%;
+  margin: 0 1px;
+}
+
+@media only screen and (max-width: 920px) {
+  .wrapper {
+    max-width: 800px;
+  }
+
+  .wrapper app-book {
+    width: 31%;
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  .wrapper {
+    max-width: 600px;
+  }
+
+  .wrapper app-book {
+    width: 46%;
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .wrapper {
+    max-width: 280px;
+  }
+
+  .wrapper app-book {
+    width: 98%;
+  }
+}
