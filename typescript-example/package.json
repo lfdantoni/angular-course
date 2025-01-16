@@ -1,0 +1,15 @@
+{
+  "name": "typescript-example",
+  "version": "1.0.0",
+  "description": "- npm init --y\r - npm install -save-dev typescript\r - \"start\": \"tsc main.ts --outDir dist --target es5\"\r - Create main.ts\r - Create Person interface\r - Create Kid class which implements Person interface\r - Create a file index.html and link it with dist/main.js\r - Build and check index.html on a web browser",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc main.ts --outDir dist --target es5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}
