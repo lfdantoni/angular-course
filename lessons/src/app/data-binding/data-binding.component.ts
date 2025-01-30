@@ -11,7 +11,7 @@ export class DataBindingComponent {
   inputValue: string = 'test input';
   greeting: string = '';
 
-  list: string[] = ['hello', 'world', '!'];
+  list: string[] = [];
   remove = false;
 
   constructor() { }
@@ -29,6 +29,7 @@ export class DataBindingComponent {
   }
 
   onAddText() {
+    console.log('Adding text');
     this.list.push(new Date().getTime().toString());
   }
 

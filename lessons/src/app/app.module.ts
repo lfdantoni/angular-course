@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { DataBindingComponent } from './data-binding/data-binding.component';
 import { BookComponent } from './data-binding/book/book.component';
 import { HighLightDirective } from './directives/high-light.directive';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { HighLightDirective } from './directives/high-light.directive';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    CommonModule, // it is necessary to use the new Control Flow directive @ngFor, etc.
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -69,10 +69,19 @@
   <br>
   <!-- https://angular.io/api/common/NgFor#description -->
   <!-- ngFor performance -->
-  <span *ngFor="let text of list">{{text + ' '}}</span><i>*ngFor</i>
+  <!-- <span *ngFor="let text of list">{{text + ' '}}</span><i>*ngFor</i> -->
+  @for (text of list; track text) {
+    <span>{{text + ' '}}</span><i>*ngFor</i>
+  } @empty {
+    <span>Empty list</span>
+  }
+
   <br>
   <button (click)="onAddText()">Add Text</button>
   <hr>
-  <div *ngIf="!remove">Text to remove</div>
+  <!-- <div *ngIf="!remove">Text to remove</div> -->
+  @if (!remove) {
+    <div *ngIf="!remove">Text to remove</div>
+  }
   <button (click)="onRemoveClick()">Remove</button>
 </div>
