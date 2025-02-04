@@ -2,7 +2,8 @@ import { HighLightDirective } from './high-light.directive';
 
 describe('HighLightDirective', () => {
   it('should create an instance', () => {
-    const directive = new HighLightDirective();
+    const elRefMock = jasmine.createSpyObj('ElementRef', ['nativeElement']);
+    const directive = new HighLightDirective(elRefMock);
     expect(directive).toBeTruthy();
   });
 });
