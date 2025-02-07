@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { BookComponent } from './book/book.component';
 import { CommonModule } from '@angular/common';
 import { HighLightDirective } from '../directives/high-light.directive';
 
 @Component({
   selector: 'app-data-binding',
   imports: [
-    BookComponent,
     CommonModule, // to use *ngIf, *ngFor, etc  - no built-in Control flow
     HighLightDirective,
   ],
