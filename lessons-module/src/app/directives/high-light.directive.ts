@@ -7,7 +7,9 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 export class HighLightDirective {
   constructor(private el: ElementRef) { }
 
-  @HostListener('mouseenter') onMouseEnter() {
+  // second HostListener param is optional (['$event'])
+  @HostListener('mouseenter', ['$event']) onMouseEnter(event: MouseEvent) {
+    console.log('mouseEvent', event)
     this.highlight('yellow');
   }
 
