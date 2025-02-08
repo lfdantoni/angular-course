@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.css'
 })
-export class BookListComponent implements OnInit {
+export class BookListComponent implements OnInit { // https://angular.dev/guide/components/lifecycle
   bookList: Book[] = booksMock;
   card: Book[] = [];
 
