@@ -9,7 +9,7 @@ import { Book } from '../../models/book';
   styleUrl: './book.component.css'
 })
 export class BookComponent {
-  @Input() book?: Book;
+  @Input({ required: true }) book!: Book;
   @Output() addBookToCartEvent = new EventEmitter<Book>()
   // bgImageUrl: string;
   get bgImageUrl(): string {
