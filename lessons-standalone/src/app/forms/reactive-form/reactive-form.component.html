@@ -1,0 +1,96 @@
+<a target="_blank" href="https://angular.dev/guide/forms/reactive-forms">Reactive Form</a>
+<br>
+
+<form [formGroup]="formGroup" (submit)="onSubmit()">
+  Name: <input type="text" formControlName="firstName" />
+
+  @if (firstName?.touched && !firstName?.valid) {
+    @if (firstName?.errors?.['required']) {
+      <div>Name is required</div>
+    }
+    @if (firstName?.errors?.['minlength']) {
+      <div>Name should have 4 characters minimum</div>
+    }
+  }
+  <br>
+
+  Lastname: <input type="text" formControlName="lastName" />
+  <br>
+
+  Email: <input type="email" formControlName="email" />
+  <br>
+
+  Phone Number: <input type="text" formControlName="phoneNumber" />
+  @if (phoneNumber?.touched && !phoneNumber?.valid && phoneNumber?.errors?.['phoneNumber']) {
+    <div>Invalid phone number</div>
+  }
+  <br>
+
+  Id: <input type="text" formControlName="id" />
+  @if (id?.touched && !id?.valid && id?.errors?.['idInvalid']) {
+    <div>Invalid id</div>
+  }
+  <br>
+
+  Comment: <input type="text" formControlName="comment"/>
+  <br>
+
+  <label for="country">Country</label>
+  <select formControlName="country" id="country">
+    @for (country of countries; track country.code) {
+      <option [value]="country.code">
+      {{country.name}}
+      </option>
+    }
+  </select>
+  <br>
+
+  Age: <input type="number" formControlName="age" />
+  @if (age?.touched && !age?.valid && age?.errors?.['min']) {
+    <div>Age should be 18+</div>
+  }
+  <br>
+
+  Gender:
+  <input type="radio" value="male" formControlName="gender"> Male
+  <input type="radio" value="female" formControlName="gender"> Female
+  <br>
+
+  Password: <input type="password" formControlName="password" />
+
+  @if (password?.touched && !password?.valid) {
+    @if (password?.errors?.['required']) {
+      <div>Password is required</div>
+    }
+  }
+  <br>
+
+  Repeat Password: <input type="password" formControlName="repeatPassword" />
+
+  @if (repeatPassword?.touched && !repeatPassword?.valid) {
+    @if (repeatPassword?.errors?.['required']) {
+      <div>Repeat Password is required</div>
+    }
+  }
+
+  @if (formGroup.errors?.['matchFields']) {
+    <div>{{formGroup.errors?.['matchFields']}}</div>
+  }
+
+  <br>
+
+  Terms & Conditions: <input type="checkbox" formControlName="tc">
+  @if (tc?.touched && !tc?.valid && tc?.errors?.['required']) {
+    <div>Terms & Conditions should be accepted</div>
+  }
+  <br>
+  <br>
+
+  <!-- custom directive validator -->
+  Custom validator: <input type="text" formControlName="customValidator" appForbiddenValue="test" />
+  @if (customValidator?.touched && !customValidator?.valid && customValidator?.errors?.['forbiddenValue']) {
+    <div>Custom directive validator error!</div>
+  }
+
+  <br>
+  <button type="submit" [disabled]="!formGroup.valid">Send</button>

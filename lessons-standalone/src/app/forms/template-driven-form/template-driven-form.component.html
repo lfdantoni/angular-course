@@ -1,0 +1,65 @@
+<a target="_blank" href="https://angular.dev/guide/forms/template-driven-forms">template-driven-form Angular doc</a>
+
+<!-- Sending the form value is optional if we are using model binding (myModel) -->
+<form #myForm="ngForm" (submit)="onSubmit(myForm.value)">
+  Name: <input type="text" ngModel name="firstName" required #firstName="ngModel"/>
+  @if(!firstName.valid && firstName.touched) {
+    <span>Name invalid</span>
+  }
+  <br>
+
+  Last Name: <input type="text" ngModel name="lastName" required #lastName="ngModel"/>
+  @if(!lastName.valid && lastName.touched) {
+    <span>Last Name invalid</span>
+  }
+  <br>
+
+  Email: <input type="email" ngModel name="email" email required #email="ngModel"/>
+  <!-- Two way data binding -->
+  @if(!email.valid && email.touched && email.errors?.['email']) {
+    <span>Email Invalid</span>
+  }
+  @if(!email.valid && email.touched && email.errors?.['required']) {
+    <span>Email is empty</span>
+  }
+  <br>
+
+  Comment: <input type="text" [(ngModel)]="myModel.comment" name="comment"/>
+  <br>
+
+  <label for="country">Country</label>
+  <select [(ngModel)]="myModel.countryCode" name="country" id="country" required>
+    @for (country of countries; track country.code) {
+      <option [value]="country.code">
+        {{country.name}}
+      </option>
+    }
+  </select>
+  <br>
+
+  <!-- min directive is not supported for Template-Driven -->
+  Age: <input type="number" [(ngModel)]="myModel.age" name="age" #age="ngModel" required />
+  <br>
+
+  Gender:
+  <input type="radio" value="male" [(ngModel)]="myModel.gender" name="gender" required> Male
+  <input type="radio" value="female" [(ngModel)]="myModel.gender" name="gender" required> Female
+  <br>
+
+  Terms & Conditions: <input type="checkbox" [(ngModel)]="myModel.tc" name="tc" #tc="ngModel" required>
+  @if (tc.touched && !tc.valid && tc.errors?.['required']) {
+    <span>Terms & Conditions should be accepted</span>
+  }
+  <br>
+  <br>
+
+  <!-- custom directive validator -->
+  Custom validator: <input type="text" ngModel name="customValidator" appForbiddenValue="test" #customValidator="ngModel" />
+  @if (customValidator.touched && !customValidator.valid && customValidator.errors?.['forbiddenValue']) {
+    <span>Custom directive validator error!</span>
+  }
+
+
+  <br>
+  <button type="submit" [disabled]="!myForm.valid">Send</button>
+</form>
