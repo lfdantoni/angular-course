@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { environment } from '../environments/environment';
 import { jwtDecode, JwtPayload } from "jwt-decode";
+import { LoggerService } from './services/logger/logger.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import { jwtDecode, JwtPayload } from "jwt-decode";
 export class AppComponent {
   title = 'lessons';
 
-  constructor() {
+  constructor(private logger: LoggerService) {
     console.log('isProd:', environment.production, environment)
 
     // https://jwt.io/
@@ -22,5 +23,7 @@ export class AppComponent {
     localStorage.setItem('session', jwt)
 
     localStorage.setItem('role', 'administrator') // user or administrator
+
+    this.logger.log('AppComponent initialized')
   }
 }

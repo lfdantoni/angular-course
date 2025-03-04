@@ -86,11 +86,25 @@
   <br>
   <br>
 
+  Async validator function (invalid value: 123): <input type="text" formControlName="asyncValidatorFnField" />
+  {{asyncValidatorFnField?.status | json}}
+  <br>
+
   <!-- custom directive validator -->
   Custom validator: <input type="text" formControlName="customValidator" appForbiddenValue="test" />
   @if (customValidator?.touched && !customValidator?.valid && customValidator?.errors?.['forbiddenValue']) {
     <div>Custom directive validator error!</div>
   }
+  <br>
+  <!-- custom async directive validator -->
+  Custom Async validator: <input type="text" formControlName="customValidatorAsync" appForbiddenValueAsync="test" />
+  @if (customValidatorAsync?.touched && !customValidatorAsync?.valid && customValidatorAsync?.errors?.['forbiddenValue']) {
+    <div>Custom async directive validator error!</div>
+  }
+  {{customValidatorAsync?.status | json}}
+
+  <br>
+  <br>
 
   <br>
   <button type="submit" [disabled]="!formGroup.valid">Send</button>

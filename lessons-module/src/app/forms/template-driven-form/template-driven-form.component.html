@@ -41,6 +41,11 @@
   <!-- custom directive validator -->
   Custom validator: <input type="text" ngModel name="customValidator" appForbiddenValue="test" #customValidator="ngModel" />
   <div *ngIf="customValidator.touched && !customValidator.valid && customValidator.errors?.['forbiddenValue']">Custom directive validator error!</div>
+  <br>
+  <!-- custom async directive validator -->
+  Custom validator Async: <input type="text" ngModel name="customValidatorAsync" appForbiddenValueAsync="test" #customValidatorAsync="ngModel" />
+  <div *ngIf="customValidatorAsync.touched && !customValidatorAsync.valid && customValidatorAsync.errors?.['forbiddenValue']">Custom async directive validator error!</div>
+  {{customValidatorAsync.status | json}}
 
   <br>
   <button type="submit" [disabled]="!myForm.valid">Send</button>

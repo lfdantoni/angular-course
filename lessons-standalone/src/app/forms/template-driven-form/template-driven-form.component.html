@@ -58,6 +58,14 @@
   @if (customValidator.touched && !customValidator.valid && customValidator.errors?.['forbiddenValue']) {
     <span>Custom directive validator error!</span>
   }
+  <br>
+
+  <!-- custom async directive validator -->
+  Custom validator Async: <input type="text" ngModel name="customValidatorAsync" appForbiddenValueAsync="test" #customValidatorAsync="ngModel" />
+  @if (customValidatorAsync.touched && !customValidatorAsync.valid && customValidatorAsync.errors?.['forbiddenValue']) {
+    <span>Custom async directive validator error!</span>
+  }
+  {{customValidatorAsync.status | json}}
 
 
   <br>

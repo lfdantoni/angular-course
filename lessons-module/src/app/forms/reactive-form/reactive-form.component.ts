@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { countries } from '../../mock-data/countries';
 import { idValidator } from '../../validators/id-validator';
 import { matchFields } from '../../validators/match-fields';
@@ -37,6 +37,8 @@ export class ReactiveFormComponent {
         password: new FormControl('', Validators.required),
         repeatPassword: new FormControl('', Validators.required),
         customValidator: new FormControl(''),
+        customValidatorAsync: new FormControl(''),
+        asyncValidatorFnField: new FormControl('', null, this.asyncValidatorFn) // async validators are the third parameter
       },
       [matchFields('password', 'repeatPassword', 'Passwords are not matching.')] // add validators to validate the form as a whole
     )
@@ -45,6 +47,15 @@ export class ReactiveFormComponent {
   onSubmit(): void {
     console.log(this.formGroup.value);
     console.log(this.firstName?.errors);
+  }
+
+  asyncValidatorFn(control: AbstractControl): Promise<ValidationErrors | null> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const isValid = control.value != '123';
+        resolve(!isValid ? {asyncValidatorFn: true} : null);
+      }, 3000);
+    });
   }
 
   telephoneValidator(phoneExp: RegExp): ValidatorFn {
@@ -84,5 +95,13 @@ export class ReactiveFormComponent {
 
   get customValidator():  AbstractControl|null {
     return this.formGroup.get('customValidator');
+  }
+
+  get customValidatorAsync():  AbstractControl|null {
+    return this.formGroup.get('customValidatorAsync');
+  }
+
+  get asyncValidatorFnField():  AbstractControl|null {
+    return this.formGroup.get('asyncValidatorFnField');
   }
 }
