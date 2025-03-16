@@ -1,0 +1,21 @@
+<!-- <mat-card class="post-card" [routerLink]="[routes.PRODUCT, product.id]"> -->
+<mat-card class="post-card">
+  <mat-card-content>
+    <img src="https://demo.flatlogic.com/angular-material-admin-full/assets/e-commerce/products/1.png" alt="{{post.title}}" class="post-img">
+    <mat-chip-listbox>
+      <mat-chip class="post-status" [color]="post.id % 2 === 0 ? 'warn' : 'primary'" selected>{{'New'}}</mat-chip>
+    </mat-chip-listbox>
+
+    <div class="post-title-wrapper">
+      <p class="post-title">{{post.title | slice: 0 : 15 }}</p>
+      <p class="post-subtitle">{{post.body | slice: 0 : 30 }}</p>
+    </div>
+
+    <div class="post-price-wrapper">
+      <div class="post-pop-wrapper">
+        <p class="post-pop">{{post.id}}</p>
+        <mat-icon color="accent" class="pop-icon">star</mat-icon>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

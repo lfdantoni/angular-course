@@ -1,0 +1,82 @@
+.post-card {
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+  cursor: pointer;
+  color: white;
+}
+
+.post-card .mat-primary {
+  background-color: #536dfe;
+}
+
+.post-card .mat-warn {
+  background-color: #ff4081;
+}
+
+.post-img {
+  width: 100%;
+}
+
+.post-status {
+  outline: none;
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  left: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+}
+
+
+.post-title-wrapper {
+  padding: 16px;
+}
+
+.post-title {
+  font-size: 21px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.post-title {
+  font-size: 21px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.post-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: #adadad;
+  margin: 0;
+}
+
+.post-price-wrapper {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-pop-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-pop {
+  font-size: 16px;
+  font-weight: 400;
+  color: #ffc260;
+  margin: 0;
+}
+
+.pop-icon {
+  padding: 0;
+  font-size: 16px;
+  width: 19px;
+  height: 19px;
+  margin-left: 4px;
+}

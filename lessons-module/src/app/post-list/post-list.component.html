@@ -1,0 +1,21 @@
+<a routerLink="/posts" [queryParams]="{userId: 999}">Posts from user 999</a>
+<br>
+<a routerLink="/posts">{{'All posts' | kebabCase}}</a>
+<br>
+
+<div class="products-wrapper">
+  @let posts = posts$|async;
+
+  @if (!posts) {
+    <li>Loading...</li>
+  }
+
+  @if (posts?.length === 0) {
+    <li>There are no items.</li>
+  }
+
+  @for (post of posts; track post.id) {
+    <app-post [post]="post"></app-post>
+  }
+</div>
+

@@ -7,6 +7,7 @@ import { SilentLoggerService } from './services/silent-logger/silent-logger.serv
 import { environment } from '../environments/environment';
 import { PayPalToken } from './services/injector-tokens';
 import { PayPalConfig } from './models/paypal-config';
+import { provideHttpClient } from '@angular/common/http';
 
 const payPalToken: PayPalConfig = {
   clientId: '12312qeqwe',
@@ -18,6 +19,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withInMemoryScrolling({ anchorScrolling: 'enabled' })),
+    provideHttpClient(), // Http Client
     // LoggerService,
     // { provide: LoggerService, useClass: LoggerFormatService },
     // { provide: LoggerService, useClass: SilentLoggerService },

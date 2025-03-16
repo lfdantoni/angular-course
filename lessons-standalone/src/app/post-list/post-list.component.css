@@ -1,0 +1,11 @@
+.products-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  row-gap: 30px;
+
+  @media (max-width: 576px) {
+    margin-top: -10px;
+  }
+}

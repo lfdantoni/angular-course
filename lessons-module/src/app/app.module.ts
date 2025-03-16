@@ -22,6 +22,13 @@ import { environment } from '../environments/environment';
 import { SilentLoggerService } from './services/silent-logger/silent-logger.service';
 import { LoggerFormatService } from './services/logger-format/logger-format.service';
 import { CustomForbiddenValueValidatorAsyncDirective } from './directives/validators/custom-forbidden-value-validator-async.directive';
+import { provideHttpClient } from '@angular/common/http';
+import { PostComponent } from './post-list/post/post.component';
+import { KebabCasePipe } from './pipes/kebabcase.pipe';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { PostListComponent } from './post-list/post-list.component';
 
 const payPalToken: PayPalConfig = {
   clientId: '12312qeqwe',
@@ -41,7 +48,9 @@ const payPalToken: PayPalConfig = {
     ReactiveFormComponent,
     TemplateDrivenFormComponent,
     CustomForbiddenValueValidatorDirective,
-    CustomForbiddenValueValidatorAsyncDirective
+    CustomForbiddenValueValidatorAsyncDirective,
+    PostComponent,
+    PostListComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,8 +59,13 @@ const payPalToken: PayPalConfig = {
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    KebabCasePipe,
+    MatCardModule,
+    MatChipsModule,
+    MatIconModule,
   ],
   providers: [
+    provideHttpClient(),
     // LoggerService,
     // { provide: LoggerService, useClass: LoggerFormatService },
     // { provide: LoggerService, useClass: SilentLoggerService },
