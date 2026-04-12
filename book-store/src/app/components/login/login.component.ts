@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -12,15 +12,28 @@ import { FormsModule } from '@angular/forms';
 export class LoginComponent {
   private router = inject(Router);
 
-  // Mock credentials — in a real app this would call an auth service/API
-  username = '';
-  password = '';
+  // Two-way binding example: [(ngModel)] keeps this property in sync with the checkbox.
+  // Unlike username/password (read once from form.value on submit), this value is
+  // always up-to-date in the class and can be checked at any time.
+  acceptTerms = false;
+
   error = '';
 
   // Template-Driven Form example: uses ngModel + (ngSubmit), FormsModule imported above.
   // The form state lives in the template (#loginForm="ngForm") rather than in the class.
-  onSubmit(): void {
-    if (this.username === 'admin' && this.password === 'admin') {
+  //
+  // onSubmit receives the NgForm instance passed from the template: (ngSubmit)="onSubmit(loginForm)"
+  // form.value contains all named ngModel fields as a plain object: { username: '', password: '' }
+  // This way the component doesn't need individual properties for each field.
+  onSubmit(form: NgForm): void {
+    const { username, password } = form.value as { username: string; password: string };
+
+    if (!this.acceptTerms) {
+      this.error = 'You must accept the terms and conditions.';
+      return;
+    }
+
+    if (username === 'admin' && password === 'admin') {
       // Store a mock token so authGuard allows access to protected routes
       localStorage.setItem('token', 'mock-token');
       this.router.navigate(['/add-book']);

@@ -9,14 +9,24 @@
   <h2>Login</h2>
   <p class="hint">Use <strong>admin / admin</strong> to log in.</p>
 
-  <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+  <!--
+    Passing the form reference to the method: (ngSubmit)="onSubmit(loginForm)"
+    The template local variable #loginForm is passed as an argument — the component
+    receives it as NgForm and can read form.value, form.valid, form.reset(), etc.
+    This avoids needing the component properties (username/password) as intermediate state.
+  -->
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
 
     <div class="field">
       <label for="username">Username</label>
+      <!--
+        ngModel without binding — registers the control in form.value under its name attribute.
+        No component property needed; the value is read via form.value.username on submit.
+      -->
       <input
         id="username"
         name="username"
-        [(ngModel)]="username"
+        ngModel
         required
         #usernameField="ngModel" />
       @if (usernameField.invalid && usernameField.touched) {
@@ -30,7 +40,7 @@
         id="password"
         name="password"
         type="password"
-        [(ngModel)]="password"
+        ngModel
         required
         #passwordField="ngModel" />
       @if (passwordField.invalid && passwordField.touched) {
@@ -38,11 +48,25 @@
       }
     </div>
 
+    <!--
+      Two-way binding with [(ngModel)]: the acceptTerms property in the class is updated
+      on every change, not just on submit. This contrasts with username/password above,
+      which use unbound ngModel and are read from form.value only when the form is submitted.
+    -->
+    <div class="field field-inline">
+      <input
+        id="acceptTerms"
+        name="acceptTerms"
+        type="checkbox"
+        [(ngModel)]="acceptTerms" />
+      <label for="acceptTerms">I accept the terms and conditions</label>
+    </div>
+
     @if (error) {
       <p class="error-banner">{{ error }}</p>
     }
 
-    <!-- loginForm.invalid: true while any required field is empty -->
-    <button type="submit" [disabled]="loginForm.invalid">Log in</button>
+    <!-- Disabled when form is invalid OR terms not accepted -->
+    <button type="submit" [disabled]="loginForm.invalid || !acceptTerms">Log in</button>
   </form>
 </div>

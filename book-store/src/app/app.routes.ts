@@ -4,6 +4,7 @@ import { BookDetailComponent } from './components/book-detail/book-detail.compon
 import { DataBindingComponent } from './components/data-binding/data-binding.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { AddBookComponent } from './components/add-book/add-book.component';
+import { AddBookTdfComponent } from './components/add-book-tdf/add-book-tdf.component';
 import { LoginComponent } from './components/login/login.component';
 import { authGuard } from './guards/auth.guard';
 
@@ -18,8 +19,10 @@ export const routes: Routes = [
   { path: 'data-binding', component: DataBindingComponent },
   // Login — Template-Driven Form example; sets mock token in localStorage
   { path: 'login', component: LoginComponent },
-  // Add book — protected by authGuard (redirects to /login if no token)
+  // Add book — Reactive Form version, protected by authGuard
   { path: 'add-book', component: AddBookComponent, canActivate: [authGuard] },
+  // Add book — Template-Driven Form version (same feature, different form approach)
+  { path: 'add-book-tdf', component: AddBookTdfComponent, canActivate: [authGuard] },
   // Wildcard — must always be last (first-match wins)
   { path: '**', component: NotFoundComponent },
 ];

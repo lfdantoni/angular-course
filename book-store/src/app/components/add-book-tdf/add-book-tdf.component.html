@@ -1,0 +1,111 @@
+<!--
+  Template-Driven Form version of AddBook.
+  Compare with add-book (Reactive): here validation rules live as HTML attributes,
+  the model lives in the class as plain properties, and form state is tracked by
+  Angular directives (#field="ngModel") rather than FormControl instances.
+-->
+<div class="form-card">
+  <h2>Add Book (Template-Driven)</h2>
+
+  <!--
+    #form="ngForm" — local ref to the NgForm directive that wraps this form.
+    Passed to onSubmit so the component can read form.valid and call form.reset().
+  -->
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+    <!-- Title -->
+    <div class="field">
+      <label for="title">Title *</label>
+      <!--
+        [(ngModel)]="book.title" — two-way binding: keeps book.title in sync.
+        name="title" — required by Angular to register the control in NgForm.
+        required / minlength — HTML validation attributes; Angular picks them up automatically.
+        #titleField="ngModel" — local ref to inspect this control's state.
+      -->
+      <input
+        id="title"
+        name="title"
+        [(ngModel)]="book.title"
+        required
+        minlength="3"
+        #titleField="ngModel" />
+      @if (titleField.hasError('required') && titleField.touched) {
+        <span class="error">Title is required</span>
+      }
+      @if (titleField.hasError('minlength')) {
+        <span class="error">Minimum 3 characters</span>
+      }
+    </div>
+
+    <!-- Author -->
+    <div class="field">
+      <label for="author">Author *</label>
+      <input
+        id="author"
+        name="author"
+        [(ngModel)]="book.author"
+        required
+        #authorField="ngModel" />
+      @if (authorField.hasError('required') && authorField.touched) {
+        <span class="error">Author is required</span>
+      }
+    </div>
+
+    <!-- Categories (comma-separated) -->
+    <div class="field">
+      <label for="categories">Categories *</label>
+      <input
+        id="categories"
+        name="categories"
+        [(ngModel)]="book.categories"
+        required
+        placeholder="fiction, novel, ..."
+        #categoriesField="ngModel" />
+      @if (categoriesField.hasError('required') && categoriesField.touched) {
+        <span class="error">At least one category is required</span>
+      }
+    </div>
+
+    <!-- Year (optional) -->
+    <div class="field">
+      <label for="year">Year</label>
+      <!--
+        min="1000" — HTML attribute validator; Angular maps it to Validators.min()
+      -->
+      <input
+        id="year"
+        name="year"
+        type="number"
+        [(ngModel)]="book.year"
+        min="1000"
+        placeholder="e.g. 2023"
+        #yearField="ngModel" />
+      @if (yearField.hasError('min')) {
+        <span class="error">Year must be 1000 or later</span>
+      }
+    </div>
+
+    <!-- ISBN (optional) — uses IsbnValidatorDirective for custom validation -->
+    <div class="field">
+      <label for="isbn">ISBN</label>
+      <!--
+        isbnValidatorDirective — custom validator directive applied as an attribute.
+        Angular discovers it via NG_VALIDATORS and runs it automatically.
+        Equivalent to adding isbnValidator() to a Reactive FormControl's validators array.
+      -->
+      <input
+        id="isbn"
+        name="isbn"
+        [(ngModel)]="book.isbn"
+        isbnValidatorDirective
+        placeholder="10 or 13 digits"
+        #isbnField="ngModel" />
+      @if (isbnField.hasError('isbn') && isbnField.touched) {
+        <span class="error">Invalid ISBN — must be 10 or 13 digits</span>
+      }
+    </div>
+
+    <!-- form.invalid: true when any required control is invalid -->
+    <button type="submit" [disabled]="form.invalid">Save Book</button>
+  </form>
+</div>

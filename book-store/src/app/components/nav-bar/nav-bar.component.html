@@ -25,5 +25,17 @@
         Add Book
       </a>
     </li>
+    <li>
+      <a routerLink="/add-book-tdf"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{ exact: true }">
+        Add Book (TDF)
+      </a>
+    </li>
+    @if (isLoggedIn) {
+      <li>
+        <button class="logout-btn" (click)="logout()">Log out</button>
+      </li>
+    }
   </ul>
 </nav>

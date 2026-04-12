@@ -39,3 +39,19 @@
   color: white;
   border-bottom-color: white;
 }
+
+.logout-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: 4px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+}

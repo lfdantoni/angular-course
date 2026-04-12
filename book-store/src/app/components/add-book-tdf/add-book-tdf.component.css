@@ -1,6 +1,6 @@
-.login-card {
-  max-width: 360px;
-  margin: 3rem auto;
+.form-card {
+  max-width: 480px;
+  margin: 2rem auto;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -8,14 +8,8 @@
 }
 
 h2 {
-  margin: 0 0 0.25rem;
-  color: #1976d2;
-}
-
-.hint {
-  font-size: 0.85rem;
-  color: #757575;
   margin: 0 0 1.5rem;
+  color: #1976d2;
 }
 
 .field {
@@ -36,6 +30,7 @@ input {
   border: 1px solid #bdbdbd;
   border-radius: 4px;
   font-size: 0.95rem;
+  transition: border-color 0.15s;
 }
 
 input:focus {
@@ -43,6 +38,7 @@ input:focus {
   border-color: #1976d2;
 }
 
+/* Angular adds ng-invalid + ng-touched when a field has been visited and is invalid */
 input.ng-invalid.ng-touched {
   border-color: #c62828;
 }
@@ -51,26 +47,6 @@ input.ng-invalid.ng-touched {
   margin-top: 0.25rem;
   font-size: 0.78rem;
   color: #c62828;
-}
-
-.field-inline {
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.field-inline input {
-  width: auto;
-  margin: 0;
-}
-
-.error-banner {
-  background-color: #ffebee;
-  border-radius: 4px;
-  padding: 0.5rem 0.8rem;
-  font-size: 0.85rem;
-  color: #c62828;
-  margin-bottom: 1rem;
 }
 
 button[type="submit"] {
@@ -82,6 +58,7 @@ button[type="submit"] {
   border-radius: 4px;
   font-size: 0.95rem;
   cursor: pointer;
+  transition: background-color 0.15s;
 }
 
 button[type="submit"]:hover:not(:disabled) {
