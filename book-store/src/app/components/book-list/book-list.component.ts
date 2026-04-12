@@ -18,6 +18,9 @@ export class BookListComponent implements OnInit, OnDestroy {
   cart: Book[] = [];
   activeCategory: string = '';
 
+  // ngOnInit: runs once after Angular initializes the component's inputs.
+  // Correct place for: initial HTTP calls, initialization logic.
+  // Do NOT put business logic in the constructor.
   ngOnInit(): void {
     console.log('BookListComponent initialized');
 
@@ -34,6 +37,8 @@ export class BookListComponent implements OnInit, OnDestroy {
     });
   }
 
+  // ngOnDestroy: runs before the component is removed from the DOM.
+  // Correct place for: cancelling subscriptions, clearing timers.
   ngOnDestroy(): void {
     console.log('BookListComponent destroyed');
   }
