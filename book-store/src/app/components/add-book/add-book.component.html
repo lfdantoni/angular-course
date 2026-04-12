@@ -1,0 +1,62 @@
+<div class="form-card">
+  <h2>Add Book</h2>
+
+  <!--
+    [formGroup] binds the form instance from the class.
+    (ngSubmit) fires when the user submits — we call onSubmit() which guards against invalid state.
+  -->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- Title -->
+    <div class="field">
+      <label for="title">Title *</label>
+      <input id="title" formControlName="title" placeholder="Book title" />
+      <!-- hasError() checks a specific validator; touched prevents showing errors before the user interacts -->
+      @if (form.get('title')?.hasError('required') && form.get('title')?.touched) {
+        <span class="error">Title is required</span>
+      }
+      @if (form.get('title')?.hasError('minlength')) {
+        <span class="error">Minimum 3 characters</span>
+      }
+    </div>
+
+    <!-- Author -->
+    <div class="field">
+      <label for="author">Author *</label>
+      <input id="author" formControlName="author" placeholder="Author name" />
+      @if (form.get('author')?.hasError('required') && form.get('author')?.touched) {
+        <span class="error">Author is required</span>
+      }
+    </div>
+
+    <!-- Categories (comma-separated) -->
+    <div class="field">
+      <label for="categories">Categories *</label>
+      <input id="categories" formControlName="categories" placeholder="fiction, novel, ..." />
+      @if (form.get('categories')?.hasError('required') && form.get('categories')?.touched) {
+        <span class="error">At least one category is required</span>
+      }
+    </div>
+
+    <!-- Year (optional) -->
+    <div class="field">
+      <label for="year">Year</label>
+      <input id="year" type="number" formControlName="year" placeholder="e.g. 2023" />
+      @if (form.get('year')?.hasError('min')) {
+        <span class="error">Year must be 1000 or later</span>
+      }
+    </div>
+
+    <!-- ISBN (optional) — uses custom isbnValidator -->
+    <div class="field">
+      <label for="isbn">ISBN</label>
+      <input id="isbn" formControlName="isbn" placeholder="10 or 13 digits" />
+      @if (form.get('isbn')?.hasError('isbn') && form.get('isbn')?.touched) {
+        <span class="error">Invalid ISBN — must be 10 or 13 digits</span>
+      }
+    </div>
+
+    <!-- [disabled] binding: button is disabled while the form is invalid -->
+    <button type="submit" [disabled]="form.invalid">Save Book</button>
+  </form>
+</div>

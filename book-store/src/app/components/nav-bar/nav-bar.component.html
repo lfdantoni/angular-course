@@ -17,5 +17,13 @@
         Data Binding
       </a>
     </li>
+    <li>
+      <!-- Navigates to /add-book — authGuard redirects to /login if no token -->
+      <a routerLink="/add-book"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{ exact: true }">
+        Add Book
+      </a>
+    </li>
   </ul>
 </nav>

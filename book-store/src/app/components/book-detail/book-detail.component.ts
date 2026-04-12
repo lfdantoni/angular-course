@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { inject } from '@angular/core';
 import { Book } from '../../models/book';
-import { booksMock } from '../../mock-data/books';
+import { BookService } from '../../services/book.service';
 import { BookStatusDirective } from '../../directives/book-status.directive';
 import { NgStyle } from '@angular/common';
 
@@ -16,6 +16,7 @@ export class BookDetailComponent implements OnInit {
   // Inject Router and ActivatedRoute using inject() — modern approach
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private bookService = inject(BookService);
 
   book: Book | undefined;
 
@@ -23,7 +24,7 @@ export class BookDetailComponent implements OnInit {
     // snapshot.params: one-time read — sufficient when the component is always
     // destroyed and re-created on navigation (the default in Angular router)
     const id = Number(this.route.snapshot.params['id']);
-    this.book = booksMock.find(b => b.id === id);
+    this.book = this.bookService.getBookById(id);
 
     // params observable: use this when the component stays mounted and only the
     // param changes (e.g. navigating from /books/1 to /books/2 without leaving the view)

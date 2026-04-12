@@ -4,4 +4,6 @@ export interface Book {
   author: string;
   categories: string[];
   inStock: boolean;
+  year?: number;
+  isbn?: string;
 }
