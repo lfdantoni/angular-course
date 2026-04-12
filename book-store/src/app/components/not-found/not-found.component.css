@@ -1,0 +1,21 @@
+.not-found {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #555;
+}
+
+.not-found h2 {
+  font-size: 2rem;
+  color: #c62828;
+  margin-bottom: 0.5rem;
+}
+
+.not-found a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.not-found a:hover {
+  text-decoration: underline;
+}

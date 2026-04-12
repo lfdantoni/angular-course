@@ -1,0 +1,14 @@
+<nav class="navbar">
+  <span class="brand">BookStore</span>
+
+  <ul class="nav-links">
+    <!-- routerLink as string — static route -->
+    <li>
+      <a routerLink="/books"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{ exact: true }">
+        Books
+      </a>
+    </li>
+  </ul>
+</nav>

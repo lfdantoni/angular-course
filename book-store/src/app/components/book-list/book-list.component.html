@@ -1,11 +1,22 @@
 <h2>Book Catalog</h2>
 
+@if (activeCategory) {
+  <p class="filter-notice">
+    Filtered by: <strong>{{ activeCategory }}</strong>
+    <!-- routerLink as string — clear filter -->
+    <a routerLink="/books">Clear</a>
+  </p>
+}
+
 <p>Cart items: {{ cart.length }}</p>
 
 <!-- Modern control flow (Angular 17+) - preferred -->
 <div class="book-grid">
   @for (book of books; track book.id) {
-    <app-book [book]="book" (addToCart)="addToCart($event)" />
+    <!-- routerLink as array — dynamic route with route param -->
+    <a [routerLink]="['/books', book.id]" class="book-link">
+      <app-book [book]="book" (addToCart)="addToCart($event)" />
+    </a>
   } @empty {
     <p>No books available.</p>
   }

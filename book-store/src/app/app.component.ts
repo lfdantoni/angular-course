@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { BookListComponent } from './components/book-list/book-list.component';
-import { DataBindingComponent } from './components/data-binding/data-binding.component';
+import { RouterOutlet } from '@angular/router';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [BookListComponent, DataBindingComponent],
+  // RouterOutlet renders the component matched by the current route
+  // NavBarComponent is always visible (outside the outlet)
+  imports: [RouterOutlet, NavBarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

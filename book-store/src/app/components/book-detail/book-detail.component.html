@@ -1,0 +1,38 @@
+@if (book) {
+  <div class="detail-card" [appBookStatus]="book.inStock">
+    <div class="detail-header">
+      <button class="back-btn" (click)="goBack()">← Back to Books</button>
+    </div>
+
+    <h2>{{ book.title }}</h2>
+
+    <p class="author"
+       [ngStyle]="{ color: book.inStock ? '#00bfc5' : '#999' }">
+      {{ book.author }}
+    </p>
+
+    <div class="categories">
+      @for (category of book.categories; track category) {
+        <!-- routerLink as array — dynamic route with params -->
+        <span class="category-tag" (click)="goToCategory(category)">
+          {{ category }}
+        </span>
+      }
+    </div>
+
+    <p class="status">
+      @if (book.inStock) {
+        <span class="in-stock">In Stock</span>
+      } @else {
+        <span class="out-of-stock">Out of Stock</span>
+      }
+    </p>
+
+    <p class="book-id">Book ID: {{ book.id }}</p>
+  </div>
+} @else {
+  <div class="not-found">
+    <p>Book not found.</p>
+    <button (click)="goBack()">Back to Books</button>
+  </div>
+}
