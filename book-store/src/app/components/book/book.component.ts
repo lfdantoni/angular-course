@@ -12,10 +12,15 @@ import { BookStatusDirective } from '../../directives/book-status.directive';
 export class BookComponent {
   book = input.required<Book>();
   addToCart = output<Book>();
+  viewDetail = output<Book>();
 
   onAdd(event: MouseEvent) {
-    // Stop propagation so the click doesn't bubble up to the parent <a [routerLink]>
+    // stopPropagation prevents this click from bubbling up to the card click handler
     event.stopPropagation();
     this.addToCart.emit(this.book());
+  }
+
+  onViewDetail() {
+    this.viewDetail.emit(this.book());
   }
 }

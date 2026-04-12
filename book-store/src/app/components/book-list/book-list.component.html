@@ -13,10 +13,15 @@
 <!-- Modern control flow (Angular 17+) - preferred -->
 <div class="book-grid">
   @for (book of books; track book.id) {
-    <!-- routerLink as array — dynamic route with route param -->
-    <a [routerLink]="['/books', book.id]" class="book-link">
-      <app-book [book]="book" (addToCart)="addToCart($event)" />
-    </a>
+    <!--
+      viewDetail output: emitted when the card area is clicked (navigates to /books/:id)
+      addToCart output: emitted when "Add to Cart" button is clicked (stopPropagation
+        prevents this from also triggering viewDetail)
+    -->
+    <app-book
+      [book]="book"
+      (addToCart)="addToCart($event)"
+      (viewDetail)="navigateToDetail($event)" />
   } @empty {
     <p>No books available.</p>
   }
@@ -29,7 +34,8 @@
   <app-book
     *ngFor="let book of books"
     [book]="book"
-    (addToCart)="addToCart($event)">
+    (addToCart)="addToCart($event)"
+    (viewDetail)="navigateToDetail($event)">
   </app-book>
 </div>
 -->

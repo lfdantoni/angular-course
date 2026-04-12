@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { inject } from '@angular/core';
 import { BookComponent } from '../book/book.component';
 import { booksMock } from '../../mock-data/books';
@@ -13,6 +13,7 @@ import { Book } from '../../models/book';
 })
 export class BookListComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   books: Book[] = [];
   cart: Book[] = [];
@@ -53,5 +54,10 @@ export class BookListComponent implements OnInit, OnDestroy {
   clearCart() {
     this.cart = [];
     localStorage.removeItem('cart');
+  }
+
+  navigateToDetail(book: Book) {
+    // Programmatic navigation — same as [routerLink]="['/books', book.id]" but triggered by output
+    this.router.navigate(['/books', book.id]);
   }
 }

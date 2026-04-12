@@ -1,7 +1,8 @@
 @let currentBook = book();
 
 <!-- [appBookStatus] is a custom attribute directive that sets backgroundColor via @HostBinding -->
-<div class="book-card" [appBookStatus]="currentBook.inStock">
+<!-- (click) on the card navigates to detail; button click stops propagation to avoid this -->
+<div class="book-card" [appBookStatus]="currentBook.inStock" (click)="onViewDetail()">
   <div class="book-info">
     <h3 class="book-title">{{ currentBook.title }}</h3>
 
