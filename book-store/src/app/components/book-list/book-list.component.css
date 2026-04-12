@@ -10,10 +10,29 @@ h2 {
   margin-top: 1rem;
 }
 
-.book-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
+.cart-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.cart-bar p {
+  margin: 0;
+}
+
+.clear-cart-btn {
+  padding: 0.25rem 0.7rem;
+  background: none;
+  border: 1px solid #c62828;
+  color: #c62828;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.clear-cart-btn:hover {
+  background-color: #ffebee;
 }
 
 .filter-notice {

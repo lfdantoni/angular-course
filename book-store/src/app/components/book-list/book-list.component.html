@@ -8,7 +8,12 @@
   </p>
 }
 
-<p>Cart items: {{ cart.length }}</p>
+<div class="cart-bar">
+  <p>Cart items: {{ cart.length }}</p>
+  @if (cart.length > 0) {
+    <button class="clear-cart-btn" (click)="clearCart()">Clear Cart</button>
+  }
+</div>
 
 <!-- Modern control flow (Angular 17+) - preferred -->
 <div class="book-grid">
