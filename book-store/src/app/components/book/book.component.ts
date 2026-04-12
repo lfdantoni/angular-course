@@ -13,7 +13,9 @@ export class BookComponent {
   book = input.required<Book>();
   addToCart = output<Book>();
 
-  onAdd() {
+  onAdd(event: MouseEvent) {
+    // Stop propagation so the click doesn't bubble up to the parent <a [routerLink]>
+    event.stopPropagation();
     this.addToCart.emit(this.book());
   }
 }
