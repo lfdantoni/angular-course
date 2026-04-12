@@ -13,10 +13,16 @@
 
     <div class="categories">
       @for (category of book.categories; track category) {
-        <!-- routerLink as array — dynamic route with params -->
-        <span class="category-tag" (click)="goToCategory(category)">
+        <!--
+          [queryParams] on routerLink — template binding (not programmatic).
+          Generates URL: /books?category=<value>
+          Equivalent to: this.router.navigate(['/books'], { queryParams: { category } })
+        -->
+        <a class="category-tag"
+           routerLink="/books"
+           [queryParams]="{ category: category }">
           {{ category }}
-        </span>
+        </a>
       }
     </div>
 
@@ -29,6 +35,12 @@
     </p>
 
     <p class="book-id">Book ID: {{ book.id }}</p>
+
+    <!-- fragment link: navigates to /books#top, which scrolls to id="top" on that page -->
+    <!-- fragment="top" sets the URL hash without a [queryParams] object -->
+    <a class="fragment-link" routerLink="/books" fragment="top">
+      ↑ Back to top of book list
+    </a>
   </div>
 } @else {
   <div class="not-found">

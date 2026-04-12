@@ -20,7 +20,7 @@ interface Book {
   description?: string; // optional
 }
 
-// Class with inheritance
+// Class with inheritance and getters/setters
 class PhysicalBook implements Book {
   id: number;
   title: string;
@@ -28,7 +28,7 @@ class PhysicalBook implements Book {
   categories: string[];
   inStock: boolean;
   description?: string;
-  pages: number;
+  private _pages: number;
 
   constructor(id: number, title: string, author: string, categories: string[], inStock: boolean, pages: number) {
     this.id = id;
@@ -36,7 +36,18 @@ class PhysicalBook implements Book {
     this.author = author;
     this.categories = categories;
     this.inStock = inStock;
-    this.pages = pages;
+    this._pages = pages;
+  }
+
+  // Getter: accessed like a property (book.pages), not a method call
+  get pages(): number {
+    return this._pages;
+  }
+
+  // Setter: allows validation before assigning
+  set pages(value: number) {
+    if (value < 0) throw new Error('Pages cannot be negative');
+    this._pages = value;
   }
 
   getInfo(): string {
