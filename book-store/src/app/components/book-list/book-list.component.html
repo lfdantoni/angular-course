@@ -1,12 +1,21 @@
 <h2>Book Catalog</h2>
 
-@if (activeCategory) {
-  <p class="filter-notice">
-    Filtered by: <strong>{{ activeCategory }}</strong>
-    <!-- routerLink as string — clear filter -->
-    <a routerLink="/books">Clear</a>
-  </p>
-}
+<!-- Category filter: each tag navigates with [queryParams]; "All" clears the filter -->
+<div class="category-filter">
+  <a class="filter-tag"
+     [class.active]="!activeCategory"
+     routerLink="/books">
+    All
+  </a>
+  @for (category of categories; track category) {
+    <a class="filter-tag"
+       [class.active]="activeCategory === category"
+       routerLink="/books"
+       [queryParams]="{ category: category }">
+      {{ category }}
+    </a>
+  }
+</div>
 
 <div class="cart-bar">
   <p>Cart items: {{ cart.length }}</p>

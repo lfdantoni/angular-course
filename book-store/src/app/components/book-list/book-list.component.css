@@ -35,21 +35,28 @@ h2 {
   background-color: #ffebee;
 }
 
-.filter-notice {
-  background-color: #e3f2fd;
-  border-radius: 4px;
-  padding: 0.4rem 0.8rem;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
+.category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
 }
 
-.filter-notice a {
-  margin-left: 0.6rem;
-  color: #c62828;
+.filter-tag {
+  padding: 0.25rem 0.7rem;
+  border: 1px solid #1976d2;
+  border-radius: 20px;
+  color: #1976d2;
+  font-size: 0.8rem;
   text-decoration: none;
-  font-size: 0.85rem;
+  transition: background-color 0.15s, color 0.15s;
 }
 
-.filter-notice a:hover {
-  text-decoration: underline;
+.filter-tag:hover {
+  background-color: #e3f2fd;
+}
+
+.filter-tag.active {
+  background-color: #1976d2;
+  color: #fff;
 }

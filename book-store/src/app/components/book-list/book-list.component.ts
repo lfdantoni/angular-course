@@ -18,6 +18,7 @@ export class BookListComponent implements OnInit, OnDestroy {
   books: Book[] = [];
   cart: Book[] = [];
   activeCategory: string = '';
+  categories: string[] = [...new Set(booksMock.flatMap(b => b.categories))].sort();
 
   // ngOnInit: runs once after Angular initializes the component's inputs.
   // Correct place for: initial HTTP calls, initialization logic.
