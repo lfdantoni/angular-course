@@ -66,6 +66,67 @@ ng e2e
 
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
+## Deploy to Firebase Hosting
+
+Firebase Hosting is free on the Spark plan (no credit card required). It provides HTTPS, a global CDN, and a `*.web.app` domain.
+
+### Prerequisites (one-time setup)
+
+1. Create a project at [console.firebase.google.com](https://console.firebase.google.com/)
+2. Install the Firebase CLI globally:
+   ```bash
+   npm install -g firebase-tools
+   ```
+3. Log in:
+   ```bash
+   firebase login
+   ```
+
+### Initialize Firebase in this project (one-time)
+
+```bash
+firebase init
+```
+
+When prompted:
+- Select **Hosting**
+- Choose your Firebase project
+- Public directory: `dist/book-store/browser`
+- Configure as single-page app (rewrite all URLs to index.html): **Yes**
+- Set up automatic builds with GitHub?: **No**
+
+This generates a `firebase.json` file:
+
+```json
+{
+  "hosting": {
+    "public": "dist/book-store/browser",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      { "source": "**", "destination": "/index.html" }
+    ]
+  }
+}
+```
+
+> The `rewrites` rule is critical — without it, Angular routes like `/books/1` return 404 on page refresh.
+
+### Deploy
+
+```bash
+ng build && firebase deploy
+```
+
+The CLI will print the live URL: `https://<your-project>.web.app`
+
+### Redeploy after changes
+
+```bash
+ng build && firebase deploy
+```
+
+The URL stays the same on every deploy.
+
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
