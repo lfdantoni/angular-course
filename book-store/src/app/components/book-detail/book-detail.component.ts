@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { inject } from '@angular/core';
 import { Book } from '../../models/book';
@@ -17,10 +18,16 @@ export class BookDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private bookService = inject(BookService);
+  // Location.back() follows browser history — works regardless of which list the user came from
+  private location = inject(Location);
 
   book: Book | undefined;
 
   ngOnInit(): void {
+    // Singleton demo: bookService.createdAt is identical to the one in BookListComponent
+    // because Angular's injector returns the same instance for providedIn: 'root' services.
+    console.log('BookService singleton createdAt:', this.bookService.createdAt);
+
     // snapshot.params: one-time read — sufficient when the component is always
     // destroyed and re-created on navigation (the default in Angular router)
     const id = Number(this.route.snapshot.params['id']);
@@ -49,9 +56,12 @@ export class BookDetailComponent implements OnInit {
     });
   }
 
-  // Programmatic navigation using inject(Router)
+  // Location.back() — goes to the previous entry in the browser history.
+  // This correctly returns to /books-obs if the user came from there,
+  // or to /books if they came from the Signals version.
+  // Equivalent to clicking the browser's back button.
   goBack(): void {
-    this.router.navigate(['/books']);
+    this.location.back();
   }
 
   // Programmatic alternative to [queryParams] in template:

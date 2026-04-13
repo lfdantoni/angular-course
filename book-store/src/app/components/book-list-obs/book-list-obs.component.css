@@ -1,0 +1,77 @@
+h2 {
+  margin-bottom: 0.5rem;
+  color: #1976d2;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.badge {
+  font-size: 0.65rem;
+  font-weight: normal;
+  background-color: #e65100;
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  letter-spacing: 0.03em;
+}
+
+.category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.filter-tag {
+  padding: 0.25rem 0.7rem;
+  border: 1px solid #1976d2;
+  border-radius: 20px;
+  color: #1976d2;
+  font-size: 0.8rem;
+  background: none;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.filter-tag:hover {
+  background-color: #e3f2fd;
+}
+
+.filter-tag.active {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+.stat-bar {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.book-grid-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.delete-btn {
+  margin-top: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  background: none;
+  border: 1px solid #c62828;
+  color: #c62828;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.delete-btn:hover {
+  background-color: #ffebee;
+}

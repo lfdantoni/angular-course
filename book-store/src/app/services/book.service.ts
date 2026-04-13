@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Book } from '../models/book';
 import { booksMock } from '../mock-data/books';
 
@@ -7,23 +7,33 @@ import { booksMock } from '../mock-data/books';
 // Angular's DI creates one instance and reuses it across all components.
 @Injectable({ providedIn: 'root' })
 export class BookService {
-  // Private mutable list — components interact through the public API below
-  private books: Book[] = [...booksMock];
+  // signal() — reactive value; Angular tracks reads and re-renders consumers automatically
+  private booksSignal = signal<Book[]>([...booksMock]);
 
-  getBooks(): Book[] {
-    return this.books;
-  }
+  // asReadonly() — exposes the signal without allowing external .set() / .update() calls
+  books = this.booksSignal.asReadonly();
+
+  // computed() — derived value; recalculates automatically when booksSignal changes
+  totalBooks = computed(() => this.booksSignal().length);
+
+  // Singleton demo: this timestamp is the same across all components that inject this service
+  readonly createdAt = new Date();
 
   getBookById(id: number): Book | undefined {
-    return this.books.find(b => b.id === id);
+    return this.booksSignal().find(b => b.id === id);
   }
 
   addBook(book: Book): void {
-    this.books.push(book);
+    // update() receives the current value and returns the next value (immutable pattern)
+    this.booksSignal.update(books => [...books, book]);
   }
 
-  // Generate a unique id based on the current max — provisional until HTTP/backend exists
+  deleteBook(id: number): void {
+    this.booksSignal.update(books => books.filter(b => b.id !== id));
+  }
+
+  // Generate a unique id based on the current max
   nextId(): number {
-    return Math.max(...this.books.map(b => b.id)) + 1;
+    return Math.max(...this.booksSignal().map(b => b.id)) + 1;
   }
 }

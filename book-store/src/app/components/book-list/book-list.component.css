@@ -10,6 +10,26 @@ h2 {
   margin-top: 1rem;
 }
 
+.book-grid-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.delete-btn {
+  margin-top: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  background: none;
+  border: 1px solid #c62828;
+  color: #c62828;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.delete-btn:hover {
+  background-color: #ffebee;
+}
+
 .cart-bar {
   display: flex;
   align-items: center;

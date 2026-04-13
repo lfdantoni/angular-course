@@ -36,10 +36,10 @@
 
     <p class="book-id">Book ID: {{ book.id }}</p>
 
-    <!-- fragment link: navigates to /books#top, which scrolls to id="top" on that page -->
-    <!-- fragment="top" sets the URL hash without a [queryParams] object -->
-    <a class="fragment-link" routerLink="/books" fragment="top">
-      ↑ Back to top of book list
+    <!-- Uses location.back() to return to whichever list the user came from (/books or /books-obs) -->
+    <!-- fragment example (lesson 2 reference): <a routerLink="/books" fragment="top"> navigates to /books#top -->
+    <a class="fragment-link" (click)="goBack()">
+      ↑ Back to book list
     </a>
   </div>
 } @else {

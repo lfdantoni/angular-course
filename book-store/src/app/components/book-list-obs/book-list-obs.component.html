@@ -1,0 +1,36 @@
+<!--
+  Observable-based version — compare with /books (Signals version):
+    /books       → computed() auto-updates; no subscribe/unsubscribe needed
+    /books-obs   → books$ subscription; ngOnDestroy must unsubscribe to prevent memory leaks
+-->
+<h2>Book Catalog <span class="badge">Observable version</span></h2>
+
+<!-- Category filter — programmatic instead of [queryParams] to keep example self-contained -->
+<div class="category-filter">
+  <button class="filter-tag" [class.active]="!activeCategory" (click)="clearFilter()">All</button>
+  @for (category of categories; track category) {
+    <button class="filter-tag"
+            [class.active]="activeCategory === category"
+            (click)="filterByCategory(category)">
+      {{ category }}
+    </button>
+  }
+</div>
+
+<!-- totalBooks comes from totalBooks$ subscription, not a computed() signal -->
+<div class="stat-bar">
+  <p>Total books: {{ totalBooks }}</p>
+</div>
+
+<div class="book-grid">
+  @for (book of books; track book.id) {
+    <div class="book-grid-item">
+      <app-book
+        [book]="book"
+        (viewDetail)="navigateToDetail($event)" />
+      <button class="delete-btn" (click)="deleteBook(book)">Delete</button>
+    </div>
+  } @empty {
+    <p>No books available.</p>
+  }
+</div>

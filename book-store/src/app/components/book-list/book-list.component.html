@@ -1,15 +1,16 @@
-<h2>Book Catalog</h2>
+<h2>{{ appConfig.appName }}</h2>
 
 <!-- Category filter: each tag navigates with [queryParams]; "All" clears the filter -->
 <div class="category-filter">
   <a class="filter-tag"
-     [class.active]="!activeCategory"
+     [class.active]="!activeCategory()"
      routerLink="/books">
     All
   </a>
-  @for (category of categories; track category) {
+  <!-- categories is a computed() signal — read with () -->
+  @for (category of categories(); track category) {
     <a class="filter-tag"
-       [class.active]="activeCategory === category"
+       [class.active]="activeCategory() === category"
        routerLink="/books"
        [queryParams]="{ category: category }">
       {{ category }}
@@ -18,7 +19,8 @@
 </div>
 
 <div class="cart-bar">
-  <p>Cart items: {{ cart.length }}</p>
+  <!-- totalBooks() reads a computed() signal from BookService -->
+  <p>Total books: {{ bookService.totalBooks() }} &nbsp;|&nbsp; Cart: {{ cart.length }}</p>
   @if (cart.length > 0) {
     <button class="clear-cart-btn" (click)="clearCart()">Clear Cart</button>
   }
@@ -26,16 +28,20 @@
 
 <!-- Modern control flow (Angular 17+) - preferred -->
 <div class="book-grid">
-  @for (book of books; track book.id) {
+  <!-- filteredBooks is a computed() signal — read with () -->
+  @for (book of filteredBooks(); track book.id) {
     <!--
       viewDetail output: emitted when the card area is clicked (navigates to /books/:id)
       addToCart output: emitted when "Add to Cart" button is clicked (stopPropagation
         prevents this from also triggering viewDetail)
     -->
-    <app-book
-      [book]="book"
-      (addToCart)="addToCart($event)"
-      (viewDetail)="navigateToDetail($event)" />
+    <div class="book-grid-item">
+      <app-book
+        [book]="book"
+        (addToCart)="addToCart($event)"
+        (viewDetail)="navigateToDetail($event)" />
+      <button class="delete-btn" (click)="deleteBook(book)">Delete</button>
+    </div>
   } @empty {
     <p>No books available.</p>
   }
@@ -46,7 +52,7 @@
 <!--
 <div class="book-grid">
   <app-book
-    *ngFor="let book of books"
+    *ngFor="let book of filteredBooks()"
     [book]="book"
     (addToCart)="addToCart($event)"
     (viewDetail)="navigateToDetail($event)">
