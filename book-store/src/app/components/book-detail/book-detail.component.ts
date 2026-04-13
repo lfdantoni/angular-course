@@ -6,6 +6,7 @@ import { catchError, of, switchMap } from 'rxjs';
 import { Book } from '../../models/book';
 import { BookService } from '../../services/book.service';
 import { BookStatusDirective } from '../../directives/book-status.directive';
+import { BookReviewsComponent } from '../book-reviews/book-reviews.component';
 
 // ── Lesson 3–4 approach (synchronous) — replaced in lesson 5 by book$ Observable ──
 // Route params were read once via snapshot — no reactive stream.
@@ -24,7 +25,7 @@ import { BookStatusDirective } from '../../directives/book-status.directive';
 
 @Component({
   selector: 'app-book-detail',
-  imports: [BookStatusDirective, NgStyle, RouterLink, AsyncPipe, UpperCasePipe],
+  imports: [BookStatusDirective, NgStyle, RouterLink, AsyncPipe, UpperCasePipe, BookReviewsComponent],
   templateUrl: './book-detail.component.html',
   styleUrl: './book-detail.component.css'
 })

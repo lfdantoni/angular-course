@@ -1,7 +1,8 @@
 import { Component, DestroyRef, Inject, inject, OnDestroy, OnInit, Optional } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
+// AsyncPipe import removed in lesson 6 — toSignal() replaces the (vm$ | async) pattern.
+// import { AsyncPipe } from '@angular/common';
 import { BehaviorSubject, catchError, forkJoin, map, of, shareReplay, switchMap } from 'rxjs';
 import { BookComponent } from '../book/book.component';
 import { Book } from '../../models/book';
@@ -48,7 +49,9 @@ interface BookListVm {
 
 @Component({
   selector: 'app-book-list',
-  imports: [BookComponent, RouterLink, AsyncPipe],
+  // AsyncPipe was here in lesson 5 for the (vm$ | async) pattern — removed in lesson 6.
+  // toSignal() reads the signal directly in the template with vm() — no pipe needed.
+  imports: [BookComponent, RouterLink],
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.css'
 })
@@ -125,6 +128,19 @@ export class BookListComponent implements OnInit, OnDestroy {
     map(vm => { this.isLoading = false; return vm; })
   );
 
+  // ── Lesson 5 approach (async pipe in template) — replaced in lesson 6 by toSignal() ──
+  // The template used: @if (vm$ | async; as vm) { ... }
+  // async pipe subscribes/unsubscribes automatically but requires AsyncPipe in imports.
+  // ────────────────────────────────────────────────────────────────────────────────────────
+
+  // toSignal(): bridges Observable → Signal.
+  // Subscribes to vm$ internally and exposes the latest value as a readable signal.
+  // - No need for async pipe in the template — read with vm()
+  // - Automatically unsubscribes when the component is destroyed
+  // - initialValue: null represents "not yet loaded" (same as async pipe before first emission)
+  // Must be called in an injection context (class field initialization qualifies).
+  vm = toSignal(this.vm$, { initialValue: null });
+
   // ngOnInit: runs once after Angular initializes the component's inputs.
   // Correct place for: initial HTTP calls, initialization logic.
   // Do NOT put business logic in the constructor.
@@ -138,7 +154,7 @@ export class BookListComponent implements OnInit, OnDestroy {
 
   // ngOnDestroy: runs before the component is removed from the DOM.
   // Correct place for: cancelling subscriptions, clearing timers.
-  // Note: vm$ is managed by the async pipe — no manual unsubscribe needed for it.
+  // Note: vm is managed by toSignal() — no manual unsubscribe needed.
   ngOnDestroy(): void {
     this.logger?.log('BookListComponent destroyed');
   }

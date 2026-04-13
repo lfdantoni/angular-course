@@ -54,6 +54,33 @@
     <a class="fragment-link" (click)="goBack()">
       ↑ Back to book list
     </a>
+
+    <!--
+      @defer: lazy-loads BookReviewsComponent only when the block scrolls into the viewport.
+      Angular generates a separate JS chunk for everything inside @defer — it is NOT included
+      in the initial bundle. The chunk downloads only when the trigger fires.
+
+      Triggers:
+        on viewport  — fires when the @placeholder enters the visible area
+        on interaction — fires on click/focus/touch
+        on idle      — fires when the browser has no pending work
+        on hover     — fires on mouseover
+        when <expr>  — fires when the expression becomes true
+
+      @placeholder: rendered immediately (before the chunk loads) — keep it lightweight.
+      @loading:     rendered while the chunk is being downloaded.
+      @error:       rendered if the chunk fails to load.
+    -->
+    @defer (on viewport) {
+      <app-book-reviews [bookId]="book.id" />
+    } @placeholder {
+      <p class="reviews-placeholder">↓ Scroll to load reviews</p>
+    } @loading (minimum 500ms) {
+      <p class="reviews-loading">Loading reviews...</p>
+    } @error {
+      <p class="reviews-error">Could not load reviews.</p>
+    }
+
   </div>
 } @else {
   <div class="not-found">

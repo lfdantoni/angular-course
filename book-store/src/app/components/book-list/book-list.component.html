@@ -1,11 +1,17 @@
 <h2>{{ appConfig.appName }}</h2>
 
 <!--
-  async pipe: subscribes to vm$ and unsubscribes automatically when the component is destroyed.
-  "as vm" assigns the emitted value to a local template variable.
-  The @else block handles both loading (null before first emission) and error (null from catchError).
+  ── Lesson 5 approach (async pipe) — replaced in lesson 6 by toSignal() ──
+  @if (vm$ | async; as vm) { ... }
+  async pipe subscribes to the Observable and unwraps the value.
+  Requires AsyncPipe in the component's imports array.
+  ─────────────────────────────────────────────────────────────────────────
+
+  toSignal() approach: vm() is a Signal<BookListVm | null>.
+  No async pipe needed — signals are read synchronously in the template with ().
+  Angular's change detection tracks signal reads automatically.
 -->
-@if (vm$ | async; as vm) {
+@if (vm(); as vm) {
 
   <!-- Category filter: active tag highlighted with [class.active] -->
   <div class="category-filter">
@@ -52,7 +58,7 @@
 
 } @else {
 
-  <!-- Shown while vm$ hasn't emitted yet (loading) or after catchError returns null (error) -->
+  <!-- Shown while vm hasn't emitted yet (loading) or after catchError returns null (error) -->
   @if (error) {
     <p class="error-msg">{{ error }}</p>
   } @else if (isLoading) {

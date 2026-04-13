@@ -1,0 +1,15 @@
+.reviews {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-top: 1px solid #2a2a3d;
+}
+
+.reviews h3 {
+  color: #00bfc5;
+  margin-bottom: 0.75rem;
+}
+
+.no-reviews {
+  color: #888;
+  font-style: italic;
+}
