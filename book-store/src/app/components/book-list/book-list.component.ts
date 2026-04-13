@@ -1,75 +1,129 @@
-import { Component, computed, effect, Inject, OnDestroy, OnInit, Optional, signal } from '@angular/core';
+import { Component, DestroyRef, Inject, inject, OnDestroy, OnInit, Optional } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { BehaviorSubject, catchError, forkJoin, map, of, shareReplay, switchMap } from 'rxjs';
 import { BookComponent } from '../book/book.component';
 import { Book } from '../../models/book';
 import { BookService } from '../../services/book.service';
 import { LoggerService } from '../../services/logger.service';
 import { APP_CONFIG, AppConfig } from '../../tokens/app-config.token';
 
+// ── Lesson 4 approach (Signals) — replaced in lesson 5 by vm$ Observable + async pipe ──
+// import { signal, computed, effect } from '@angular/core';
+//
+// Books and derived state lived in reactive signals — no Observable, no async pipe needed.
+//
+// books = this.bookService.books; // ReadonlySignal<Book[]> from the service
+// activeCategory = signal('');    // writable signal updated from queryParams
+//
+// // computed(): recalculates whenever a read signal changes
+// filteredBooks = computed(() => {
+//   const cat = this.activeCategory();
+//   return cat ? this.books().filter(b => b.categories.includes(cat)) : this.books();
+// });
+//
+// categories = computed(() =>
+//   [...new Set(this.books().flatMap(b => b.categories))].sort()
+// );
+//
+// // effect(): runs a side effect whenever read signals change — auto-cleans on destroy
+// _ = effect(() => this.logger?.log(`Showing ${this.filteredBooks().length} books`));
+//
+// In ngOnInit, queryParams updated the signal:
+//   this.route.queryParams.subscribe(params =>
+//     this.activeCategory.set(params['category'] ?? '')
+//   );
+//
+// In the template: filteredBooks(), categories(), activeCategory() — no async pipe needed.
+// ─────────────────────────────────────────────────────────────────────────────────────────
+
+// View model — the shape of the data resolved and passed to the template
+interface BookListVm {
+  books: Book[];
+  categories: string[];
+  activeCategory: string;
+  total: number;
+}
+
 @Component({
   selector: 'app-book-list',
-  imports: [BookComponent, RouterLink],
+  imports: [BookComponent, RouterLink, AsyncPipe],
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.css'
 })
-// Constructor injection — the traditional approach, still valid (not deprecated).
-// Each dependency is declared as a constructor parameter with an access modifier.
-// With InjectionToken, @Inject() decorator is required to pass the token explicitly.
-//
-// export class BookListComponent implements OnInit, OnDestroy {
-//   constructor(
-//     private route: ActivatedRoute,
-//     private router: Router,
-//     public bookService: BookService,
-//     @Optional() private logger: LoggerService | null,
-//     @Inject(APP_CONFIG) public appConfig: AppConfig,
-//   ) {}
-// }
-//
-// inject() is preferred in Angular 14+ because:
-//   - works outside constructors (field initializers, guards, factories)
-//   - less boilerplate, no need for @Inject() or @Optional() decorators
-//   - options object: inject(LoggerService, { optional: true })
 export class BookListComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  // public so the template can call bookService.totalBooks() directly —
-  // demonstrates reading a computed() signal from a service in the template
-  bookService = inject(BookService);
+  private bookService = inject(BookService);
+  private destroyRef = inject(DestroyRef);
 
-  // inject(LoggerService, { optional: true }) — if the provider is not registered,
-  // Angular returns null instead of throwing. Useful for optional dependencies.
+  // inject(LoggerService, { optional: true }) — null if the provider is not registered
   private logger = inject(LoggerService, { optional: true });
 
-  // inject(APP_CONFIG) — reads a non-class value registered via InjectionToken
+  // inject(APP_CONFIG) — reads a value registered via InjectionToken
   appConfig = inject(APP_CONFIG);
 
+  // Constructor injection alternative (commented reference):
+  // constructor(
+  //   private route: ActivatedRoute,
+  //   private router: Router,
+  //   private bookService: BookService,
+  //   @Optional() private logger: LoggerService | null,
+  //   @Inject(APP_CONFIG) public appConfig: AppConfig,
+  // ) {}
+
   cart: Book[] = [];
+  isLoading = true;
+  error = '';
 
-  // signal() — activeCategory is now reactive; setting it re-triggers computed() below
-  activeCategory = signal('');
+  // BehaviorSubject used as a manual refresh trigger.
+  // Emitting a new value causes vm$ to re-fetch books from the server.
+  private refresh$ = new BehaviorSubject<void>(undefined);
 
-  // computed() — auto-recalculates whenever bookService.books() or activeCategory() changes.
-  // This replaces the manual `this.books = ...` assignment inside the queryParams subscription.
-  filteredBooks = computed(() => {
-    const all = this.bookService.books();
-    const cat = this.activeCategory();
-    return cat ? all.filter(b => b.categories.includes(cat)) : all;
-  });
-
-  // computed() — categories list stays in sync with the book list automatically
-  categories = computed(() =>
-    [...new Set(this.bookService.books().flatMap(b => b.categories))].sort()
+  // shareReplay(1): categories are fetched once on first subscription.
+  // Every subsequent subscriber (including after filter changes or refresh) gets
+  // the cached result immediately — no new HTTP request is made.
+  // Categories don't change when the user switches filters, so re-fetching is wasteful.
+  private categories$ = this.bookService.getCategories().pipe(
+    shareReplay(1)
   );
 
-  constructor() {
-    // effect() — runs whenever any signal it reads changes; used for side effects.
-    // Must be called in an injection context (constructor or field initializer).
-    effect(() => {
-      this.logger?.log(`Book list updated — total: ${this.bookService.totalBooks()}`);
-    });
-  }
+  // vm$ — the main Observable for this component.
+  // switchMap cancels any in-flight request when queryParams or refresh$ changes.
+  vm$ = this.refresh$.pipe(
+    switchMap(() => this.route.queryParams),
+    switchMap(params => {
+      const category = params['category'] ?? '';
+      this.isLoading = true;
+      this.error = '';
+
+      // forkJoin: waits for ALL inner observables to complete, then emits one combined value.
+      // Equivalent to Promise.all() — ideal when requests are independent.
+      return forkJoin({
+        // Server-side filter: GET /books?categories_like=fiction
+        // json-server v0.17 regex-matches the query value against the field — works on arrays.
+        books: this.bookService.getBooks(category || undefined),
+        // categories$ replays the cached value — no new HTTP request on filter change or refresh.
+        categories: this.categories$,
+      }).pipe(
+        map(({ books, categories }): BookListVm => ({
+          books,
+          categories,
+          activeCategory: category,
+          total: books.length,
+        }))
+      );
+    }),
+    // tap() could be used here for side effects without altering the stream:
+    // tap(() => this.isLoading = false)
+    catchError(err => {
+      this.isLoading = false;
+      this.error = err.message;
+      return of(null); // emit null so the stream doesn't terminate
+    }),
+    map(vm => { this.isLoading = false; return vm; })
+  );
 
   // ngOnInit: runs once after Angular initializes the component's inputs.
   // Correct place for: initial HTTP calls, initialization logic.
@@ -80,38 +134,40 @@ export class BookListComponent implements OnInit, OnDestroy {
     // LocalStorage: restore cart from previous session
     const savedCart = localStorage.getItem('cart');
     this.cart = savedCart ? JSON.parse(savedCart) : [];
-
-    // Read queryParams — e.g. /books?category=fiction (set from BookDetail or category filter).
-    // Observable from the router; we bridge it to a signal by calling activeCategory.set().
-    // filteredBooks (computed) re-runs automatically once activeCategory changes.
-    this.route.queryParams.subscribe(params => {
-      this.activeCategory.set(params['category'] ?? '');
-    });
   }
 
   // ngOnDestroy: runs before the component is removed from the DOM.
   // Correct place for: cancelling subscriptions, clearing timers.
+  // Note: vm$ is managed by the async pipe — no manual unsubscribe needed for it.
   ngOnDestroy(): void {
     this.logger?.log('BookListComponent destroyed');
   }
 
-  addToCart(book: Book) {
+  addToCart(book: Book): void {
     this.cart.push(book);
     // LocalStorage: persist cart across navigation
     localStorage.setItem('cart', JSON.stringify(this.cart));
   }
 
-  clearCart() {
+  clearCart(): void {
     this.cart = [];
     localStorage.removeItem('cart');
   }
 
-  navigateToDetail(book: Book) {
+  navigateToDetail(book: Book): void {
     // Programmatic navigation — same as [routerLink]="['/books', book.id]" but triggered by output
     this.router.navigate(['/books', book.id]);
   }
 
-  deleteBook(book: Book) {
-    this.bookService.deleteBook(book.id);
+  deleteBook(book: Book): void {
+    // takeUntilDestroyed(destroyRef) — cancels this subscription when the component is destroyed.
+    // Modern replacement for storing a Subscription and calling unsubscribe() in ngOnDestroy.
+    // Must use destroyRef explicitly when called outside the constructor.
+    this.bookService.deleteBook(book.id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: () => this.refresh$.next(), // re-trigger vm$ to reload from server
+      error: err => { this.error = err.message; },
+    });
   }
 }

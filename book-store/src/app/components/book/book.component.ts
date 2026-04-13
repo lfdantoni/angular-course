@@ -1,11 +1,12 @@
 import { Component, input, output } from '@angular/core';
-import { NgStyle } from '@angular/common';
+import { NgStyle, UpperCasePipe } from '@angular/common';
 import { Book } from '../../models/book';
 import { BookStatusDirective } from '../../directives/book-status.directive';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-book',
-  imports: [BookStatusDirective, NgStyle],
+  imports: [BookStatusDirective, NgStyle, TruncatePipe, UpperCasePipe],
   templateUrl: './book.component.html',
   styleUrl: './book.component.css'
 })

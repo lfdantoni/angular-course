@@ -4,13 +4,25 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## Development server
 
-To start a local development server, run:
+This app uses **json-server** as a local REST API backend. You need to run both servers simultaneously.
+
+### 1. Start the API server (json-server)
 
 ```bash
-ng serve
+npm run server
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+This starts json-server on `http://localhost:3000` using `db.json` as the data source.
+
+### 2. Start the Angular dev server
+
+In a separate terminal:
+
+```bash
+npm start
+```
+
+Once both servers are running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
 ## Code scaffolding
 

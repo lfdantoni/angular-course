@@ -4,11 +4,19 @@
 <!-- (click) on the card navigates to detail; button click stops propagation to avoid this -->
 <div class="book-card" [appBookStatus]="currentBook.inStock" (click)="onViewDetail()">
   <div class="book-info">
-    <h3 class="book-title">{{ currentBook.title }}</h3>
+    <!--
+      Custom pipe: {{ value | truncate:40 }} — limits the title to 40 chars + ellipsis.
+      Defined in pipes/truncate.pipe.ts; added to this component's imports array.
+    -->
+    <h3 class="book-title">{{ currentBook.title | truncate:40 }}</h3>
 
     <!-- [ngStyle]: sets inline styles dynamically — requires NgStyle or CommonModule import -->
+    <!--
+      Built-in pipe: uppercase — transforms the author name to ALL CAPS.
+      No import needed in standalone components when using UpperCasePipe from @angular/common.
+    -->
     <p class="book-author" [ngStyle]="{ color: currentBook.inStock ? '#00bfc5' : '#999' }">
-      {{ currentBook.author }}
+      {{ currentBook.author | uppercase }}
     </p>
 
     <!-- [ngClass]: adds/removes CSS classes dynamically — requires NgClass or CommonModule import -->

@@ -49,6 +49,15 @@ input.ng-invalid.ng-touched {
   color: #c62828;
 }
 
+.submit-error {
+  background-color: #ffebee;
+  color: #c62828;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.82rem;
+  margin-bottom: 0.8rem;
+}
+
 button[type="submit"] {
   width: 100%;
   padding: 0.6rem;

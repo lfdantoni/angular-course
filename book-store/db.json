@@ -1,0 +1,69 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "title": "The Art of Thinking Clearly",
+      "author": "Rolf Dobelli",
+      "categories": ["novel", "biography"],
+      "inStock": true,
+      "year": 2013
+    },
+    {
+      "id": 2,
+      "title": "Everyone Brave is Forgiven",
+      "author": "Stephanie Moreno",
+      "categories": ["biography", "fiction"],
+      "inStock": false,
+      "year": 2016
+    },
+    {
+      "id": 3,
+      "title": "Garden Design and Landscaping",
+      "author": "Russell Reynolds",
+      "categories": ["art", "design"],
+      "inStock": true,
+      "year": 2020
+    },
+    {
+      "id": 4,
+      "title": "How To Be An Explorer of The World Around You",
+      "author": "Diane Washington",
+      "categories": ["art", "biography"],
+      "inStock": true,
+      "year": 2011
+    },
+    {
+      "id": 5,
+      "title": "The Designer's Cookbook",
+      "author": "Byron Kelly",
+      "categories": ["cook", "design"],
+      "inStock": false,
+      "year": 2019
+    },
+    {
+      "id": 6,
+      "title": "The Naked Cookbook",
+      "author": "Yvonne Flemming",
+      "categories": ["cook", "biography"],
+      "inStock": true,
+      "year": 2018
+    },
+    {
+      "id": 7,
+      "title": "The Independent One",
+      "author": "Katherine Spencer",
+      "categories": ["fiction", "romance"],
+      "inStock": true,
+      "year": 2021
+    }
+  ],
+  "categories": [
+    { "id": 1, "name": "fiction" },
+    { "id": 2, "name": "novel" },
+    { "id": 3, "name": "biography" },
+    { "id": 4, "name": "art" },
+    { "id": 5, "name": "design" },
+    { "id": 6, "name": "cook" },
+    { "id": 7, "name": "romance" }
+  ]
+}

@@ -1,49 +1,70 @@
 <h2>{{ appConfig.appName }}</h2>
 
-<!-- Category filter: each tag navigates with [queryParams]; "All" clears the filter -->
-<div class="category-filter">
-  <a class="filter-tag"
-     [class.active]="!activeCategory()"
-     routerLink="/books">
-    All
-  </a>
-  <!-- categories is a computed() signal — read with () -->
-  @for (category of categories(); track category) {
+<!--
+  async pipe: subscribes to vm$ and unsubscribes automatically when the component is destroyed.
+  "as vm" assigns the emitted value to a local template variable.
+  The @else block handles both loading (null before first emission) and error (null from catchError).
+-->
+@if (vm$ | async; as vm) {
+
+  <!-- Category filter: active tag highlighted with [class.active] -->
+  <div class="category-filter">
     <a class="filter-tag"
-       [class.active]="activeCategory() === category"
-       routerLink="/books"
-       [queryParams]="{ category: category }">
-      {{ category }}
+       [class.active]="!vm.activeCategory"
+       routerLink="/books">
+      All
     </a>
-  }
-</div>
+    @for (category of vm.categories; track category) {
+      <a class="filter-tag"
+         [class.active]="vm.activeCategory === category"
+         routerLink="/books"
+         [queryParams]="{ category: category }">
+        {{ category }}
+      </a>
+    }
+  </div>
 
-<div class="cart-bar">
-  <!-- totalBooks() reads a computed() signal from BookService -->
-  <p>Total books: {{ bookService.totalBooks() }} &nbsp;|&nbsp; Cart: {{ cart.length }}</p>
+  <div class="cart-bar">
+    <!-- vm.total comes from the forkJoin result — total books before category filter -->
+    <p>Total books: {{ vm.total }} &nbsp;|&nbsp; Cart: {{ cart.length }}</p>
+    @if (cart.length > 0) {
+      <button class="clear-cart-btn" (click)="clearCart()">Clear Cart</button>
+    }
+  </div>
+
+  <div class="book-grid">
+    @for (book of vm.books; track book.id) {
+      <!--
+        viewDetail output: emitted when the card area is clicked (navigates to /books/:id)
+        addToCart output: emitted when "Add to Cart" is clicked
+      -->
+      <div class="book-grid-item">
+        <app-book
+          [book]="book"
+          (addToCart)="addToCart($event)"
+          (viewDetail)="navigateToDetail($event)" />
+        <button class="delete-btn" (click)="deleteBook(book)">Delete</button>
+      </div>
+    } @empty {
+      <p>No books found for this category.</p>
+    }
+  </div>
+
+} @else {
+
+  <!-- Shown while vm$ hasn't emitted yet (loading) or after catchError returns null (error) -->
+  @if (error) {
+    <p class="error-msg">{{ error }}</p>
+  } @else if (isLoading) {
+    <p class="loading-msg">Loading books...</p>
+  }
+
+}
+
+<!-- Cart bar always visible even while loading -->
+<div class="cart-bar-static">
   @if (cart.length > 0) {
-    <button class="clear-cart-btn" (click)="clearCart()">Clear Cart</button>
-  }
-</div>
-
-<!-- Modern control flow (Angular 17+) - preferred -->
-<div class="book-grid">
-  <!-- filteredBooks is a computed() signal — read with () -->
-  @for (book of filteredBooks(); track book.id) {
-    <!--
-      viewDetail output: emitted when the card area is clicked (navigates to /books/:id)
-      addToCart output: emitted when "Add to Cart" button is clicked (stopPropagation
-        prevents this from also triggering viewDetail)
-    -->
-    <div class="book-grid-item">
-      <app-book
-        [book]="book"
-        (addToCart)="addToCart($event)"
-        (viewDetail)="navigateToDetail($event)" />
-      <button class="delete-btn" (click)="deleteBook(book)">Delete</button>
-    </div>
-  } @empty {
-    <p>No books available.</p>
+    <p>Cart: {{ cart.length }} item(s)</p>
   }
 </div>
 
@@ -52,7 +73,7 @@
 <!--
 <div class="book-grid">
   <app-book
-    *ngFor="let book of filteredBooks()"
+    *ngFor="let book of vm.books"
     [book]="book"
     (addToCart)="addToCart($event)"
     (viewDetail)="navigateToDetail($event)">

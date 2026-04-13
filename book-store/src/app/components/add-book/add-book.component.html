@@ -56,7 +56,13 @@
       }
     </div>
 
-    <!-- [disabled] binding: button is disabled while the form is invalid -->
-    <button type="submit" [disabled]="form.invalid">Save Book</button>
+    @if (error) {
+      <p class="submit-error">{{ error }}</p>
+    }
+
+    <!-- [disabled] binding: button is disabled while the form is invalid or the HTTP request is in flight -->
+    <button type="submit" [disabled]="form.invalid || isSaving">
+      {{ isSaving ? 'Saving...' : 'Save Book' }}
+    </button>
   </form>
 </div>

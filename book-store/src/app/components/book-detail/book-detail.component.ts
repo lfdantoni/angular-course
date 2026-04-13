@@ -1,68 +1,56 @@
-import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Component } from '@angular/core';
+import { Location, AsyncPipe, NgStyle, UpperCasePipe } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { inject } from '@angular/core';
+import { catchError, of, switchMap } from 'rxjs';
 import { Book } from '../../models/book';
 import { BookService } from '../../services/book.service';
 import { BookStatusDirective } from '../../directives/book-status.directive';
-import { NgStyle } from '@angular/common';
+
+// ── Lesson 3–4 approach (synchronous) — replaced in lesson 5 by book$ Observable ──
+// Route params were read once via snapshot — no reactive stream.
+//
+// book: Book | undefined;
+//
+// ngOnInit(): void {
+//   // snapshot.params: reads the current params once (not reactive to param changes).
+//   // Use route.params.subscribe() if the component can be reused across different routes.
+//   const id = Number(this.route.snapshot.params['id']);
+//   this.book = this.bookService.getBookById(id);
+// }
+//
+// In the template: @if (book) { ... } @else { <p>Book not found.</p> }
+// ──────────────────────────────────────────────────────────────────────────────────────
 
 @Component({
   selector: 'app-book-detail',
-  imports: [BookStatusDirective, NgStyle, RouterLink],
+  imports: [BookStatusDirective, NgStyle, RouterLink, AsyncPipe, UpperCasePipe],
   templateUrl: './book-detail.component.html',
   styleUrl: './book-detail.component.css'
 })
-export class BookDetailComponent implements OnInit {
+export class BookDetailComponent {
   // Inject Router and ActivatedRoute using inject() — modern approach
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private bookService = inject(BookService);
-  // Location.back() follows browser history — works regardless of which list the user came from
+  // Location.back() follows browser history — works from both /books and /books-obs
   private location = inject(Location);
 
-  book: Book | undefined;
+  // switchMap: when route params change (navigating from /books/1 to /books/2),
+  // the previous HTTP request is cancelled and a new one starts.
+  // The async pipe in the template subscribes and unsubscribes automatically.
+  book$ = this.route.params.pipe(
+    switchMap(params => this.bookService.getBookById(Number(params['id']))),
+    catchError(err => {
+      console.error(err.message);
+      return of(undefined); // emit undefined to show the "not found" block
+    })
+  );
 
-  ngOnInit(): void {
-    // Singleton demo: bookService.createdAt is identical to the one in BookListComponent
-    // because Angular's injector returns the same instance for providedIn: 'root' services.
-    console.log('BookService singleton createdAt:', this.bookService.createdAt);
-
-    // snapshot.params: one-time read — sufficient when the component is always
-    // destroyed and re-created on navigation (the default in Angular router)
-    const id = Number(this.route.snapshot.params['id']);
-    this.book = this.bookService.getBookById(id);
-
-    // params observable: use this when the component stays mounted and only the
-    // param changes (e.g. navigating from /books/1 to /books/2 without leaving the view)
-    this.route.params.subscribe(params => {
-      const paramId = Number(params['id']);
-      console.log('Param changed (observable):', paramId);
-      // In a real use-case, reload data here instead of using snapshot above
-    });
-
-    // queryParams observable: reactive — re-runs whenever ?category= changes
-    this.route.queryParams.subscribe(params => {
-      if (Object.keys(params).length) {
-        console.log('QueryParams received:', params);
-      }
-    });
-
-    // fragment observable: reads the URL hash (#section)
-    this.route.fragment.subscribe(fragment => {
-      if (fragment) {
-        console.log('Fragment:', fragment);
-      }
-    });
-  }
-
-  // Location.back() — goes to the previous entry in the browser history.
-  // This correctly returns to /books-obs if the user came from there,
-  // or to /books if they came from the Signals version.
-  // Equivalent to clicking the browser's back button.
+  // Programmatic navigation using Location — goes back in browser history
   goBack(): void {
     this.location.back();
   }
+
 
   // Programmatic alternative to [queryParams] in template:
   // goToCategory(category: string): void {

@@ -1,4 +1,9 @@
-@if (book) {
+<!--
+  async pipe subscribes to book$ and re-renders when the Observable emits.
+  switchMap in the component cancels the previous HTTP request if the user navigates
+  to a different book without leaving the detail view.
+-->
+@if (book$ | async; as book) {
   <div class="detail-card" [appBookStatus]="book.inStock">
     <div class="detail-header">
       <button class="back-btn" (click)="goBack()">← Back to Books</button>
@@ -6,17 +11,25 @@
 
     <h2>{{ book.title }}</h2>
 
+    <!--
+      [ngStyle]: inline style binding — color changes based on stock status.
+      Built-in pipe example: {{ book.author | uppercase }}
+    -->
     <p class="author"
        [ngStyle]="{ color: book.inStock ? '#00bfc5' : '#999' }">
-      {{ book.author }}
+      {{ book.author | uppercase }}
     </p>
+
+    @if (book.year) {
+      <!-- Built-in pipe: number formatted with decimal places -->
+      <p class="year">Published: {{ book.year }}</p>
+    }
 
     <div class="categories">
       @for (category of book.categories; track category) {
         <!--
           [queryParams] on routerLink — template binding (not programmatic).
           Generates URL: /books?category=<value>
-          Equivalent to: this.router.navigate(['/books'], { queryParams: { category } })
         -->
         <a class="category-tag"
            routerLink="/books"
@@ -36,8 +49,8 @@
 
     <p class="book-id">Book ID: {{ book.id }}</p>
 
-    <!-- Uses location.back() to return to whichever list the user came from (/books or /books-obs) -->
-    <!-- fragment example (lesson 2 reference): <a routerLink="/books" fragment="top"> navigates to /books#top -->
+    <!-- Uses location.back() — returns to whichever list the user came from -->
+    <!-- fragment example (lesson 2 reference): <a routerLink="/books" fragment="top"> -->
     <a class="fragment-link" (click)="goBack()">
       ↑ Back to book list
     </a>

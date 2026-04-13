@@ -3,6 +3,27 @@ h2 {
   color: #1976d2;
 }
 
+.loading-msg {
+  color: #757575;
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+.error-msg {
+  background-color: #ffebee;
+  color: #c62828;
+  border-radius: 4px;
+  padding: 0.6rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.cart-bar-static {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #555;
+}
+
 .book-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
