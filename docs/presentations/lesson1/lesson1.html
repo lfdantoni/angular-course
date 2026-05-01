@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Angular - Lección 1: Fundamentos</title>
+
+  <!-- Fonts: Angular.dev inspired - Geist Mono + Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===========================================
+       CSS CUSTOM PROPERTIES (THEME)
+       Angular.dev inspired - Dark with purple accent
+       =========================================== */
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a24;
+      --bg-terminal: #0d0d12;
+      --text-primary: #ffffff;
+      --text-secondary: #8b8b9e;
+      --text-muted: #5a5a6e;
+      --accent: #7c3aed;
+      --accent-light: #a78bfa;
+      --accent-glow: rgba(124, 58, 237, 0.15);
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --border: rgba(255, 255, 255, 0.08);
+
+      --font-display: "Inter", sans-serif;
+      --font-body: "Inter", sans-serif;
+      --font-mono: "Geist Mono", "JetBrains Mono", monospace;
+
+      --title-size: clamp(2rem, 5vw, 3.5rem);
+      --h2-size: clamp(1.5rem, 3.5vw, 2.5rem);
+      --h3-size: clamp(1.1rem, 2vw, 1.5rem);
+      --body-size: clamp(0.85rem, 1.5vw, 1.1rem);
+      --small-size: clamp(0.7rem, 1vw, 0.9rem);
+      --code-size: clamp(0.75rem, 1.2vw, 0.95rem);
+      --mono-size: clamp(0.7rem, 1.1vw, 0.9rem);
+
+      --slide-padding: clamp(1.5rem, 5vw, 5rem);
+      --content-gap: clamp(0.75rem, 2vw, 1.5rem);
+      --element-gap: clamp(0.4rem, 1vw, 0.75rem);
+
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-normal: 0.5s;
+      --duration-fast: 0.25s;
+    }
+
+    /* ===========================================
+       BASE STYLES
+       =========================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ===========================================
+       VIEWPORT FITTING - MANDATORY
+       =========================================== */
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background: var(--bg-primary);
+    }
+
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-height: 100%;
+      overflow: hidden;
+      padding: var(--slide-padding);
+    }
+
+    /* ===========================================
+       TYPOGRAPHY
+       =========================================== */
+    h1 {
+      font-family: var(--font-display);
+      font-size: var(--title-size);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: var(--h2-size);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--content-gap);
+    }
+
+    h3 {
+      font-family: var(--font-body);
+      font-size: var(--h3-size);
+      font-weight: 600;
+      margin-bottom: var(--element-gap);
+    }
+
+    p, li {
+      font-size: var(--body-size);
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    a {
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===========================================
+       ANGULAR LOGO / BRAND
+       =========================================== */
+    .angular-bracket {
+      display: inline-block;
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    /* ===========================================
+       SECTION HEADER
+       =========================================== */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: var(--content-gap);
+      margin-bottom: var(--content-gap);
+    }
+
+    .section-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(2rem, 3vw, 2.5rem);
+      height: clamp(2rem, 3vw, 2.5rem);
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      font-size: var(--small-size);
+      border-radius: 8px;
+    }
+
+    .section-label {
+      font-size: var(--small-size);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 500;
+    }
+
+    /* ===========================================
+       BULLET LISTS
+       =========================================== */
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--element-gap);
+    }
+
+    .bullet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: clamp(0.5rem, 1vw, 0.75rem);
+      font-size: var(--body-size);
+      padding-left: var(--element-gap);
+    }
+
+    .bullet-list li::before {
+      content: "›";
+      color: var(--accent-light);
+      font-weight: 600;
+      font-size: 1.2em;
+      flex-shrink: 0;
+      margin-top: -2px;
+    }
+
+    /* ===========================================
+       TERMINAL BLOCK
+       =========================================== */
+    .terminal {
+      background: var(--bg-terminal);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      font-family: var(--font-mono);
+      font-size: var(--mono-size);
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green { background: #28c840; }
+
+    .terminal-title {
+      flex: 1;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: var(--small-size);
+    }
+
+    .terminal-body {
+      padding: clamp(1rem, 2vw, 1.5rem);
+    }
+
+    .terminal-line {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--element-gap);
+      margin-bottom: var(--element-gap);
+    }
+
+    .terminal-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .terminal-prompt {
+      color: var(--success);
+      user-select: none;
+    }
+
+    .terminal-command {
+      color: var(--text-primary);
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .terminal-comment {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ===========================================
+       CODE BLOCK
+       =========================================== */
+    .code-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: clamp(1rem, 2vw, 1.5rem);
+      font-family: var(--font-mono);
+      font-size: var(--code-size);
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      color: #e2e2e6;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .code-inline {
+      background: var(--bg-card);
+      padding: 0.15em 0.5em;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      color: var(--accent-light);
+    }
+
+    .code-keyword { color: #c792ea; }
+    .code-string { color: #c3e88d; }
+    .code-comment { color: #546e7a; font-style: italic; }
+    .code-type { color: #82aaff; }
+    .code-function { color: #82aaff; }
+    .code-variable { color: #f78c6c; }
+    .code-operator { color: #89ddff; }
+
+    /* ===========================================
+       CARDS GRID
+       =========================================== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+      gap: var(--content-gap);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: var(--content-gap);
+      transition: all var(--duration-fast) ease;
+    }
+
+    .card:hover {
+      border-color: rgba(124, 58, 237, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .card h3 {
+      color: var(--text-primary);
+      margin-bottom: var(--element-gap);
+      font-size: var(--h3-size);
+    }
+
+    .card p {
+      font-size: var(--small-size);
+    }
+
+    .card-accent {
+      border-left: 3px solid var(--accent);
+    }
+
+    /* ===========================================
+       CONCEPT SECTIONS
+       =========================================== */
+    .concept-section {
+      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+      border-top: 1px solid var(--border);
+    }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+      gap: var(--content-gap);
+      margin-top: var(--content-gap);
+    }
+
+    .concept-item {
+      text-align: center;
+      padding: var(--element-gap);
+    }
+
+    .concept-item .icon {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      margin-bottom: var(--element-gap);
+    }
+
+    .concept-item h4 {
+      font-size: var(--body-size);
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .concept-item p {
+      font-size: var(--small-size);
+    }
+
+    /* ===========================================
+       INFO BOXES
+       =========================================== */
+    .info-box {
+      background: var(--accent-glow);
+      border: 1px solid rgba(124, 58, 237, 0.2);
+      border-radius: 8px;
+      padding: var(--content-gap);
+      margin-top: var(--content-gap);
+    }
+
+    .info-box p {
+      color: var(--text-primary);
+      font-size: var(--body-size);
+    }
+
+    .info-box strong {
+      color: var(--accent-light);
+    }
+
+    .warning-box {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 8px;
+      padding: var(--content-gap);
+      margin-top: var(--element-gap);
+    }
+
+    .warning-box p {
+      color: var(--warning);
+    }
+
+    /* ===========================================
+       BINDING SHOWCASE
+       =========================================== */
+    .binding-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--content-gap);
+    }
+
+    @media (max-width: 800px) {
+      .binding-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .binding-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: var(--content-gap);
+    }
+
+    .binding-item h4 {
+      font-size: var(--body-size);
+      font-weight: 600;
+      color: var(--accent-light);
+      margin-bottom: var(--element-gap);
+    }
+
+    .binding-item .syntax {
+      font-family: var(--font-mono);
+      font-size: var(--code-size);
+      color: var(--text-primary);
+      background: var(--bg-terminal);
+      padding: 0.5em 0.75em;
+      border-radius: 4px;
+      display: block;
+      margin-bottom: var(--element-gap);
+    }
+
+    .binding-item p {
+      font-size: var(--small-size);
+    }
+
+    /* ===========================================
+       SPECIAL SLIDES
+       =========================================== */
+    .title-slide {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: radial-gradient(ellipse at center, var(--bg-secondary) 0%, var(--bg-primary) 70%);
+    }
+
+    .title-slide h1 {
+      margin-bottom: var(--content-gap);
+    }
+
+    .title-slide .subtitle {
+      font-size: var(--h3-size);
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* ===========================================
+       INSTRUCTOR SLIDE
+       =========================================== */
+    .instructor-slide {
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    }
+
+    .instructor-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 4rem);
+      align-items: center;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .instructor-left {
+      display: flex;
+      flex-direction: column;
+      gap: var(--content-gap);
+    }
+
+    .instructor-photo {
+      width: clamp(100px, 14vw, 160px);
+      height: clamp(100px, 14vw, 160px);
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(124, 58, 237, 0.35);
+      flex-shrink: 0;
+    }
+
+    .instructor-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .instructor-greeting {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      color: var(--accent-light);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .instructor-info h1 {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .instructor-tagline {
+      font-size: var(--h3-size);
+      color: var(--text-secondary);
+      margin-bottom: var(--content-gap);
+      font-weight: 500;
+    }
+
+    .instructor-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+
+    .instructor-contact a {
+      color: var(--accent-light);
+      font-size: var(--body-size);
+      text-decoration: none;
+      transition: opacity var(--duration-fast) ease;
+    }
+
+    .instructor-contact a:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+
+    .instructor-code {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .instructor-layout {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .instructor-code {
+        display: none;
+      }
+      .instructor-contact {
+        align-items: center;
+      }
+    }
+
+    .section-slide {
+      justify-content: center;
+      background: radial-gradient(ellipse at top, rgba(124, 58, 237, 0.08) 0%, transparent 50%);
+    }
+
+    .center-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--content-gap);
+    }
+
+    /* ===========================================
+       NAVIGATION
+       =========================================== */
+    .nav-dots {
+      position: fixed;
+      right: clamp(0.75rem, 1.5vw, 1.5rem);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 100;
+    }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      cursor: pointer;
+      transition: all var(--duration-fast) ease;
+    }
+
+    .nav-dot:hover {
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(1.3);
+    }
+
+    .nav-dot.active {
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      z-index: 200;
+    }
+
+    /* ===========================================
+       ANIMATIONS
+       =========================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition:
+        opacity var(--duration-normal) var(--ease-out-expo),
+        transform var(--duration-normal) var(--ease-out-expo);
+    }
+
+    .slide.visible .reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal:nth-child(1) { transition-delay: 0.05s; }
+    .reveal:nth-child(2) { transition-delay: 0.1s; }
+    .reveal:nth-child(3) { transition-delay: 0.15s; }
+    .reveal:nth-child(4) { transition-delay: 0.2s; }
+    .reveal:nth-child(5) { transition-delay: 0.25s; }
+    .reveal:nth-child(6) { transition-delay: 0.3s; }
+
+    /* ===========================================
+       TWO COLUMN LAYOUT
+       =========================================== */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--slide-padding);
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===========================================
+       RESPONSIVE
+       =========================================== */
+    @media (max-height: 700px) {
+      :root {
+        --slide-padding: clamp(1rem, 3vw, 2rem);
+        --content-gap: clamp(0.5rem, 1.5vw, 1rem);
+        --title-size: clamp(1.5rem, 4.5vw, 2.5rem);
+      }
+    }
+
+    @media (max-height: 600px) {
+      :root {
+        --slide-padding: clamp(0.75rem, 2vw, 1.5rem);
+        --title-size: clamp(1.25rem, 4vw, 2rem);
+      }
+      .nav-dots { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      :root {
+        --title-size: clamp(1.5rem, 7vw, 2.5rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.15s !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Navigation Dots -->
+  <nav class="nav-dots" id="navDots"></nav>
+
+  <!-- =========================================
+       SLIDE 0: INSTRUCTOR
+       ========================================= -->
+  <section class="slide instructor-slide">
+    <div class="slide-content">
+      <div class="instructor-layout">
+        <div class="instructor-left">
+          <div class="instructor-photo reveal">
+            <img src="../assets/instructor.png" alt="Leonardo D'Antoni">
+          </div>
+          <div class="instructor-info reveal">
+            <p class="instructor-greeting">Hola!</p>
+            <h1>Leonardo D'Antoni</h1>
+            <p class="instructor-tagline">Developer</p>
+            <div class="instructor-contact">
+              <a href="https://github.com/lfdantoni" target="_blank">https://github.com/lfdantoni</a>
+              <a href="mailto:lfdantoni@gmail.com">lfdantoni@gmail.com</a>
+            </div>
+          </div>
+        </div>
+        <div class="instructor-code reveal">
+          <div class="code-block">
+            <code><span class="code-comment">// If you can read this code, you could</span>
+<span class="code-comment">// probably use a free cup of coffee.</span>
+
+<span class="code-keyword">var</span> your_drink;
+
+<span class="code-keyword">var</span> reverse = <span class="code-keyword">function</span>(s){
+  <span class="code-keyword">return</span> s.split(<span class="code-string">""</span>).reverse().join(<span class="code-string">""</span>);
+}
+
+<span class="code-keyword">var</span> barista = {
+  str1: <span class="code-string">"ion"</span>,
+  str2: reverse(<span class="code-string">"rcne"</span>),
+  str3: <span class="code-string">"ypt"</span>,
+  request: <span class="code-keyword">function</span>(preference) {
+    <span class="code-keyword">return</span> preference + <span class="code-string">"Secret word:"</span>
+      + <span class="code-keyword">this</span>.str2 + <span class="code-keyword">this</span>.str3 + <span class="code-keyword">this</span>.str1;
+  }
+};
+
+barista.request(your_drink);</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 1: TITLE
+       ========================================= -->
+  <section class="slide title-slide">
+    <div class="slide-content center-content">
+      <div class="reveal">
+        <img src="../assets/angular.svg" alt="Angular" style="width: clamp(120px, 20vw, 200px); height: auto; margin-bottom: 1.5rem; filter: brightness(0) invert(1);">
+      </div>
+      <h1 class="reveal">Angular</h1>
+      <p class="subtitle reveal">Lección 1: Fundamentos y Arquitectura</p>
+      <p class="reveal" style="margin-top: 2rem; color: var(--text-muted); font-size: var(--small-size);">
+        EducaciónIT • 2026
+      </p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 2: AGENDA
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">02</div>
+        <span class="section-label">Agenda</span>
+      </div>
+      <h2 class="reveal">Qué vamos a ver</h2>
+      <div class="two-col reveal">
+        <ul class="bullet-list">
+          <li>Herramientas de desarrollo</li>
+          <li>Librería vs Framework</li>
+          <li>Qué es Angular</li>
+          <li>TypeScript: tipos y conceptos</li>
+        </ul>
+        <ul class="bullet-list">
+          <li>Angular CLI y estructura</li>
+          <li>Componentes y Data Binding</li>
+          <li>Control Flow moderno</li>
+          <li>input/output y Lifecycle</li>
+        </ul>
+      </div>
+      <div class="info-box reveal">
+        <p><strong>Proyecto integrador:</strong> BookStore — aplicación de gestión de libros</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 3: HERRAMIENTAS
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">03</div>
+        <span class="section-label">Herramientas</span>
+      </div>
+      <h2 class="reveal">Setup del entorno</h2>
+      <div class="cards-grid reveal">
+        <div class="card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <img src="../assets/nodedotjs.svg" alt="Node.js" style="width: 48px; height: 48px; margin-bottom: 0.75rem; filter: brightness(0) invert(1);">
+          <h3>Node.js</h3>
+          <p>Necesario para Angular CLI y el servidor de desarrollo</p>
+          <p style="margin-top: 0.5rem; color: var(--accent-light); font-size: var(--small-size);">nodejs.org</p>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <img src="../assets/vscode.svg" alt="VS Code" style="width: 48px; height: 48px; margin-bottom: 0.75rem; filter: brightness(0) invert(1);">
+          <h3>VS Code</h3>
+          <p>Editor recomendado. También: Cursor, Antigravity</p>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <img src="../assets/openai.svg" alt="IA" style="width: 48px; height: 48px; margin-bottom: 0.75rem; filter: brightness(0) invert(1);">
+          <h3>IA Asistentes</h3>
+          <p>Claude Code, Gemini, Cline + OpenRouter</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 4: LIBRERIA VS FRAMEWORK
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">04</div>
+        <span class="section-label">Concepto</span>
+      </div>
+      <h2 class="reveal">Librería vs Framework</h2>
+      <div class="two-col reveal">
+        <div class="card card-accent">
+          <h3>Librería</h3>
+          <p>Conjunto de objetos/funciones para una tarea específica</p>
+          <p style="margin-top: 1rem; color: var(--text-muted); font-size: var(--small-size);">Ej: manejo de fechas, validación</p>
+        </div>
+        <div class="card" style="border-color: var(--accent);">
+          <h3>Framework</h3>
+          <p>Define una forma de construir aplicaciones y provee herramientas</p>
+          <p style="margin-top: 1rem; color: var(--accent-light); font-size: var(--small-size);">Ej: Angular, .NET, Ruby on Rails, Django</p>
+        </div>
+      </div>
+      <div class="info-box reveal">
+        <p><strong>Angular es un framework</strong> — define estructura, convenciones y herramientas completas</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 5: QUE ES ANGULAR
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">05</div>
+        <span class="section-label">Angular</span>
+      </div>
+      <h2 class="reveal">Qué es Angular</h2>
+      <ul class="bullet-list reveal" style="max-width: 700px;">
+        <li>Framework para construir aplicaciones web SPA</li>
+        <li>Combina templates declarativos, inyección de dependencias y comunicación Frontend-Backend</li>
+        <li>Divide el proyecto en <strong>componentes reutilizables</strong></li>
+        <li>Standalone por defecto desde Angular 17+</li>
+      </ul>
+      <div class="info-box reveal" style="max-width: 500px;">
+        <p><a href="https://angular.dev/overview" target="_blank">angular.dev/overview</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 6: TYPESCRIPT INTRO
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="slide-content center-content">
+      <div class="section-number reveal">06</div>
+      <h1 class="reveal">TypeScript</h1>
+      <p class="subtitle reveal">Superset tipado de JavaScript que compila a JS</p>
+      <p class="reveal" style="margin-top: 1rem;">
+        <a href="https://www.typescriptlang.org/" target="_blank">typescriptlang.org</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 7: TYPESCRIPT CONCEPTOS
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">07</div>
+        <span class="section-label">TypeScript</span>
+      </div>
+      <h2 class="reveal">Conceptos clave</h2>
+      <div class="two-col reveal">
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);">Tipos Primitivos</h3>
+          <div class="code-block">
+            <code><span class="code-keyword">number</span>, <span class="code-keyword">string</span>, <span class="code-keyword">boolean</span>, <span class="code-keyword">any</span>, <span class="code-keyword">void</span>, <span class="code-keyword">null</span>, <span class="code-keyword">undefined</span></code>
+          </div>
+          <div class="code-block" style="margin-top: var(--element-gap);">
+            <code><span class="code-comment">// Arrays</span>
+<span class="code-type">string</span>[]  <span class="code-comment">// o</span>  <span class="code-type">Array</span>&lt;<span class="code-type">string</span>&gt;</code>
+          </div>
+          <div class="code-block" style="margin-top: var(--element-gap);">
+            <code><span class="code-comment">// Union Types</span>
+<span class="code-type">string</span> | <span class="code-type">number</span>
+
+<span class="code-comment">// Type Alias</span>
+<span class="code-keyword">type</span> Status = <span class="code-string">'active'</span> | <span class="code-string">'inactive'</span></code>
+          </div>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);">Interfaces y Clases</h3>
+          <div class="code-block">
+            <code><span class="code-keyword">interface</span> <span class="code-type">Book</span> {
+  id: <span class="code-keyword">number</span>;
+  title: <span class="code-keyword">string</span>;
+  author?: <span class="code-keyword">string</span>;  <span class="code-comment">// opcional</span>
+}</code>
+          </div>
+          <div class="code-block" style="margin-top: var(--element-gap);">
+            <code><span class="code-keyword">class</span> <span class="code-type">EBook</span> <span class="code-keyword">extends</span> <span class="code-type">Book</span> {
+  <span class="code-keyword">constructor</span>() {
+    <span class="code-keyword">super</span>();
+  }
+}</code>
+          </div>
+          <div class="code-block" style="margin-top: var(--element-gap);">
+            <code><span class="code-comment">// Generics</span>
+<span class="code-keyword">function</span> identity&lt;<span class="code-type">T</span>&gt;(value: <span class="code-type">T</span>): <span class="code-type">T</span> {
+  <span class="code-keyword">return</span> value;
+}</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+         ========================================= -->
+  <section class="slide section-slide">
+    <div class="slide-content center-content">
+      <div class="section-number reveal">08</div>
+      <h1 class="reveal">Angular CLI</h1>
+      <p class="subtitle reveal">Command Line Interface</p>
+      <p class="reveal">
+        <a href="https://angular.dev/tools/cli" target="_blank">angular.dev/tools/cli</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 10: INSTALACION Y PROYECTO
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">09</div>
+        <span class="section-label">Angular CLI</span>
+      </div>
+      <h2 class="reveal">Instalación y nuevo proyecto</h2>
+      <div class="terminal reveal">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command">npm install -g @angular/cli</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command">ng version</span>
+          </div>
+          <div class="terminal-line" style="margin-top: 1rem;">
+            <span class="terminal-comment"># Crear nuevo proyecto (Angular 21 default: standalone)</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command">ng new book-store</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-comment"># Seleccionar: CSS, sin SSR</span>
+          </div>
+          <div class="terminal-line" style="margin-top: 1rem;">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command">cd book-store</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command">ng serve</span>
+          </div>
+        </div>
+      </div>
+      <div class="warning-box reveal">
+        <p><strong>Importante:</strong> No usar <span class="code-inline">--standalone=false</span> — standalone es el default desde v17</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 11: ESTRUCTURA DEL PROYECTO
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">10</div>
+        <span class="section-label">Angular CLI</span>
+      </div>
+      <h2 class="reveal">Estructura del proyecto</h2>
+      <div class="cards-grid reveal">
+        <div class="card">
+          <h3>src/main.ts</h3>
+          <p>Punto de entrada — bootstrapApplication</p>
+        </div>
+        <div class="card">
+          <h3>src/app/app.component.ts</h3>
+          <p>Componente raíz</p>
+        </div>
+        <div class="card">
+          <h3>src/app/app.config.ts</h3>
+          <p>Providers globales (router, http)</p>
+        </div>
+        <div class="card">
+          <h3>src/app/app.routes.ts</h3>
+          <p>Definición de rutas</p>
+        </div>
+        <div class="card">
+          <h3>angular.json</h3>
+          <p>Configuración del workspace</p>
+        </div>
+        <div class="card">
+          <h3>tsconfig.json</h3>
+          <p>Configuración de TypeScript</p>
+        </div>
+      </div>
+      <div class="info-box reveal">
+        <p><strong>Ya no existe app.module.ts</strong> en proyectos standalone</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 12: COMPONENTES INTRO
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="slide-content center-content">
+      <div class="section-number reveal">11</div>
+      <h1 class="reveal">Componentes</h1>
+      <p class="subtitle reveal">Vista (HTML) + Lógica (TS) + Estilos (CSS)</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 13: @COMPONENT
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">13</div>
+        <span class="section-label">Componentes</span>
+      </div>
+      <h2 class="reveal">Decorador @Component</h2>
+      <div class="code-block reveal" style="max-width: 700px;">
+        <code><span class="code-keyword">@Component</span>({
+  selector: <span class="code-string">'app-book'</span>,
+  template: <span class="code-string">`<h2>{{ book().title }}</h2>`</span>,
+  styles: [<span class="code-string">`h2 { color: blue; }`</span>],
+  imports: [],  <span class="code-comment">// componentes, directivas, pipes</span>
+})</code>
+      </div>
+      <div class="two-col reveal" style="margin-top: var(--content-gap);">
+        <ul class="bullet-list">
+          <li><span class="code-inline">selector</span> — tag HTML</li>
+          <li><span class="code-inline">template</span> / <span class="code-inline">templateUrl</span> — HTML</li>
+          <li><span class="code-inline">styles</span> / <span class="code-inline">styleUrl</span> — estilos</li>
+        </ul>
+        <ul class="bullet-list">
+          <li><span class="code-inline">standalone: true</span> — default en v17+</li>
+          <li><span class="code-inline">imports: []</span> — dependencias</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 14: GENERAR COMPONENTES
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">14</div>
+        <span class="section-label">Componentes</span>
+      </div>
+      <h2 class="reveal">Generar componentes</h2>
+      <div class="terminal reveal">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command">ng generate component components/book</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-comment"># shorthand:</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command">ng g c components/book</span>
+          </div>
+          <div class="terminal-line" style="margin-top: 1rem;">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command">ng g c components/book-list</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command">ng g d directives/book-status</span>
+          </div>
+        </div>
+      </div>
+      <div class="info-box reveal">
+        <p><strong>Importante:</strong> Los componentes usados en el template deben estar en <span class="code-inline">imports</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 15: DATA BINDING
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="slide-content center-content">
+      <div class="section-number reveal">15</div>
+      <h1 class="reveal">Data Binding</h1>
+      <p class="subtitle reveal">Comunicación entre componente y template</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 16: TIPOS DE BINDING
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">16</div>
+        <span class="section-label">Data Binding</span>
+      </div>
+      <h2 class="reveal">Tipos de binding</h2>
+      <div class="binding-grid reveal">
+        <div class="binding-item">
+          <h4>Interpolación</h4>
+          <span class="syntax">{{ expression }}</span>
+          <p>Usar expresiones dentro de {{ }}</p>
+        </div>
+        <div class="binding-item">
+          <h4>Property Binding</h4>
+          <span class="syntax">[prop]="value"</span>
+          <p>Pasar datos al elemento/propiedad</p>
+        </div>
+        <div class="binding-item">
+          <h4>Event Binding</h4>
+          <span class="syntax">(event)="handler()"</span>
+          <p>Manejar eventos del DOM</p>
+        </div>
+        <div class="binding-item">
+          <h4>Two-way Binding</h4>
+          <span class="syntax">[(ngModel)]="prop"</span>
+          <p>FormsModule — sincroniza en ambas direcciones</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 17: CONTROL FLOW
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="slide-content center-content">
+      <div class="section-number reveal">17</div>
+      <h1 class="reveal">Control Flow</h1>
+      <p class="subtitle reveal">Forma moderna en Angular 17+</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 18: CONTROL FLOW DETALLE
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">18</div>
+        <span class="section-label">Control Flow</span>
+      </div>
+      <h2 class="reveal">@if, @for, @switch</h2>
+      <div class="two-col reveal">
+        <div>
+          <div class="code-block">
+            <code><span class="code-comment">// @if / @else</span>
+<span class="code-keyword">@if</span> (book.inStock) {
+  &lt;span&gt;Disponible&lt;/span&gt;
+} <span class="code-keyword">@else</span> {
+  &lt;span&gt;Sin stock&lt;/span&gt;
+}</code>
+          </div>
+          <div class="code-block" style="margin-top: var(--element-gap);">
+            <code><span class="code-comment">// @switch</span>
+<span class="code-keyword">@switch</span> (status) {
+  <span class="code-keyword">@case</span> (<span class="code-string">'active'</span>) { &lt;span&gt;Activo&lt;/span&gt; }
+  <span class="code-keyword">@case</span> (<span class="code-string">'inactive'</span>) { &lt;span&gt;Inactivo&lt;/span&gt; }
+  <span class="code-keyword">@default</span> { &lt;span&gt;Desconocido&lt;/span&gt; }
+}</code>
+          </div>
+        </div>
+        <div>
+          <div class="code-block">
+            <code><span class="code-comment">// @for con track</span>
+<span class="code-keyword">@for</span> (book <span class="code-keyword">of</span> books; <span class="code-keyword">track</span> book.id) {
+  &lt;app-book [book]="book" /&gt;
+} <span class="code-keyword">@empty</span> {
+  &lt;p&gt;No hay libros&lt;/p&gt;
+}</code>
+          </div>
+          <div class="warning-box">
+            <p><strong>track</strong> es obligatorio — mejora el rendimiento de la lista</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 19: LEGACY DIRECTIVES
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">19</div>
+        <span class="section-label">Control Flow</span>
+      </div>
+      <h2 class="reveal">Directivas legacy</h2>
+      <div class="two-col reveal">
+        <div class="card">
+          <h3>*ngIf / *ngFor</h3>
+          <p>Todavía funcionan en Angular 21 por retrocompatibilidad</p>
+          <p style="margin-top: 1rem; color: var(--text-muted); font-size: var(--small-size);">
+            Se mencionan porque aparecen en proyectos existentes y exámenes
+          </p>
+        </div>
+        <div>
+          <ul class="bullet-list">
+            <li>Requieren importar <span class="code-inline">CommonModule</span></li>
+            <li>O importar <span class="code-inline">NgIf</span>, <span class="code-inline">NgFor</span> individualmente</li>
+          </ul>
+          <div class="info-box">
+            <p><strong>Criterio:</strong> Usar @if/@for en proyectos nuevos. Reconocer legacy en proyectos existentes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 20: INPUT OUTPUT
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="slide-content center-content">
+      <div class="section-number reveal">20</div>
+      <h1 class="reveal">input() / output()</h1>
+      <p class="subtitle reveal">Comunicación entre componentes</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 21: INPUT OUTPUT DETALLE
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">22</div>
+        <span class="section-label">Comunicación</span>
+      </div>
+      <h2 class="reveal">input() y output()</h2>
+      <div class="two-col reveal">
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);">input() — Recibir datos</h3>
+          <div class="code-block">
+            <code><span class="code-keyword">import</span> { input } <span class="code-keyword">from</span> <span class="code-string">'@angular/core'</span>;
+
+<span class="code-comment">// Hijo</span>
+book = input.required&lt;<span class="code-type">Book</span>&gt;();
+highlight = input&lt;<span class="code-keyword">boolean</span>&gt;(<span class="code-keyword">false</span>);</code>
+          </div>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);">output() — Emitir eventos</h3>
+          <div class="code-block">
+            <code><span class="code-keyword">import</span> { output } <span class="code-keyword">from</span> <span class="code-string">'@angular/core'</span>;
+
+addToCart = output&lt;<span class="code-type">Book</span>&gt;();
+
+onAdd() {
+  <span class="code-keyword">this</span>.addToCart.emit(<span class="code-keyword">this</span>.book());
+}</code>
+          </div>
+        </div>
+      </div>
+      <div class="code-block reveal" style="margin-top: var(--content-gap); max-width: 600px;">
+        <code><span class="code-comment">// Uso en el template del padre</span>
+&lt;app-book
+  [book]="selectedBook"
+  (addToCart)="handleAdd($event)"
+/&gt;</code>
+      </div>
+      <div class="warning-box reveal">
+        <p><strong>Legacy:</strong> @Input() / @Output() decoradores siguen funcionando</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 22: LIFECYCLE HOOKS
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="slide-content center-content">
+      <div class="section-number reveal">22</div>
+      <h1 class="reveal">Lifecycle Hooks</h1>
+      <p class="subtitle reveal">Ciclo de vida de los componentes</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 23: LIFECYCLE DETALLE
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">21</div>
+        <span class="section-label">Lifecycle</span>
+      </div>
+      <h2 class="reveal">ngOnInit y ngOnDestroy</h2>
+      <div class="two-col reveal">
+        <div class="card card-accent">
+          <h3>ngOnInit</h3>
+          <p>Se ejecuta una vez, después de que Angular inicializa los inputs</p>
+          <div class="info-box">
+            <p><strong>Lugar correcto para:</strong><br/>Llamadas HTTP iniciales, lógica de inicialización</p>
+          </div>
+          <div class="warning-box">
+            <p><strong>No usar el constructor para lógica de negocio</strong></p>
+          </div>
+        </div>
+        <div class="card card-accent">
+          <h3>ngOnDestroy</h3>
+          <p>Se ejecuta antes de que el componente sea eliminado del DOM</p>
+          <div class="info-box">
+            <p><strong>Lugar correcto para:</strong><br/>Cancelar subscriptions, limpiar timers</p>
+          </div>
+        </div>
+      </div>
+      <div class="code-block reveal" style="margin-top: var(--content-gap); max-width: 500px;">
+        <code><span class="code-keyword">export class</span> <span class="code-type">BookComponent</span> <span class="code-keyword">implements</span> <span class="code-type">OnInit</span>, <span class="code-type">OnDestroy</span> {
+  ngOnInit() { }
+  ngOnDestroy() { }
+}</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 24: DIRECTIVAS
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="slide-content center-content">
+      <div class="section-number reveal">22</div>
+      <h1 class="reveal">Directivas</h1>
+      <p class="subtitle reveal">Built-in y custom</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 25: DIRECTIVAS DETALLE
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">23</div>
+        <span class="section-label">Directivas</span>
+      </div>
+      <h2 class="reveal">ngStyle, ngClass y Custom</h2>
+      <div class="two-col reveal">
+        <div>
+          <div class="code-block">
+            <code><span class="code-comment">// ngStyle</span>
+[ngStyle]="{ color: book.isNew ? <span class="code-string">'green'</span> : <span class="code-string">'gray'</span> }"
+
+<span class="code-comment">// ngClass</span>
+[ngClass]="{ <span class="code-string">'out-of-stock'</span>: !book.inStock }"</code>
+          </div>
+        </div>
+        <div>
+          <div class="code-block">
+            <code><span class="code-comment">// Directiva custom con host object</span>
+<span class="code-keyword">@Directive</span>({
+  selector: <span class="code-string">'[appBookStatus]'</span>,
+  host: {
+    <span class="code-string">'[style.backgroundColor]'</span>: <span class="code-string">'backgroundColor'</span>
+  }
+})
+<span class="code-keyword">export class</span> <span class="code-type">BookStatusDirective</span> {
+  appBookStatus = input.required&lt;<span class="code-keyword">boolean</span>&gt;();
+
+  <span class="code-keyword">get</span> backgroundColor(): <span class="code-keyword">string</span> {
+    <span class="code-keyword">return</span> <span class="code-keyword">this</span>.appBookStatus() ? <span class="code-string">'#e8f5e9'</span> : <span class="code-string">'#ffebee'</span>;
+  }
+}</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+         ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">24</div>
+        <span class="section-label">Resumen</span>
+      </div>
+      <h2 class="reveal">Conceptos clave</h2>
+      <div class="concept-grid reveal">
+        <div class="concept-item">
+          <img src="../assets/typescript.svg" alt="TypeScript" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <h4>TypeScript</h4>
+          <p>Tipos, interfaces, clases, generics</p>
+        </div>
+        <div class="concept-item">
+          <img src="../assets/codepen.svg" alt="Components" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <h4>Componentes</h4>
+          <p>@Component, input(), output()</p>
+        </div>
+        <div class="concept-item">
+          <img src="../assets/code.svg" alt="Binding" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <h4>Binding</h4>
+          <p>{{ }}, [prop], (event), [(ngModel)]</p>
+        </div>
+        <div class="concept-item">
+          <img src="../assets/repeat.svg" alt="Control Flow" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <h4>Control Flow</h4>
+          <p>@if, @for, @switch</p>
+        </div>
+        <div class="concept-item">
+          <img src="../assets/zap.svg" alt="Lifecycle" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <h4>Lifecycle</h4>
+          <p>ngOnInit, ngOnDestroy</p>
+        </div>
+        <div class="concept-item">
+          <img src="../assets/box.svg" alt="Directivas" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <h4>Directivas</h4>
+          <p>ngStyle, ngClass, custom</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       =========================================== */
+    class SlidePresentation {
+      constructor() {
+        this.slides = document.querySelectorAll(".slide");
+        this.currentSlide = 0;
+        this.progressBar = document.getElementById("progressBar");
+        this.navDotsContainer = document.getElementById("navDots");
+
+        this.init();
+      }
+
+      init() {
+        this.setupIntersectionObserver();
+        this.setupKeyboardNav();
+        this.setupTouchNav();
+        this.setupProgressBar();
+        this.setupNavDots();
+        this.updateProgress();
+      }
+
+      setupIntersectionObserver() {
+        const options = {
+          root: null,
+          threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              const index = Array.from(this.slides).indexOf(entry.target);
+              this.currentSlide = index;
+              this.updateProgress();
+              this.updateNavDots();
+            }
+          });
+        }, options);
+
+        this.slides.forEach(slide => observer.observe(slide));
+      }
+
+      setupKeyboardNav() {
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
+            e.preventDefault();
+            this.nextSlide();
+          } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+            e.preventDefault();
+            this.prevSlide();
+          } else if (e.key === "Home") {
+            e.preventDefault();
+            this.goToSlide(0);
+          } else if (e.key === "End") {
+            e.preventDefault();
+            this.goToSlide(this.slides.length - 1);
+          }
+        });
+      }
+
+      setupTouchNav() {
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener("touchstart", (e) => {
+          touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener("touchend", (e) => {
+          touchEndY = e.changedTouches[0].screenY;
+          const diff = touchStartY - touchEndY;
+
+          if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+              this.nextSlide();
+            } else {
+              this.prevSlide();
+            }
+          }
+        }, { passive: true });
+      }
+
+      setupProgressBar() {
+        this.updateProgress();
+      }
+
+      setupNavDots() {
+        this.navDotsContainer.innerHTML = "";
+        this.slides.forEach((_, index) => {
+          const dot = document.createElement("button");
+          dot.classList.add("nav-dot");
+          dot.setAttribute("aria-label", `Go to slide ${index + 1}`);
+          dot.addEventListener("click", () => this.goToSlide(index));
+          this.navDotsContainer.appendChild(dot);
+        });
+        this.updateNavDots();
+      }
+
+      updateProgress() {
+        const progress = ((this.currentSlide + 1) / this.slides.length) * 100;
+        this.progressBar.style.width = `${progress}%`;
+      }
+
+      updateNavDots() {
+        const dots = this.navDotsContainer.querySelectorAll(".nav-dot");
+        dots.forEach((dot, index) => {
+          dot.classList.toggle("active", index === this.currentSlide);
+        });
+      }
+
+      nextSlide() {
+        if (this.currentSlide < this.slides.length - 1) {
+          this.goToSlide(this.currentSlide + 1);
+        }
+      }
+
+      prevSlide() {
+        if (this.currentSlide > 0) {
+          this.goToSlide(this.currentSlide - 1);
+        }
+      }
+
+      goToSlide(index) {
+        this.slides[index].scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      new SlidePresentation();
+    });
+  </script>
+</body>
+</html>
