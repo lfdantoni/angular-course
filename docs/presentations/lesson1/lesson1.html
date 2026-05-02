@@ -288,6 +288,40 @@
       font-family: var(--font-mono);
       font-size: var(--code-size);
       overflow-x: auto;
+      position: relative; /* Necesario para el botón de copia */
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--duration-fast) ease;
+      z-index: 10;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      border-color: var(--accent);
+    }
+
+    .copy-btn.copied {
+      color: var(--success);
+      border-color: var(--success);
+    }
+
+    .copy-btn svg {
+      width: 16px;
+      height: 16px;
     }
 
     .code-block code {
@@ -359,30 +393,55 @@
 
     .concept-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: var(--content-gap);
       margin-top: var(--content-gap);
     }
 
-    .concept-item {
-      text-align: center;
-      padding: var(--element-gap);
+    @media (max-width: 800px) {
+      .concept-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    .concept-item .icon {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      margin-bottom: var(--element-gap);
+    .concept-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: var(--content-gap);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      gap: 0.5rem;
+      transition: border-color var(--duration-fast) ease;
+    }
+
+    .concept-item:hover {
+      border-color: var(--accent);
+    }
+
+    .concept-item svg {
+      width: clamp(40px, 5vw, 56px);
+      height: clamp(40px, 5vw, 56px);
+      color: var(--accent-light);
+      flex-shrink: 0;
+    }
+
+    .concept-item img {
+      width: clamp(40px, 5vw, 56px);
+      height: clamp(40px, 5vw, 56px);
+      flex-shrink: 0;
     }
 
     .concept-item h4 {
-      font-size: var(--body-size);
+      font-size: var(--h3-size);
       font-weight: 600;
       color: var(--text-primary);
-      margin-bottom: 0.25rem;
+      margin: 0;
     }
 
     .concept-item p {
-      font-size: var(--small-size);
+      font-size: var(--body-size);
+      margin: 0;
     }
 
     /* ===========================================
@@ -420,45 +479,247 @@
     /* ===========================================
        BINDING SHOWCASE
        =========================================== */
-    .binding-grid {
+    /* ===========================================
+       BINDING DIAGRAM
+       =========================================== */
+
+    @keyframes march-left {
+      from { background-position: 0 0; }
+      to   { background-position: -14px 0; }
+    }
+    @keyframes march-right {
+      from { background-position: 0 0; }
+      to   { background-position: 14px 0; }
+    }
+
+    .binding-diagram {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--content-gap);
+      grid-template-columns: clamp(80px, 10vw, 120px) 1fr clamp(80px, 10vw, 120px);
+      gap: clamp(1rem, 3vw, 2.5rem);
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+      margin: auto;
+      flex: 1;
     }
 
-    @media (max-width: 800px) {
-      .binding-grid {
-        grid-template-columns: 1fr;
-      }
+    .bd-side {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
     }
 
-    .binding-item {
+    .bd-icon {
+      width: clamp(64px, 9vw, 100px);
+      height: auto;
+      color: var(--accent-light);
+    }
+
+    .bd-side-label {
+      font-size: var(--body-size);
+      color: var(--text-secondary);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .bd-rows {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.7rem, 1.8vh, 1.1rem);
+    }
+
+    .bd-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+    }
+
+    .bd-syntax {
+      font-family: var(--font-mono);
+      font-size: clamp(0.82rem, 1.4vw, 1.05rem);
+      color: var(--text-primary);
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: var(--content-gap);
+      padding: 0.3em 0.9em;
+      border-radius: 6px;
+      white-space: nowrap;
     }
 
-    .binding-item h4 {
+    /* Arrow track */
+    .bd-arrow-track {
+      position: relative;
+      width: 100%;
+      height: clamp(20px, 2.8vh, 30px);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Dashed flowing line */
+    .bd-arrow-line {
+      position: absolute;
+      top: 50%; left: 12px; right: 12px;
+      height: 2px;
+      margin-top: -1px;
+      background: repeating-linear-gradient(
+        90deg,
+        currentColor 0px, currentColor 8px,
+        transparent 8px, transparent 14px
+      );
+    }
+
+    .bd-left  .bd-arrow-line  { animation: march-left  0.6s linear infinite; }
+    .bd-right .bd-arrow-line  { animation: march-right 0.6s linear infinite; }
+
+    /* Two-way: two lines slightly offset */
+    .bd-twoway .bd-line-a {
+      top: calc(50% - 4px);
+      animation: march-left  0.6s linear infinite;
+    }
+    .bd-twoway .bd-line-b {
+      top: calc(50% + 3px);
+      animation: march-right 0.6s linear infinite;
+      opacity: 0.75;
+    }
+
+    /* Arrowheads */
+    .bd-arrow-tip {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0; height: 0;
+    }
+    .bd-left .bd-arrow-tip,
+    .bd-twoway .bd-tip-l {
+      left: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-right: 11px solid currentColor;
+    }
+    .bd-right .bd-arrow-tip,
+    .bd-twoway .bd-tip-r {
+      right: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 11px solid currentColor;
+    }
+
+    /* Labels */
+    .bd-label {
       font-size: var(--body-size);
-      font-weight: 600;
-      color: var(--accent-light);
-      margin-bottom: var(--element-gap);
+      font-weight: 500;
+    }
+    .bd-row-interp .bd-label { color: var(--accent-light); }
+    .bd-row-prop   .bd-label { color: var(--accent-light); }
+    .bd-row-event  .bd-label { color: var(--warning); }
+    .bd-row-twoway .bd-label { color: var(--success); }
+
+    /* Color per row */
+    .bd-row-interp .bd-arrow-track { color: var(--accent-light); }
+    .bd-row-prop   .bd-arrow-track { color: var(--accent-light); }
+    .bd-row-event  .bd-arrow-track { color: var(--warning); }
+    .bd-row-twoway .bd-arrow-track { color: var(--success); }
+
+    /* Staggered fade-in on slide visible */
+    .slide.visible .bd-row-interp .bd-arrow-track { opacity: 1; transition-delay: 0.15s; }
+    .slide.visible .bd-row-prop   .bd-arrow-track { opacity: 1; transition-delay: 0.40s; }
+    .slide.visible .bd-row-event  .bd-arrow-track { opacity: 1; transition-delay: 0.65s; }
+    .slide.visible .bd-row-twoway .bd-arrow-track { opacity: 1; transition-delay: 0.90s; }
+
+    /* ===========================================
+       ARCHITECTURE DIAGRAM
+       =========================================== */
+
+    @keyframes arch-dash {
+      to { stroke-dashoffset: -40; } /* matches dash array length: 25 + 15 */
     }
 
-    .binding-item .syntax {
-      font-family: var(--font-mono);
-      font-size: var(--code-size);
-      color: var(--text-primary);
-      background: var(--bg-terminal);
-      padding: 0.5em 0.75em;
-      border-radius: 4px;
-      display: block;
-      margin-bottom: var(--element-gap);
+    .arch-diagram {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      flex: 1;
+      min-height: 0;
+      overflow: visible;
     }
 
-    .binding-item p {
+    .arch-g-template,
+    .arch-g-component,
+    .arch-g-prop,
+    .arch-g-event,
+    .arch-g-services,
+    .arch-g-directives {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .slide.visible .arch-g-template   { opacity: 1; transition-delay: 0.10s; }
+    .slide.visible .arch-g-component  { opacity: 1; transition-delay: 0.30s; }
+    .slide.visible .arch-g-prop       { opacity: 1; transition-delay: 0.55s; }
+    .slide.visible .arch-g-event      { opacity: 1; transition-delay: 0.80s; }
+    .slide.visible .arch-g-services   { opacity: 1; transition-delay: 1.05s; }
+    .slide.visible .arch-g-directives { opacity: 1; transition-delay: 1.30s; }
+
+    .arch-arc-prop,
+    .arch-arc-event,
+    .arch-arrow-di,
+    .arch-arrow-dir {
+      animation: arch-dash 0.7s linear infinite;
+    }
+
+    /* ===========================================
+       SUPERSET DIAGRAM
+       =========================================== */
+    .superset-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      width: 100%;
+    }
+
+    .superset-diagram {
+      width: 100%;
+      max-width: clamp(400px, 65vh, 700px);
+      flex-shrink: 0;
+    }
+
+    .superset-circle {
+      transition: all 0.5s var(--ease-out-expo);
+    }
+
+    .ts-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+      flex: 1;
+    }
+
+    .comparison-panel {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .comparison-label {
       font-size: var(--small-size);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .ts-comparison {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* ===========================================
@@ -657,6 +918,89 @@
     .reveal:nth-child(5) { transition-delay: 0.25s; }
     .reveal:nth-child(6) { transition-delay: 0.3s; }
 
+    /* reveal-scale: cards pop in with scale */
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.92) translateY(12px);
+      transition:
+        opacity var(--duration-normal) var(--ease-out-expo),
+        transform var(--duration-normal) var(--ease-out-expo);
+    }
+    .slide.visible .reveal-scale { opacity: 1; transform: scale(1) translateY(0); }
+    .reveal-scale:nth-child(1) { transition-delay: 0.08s; }
+    .reveal-scale:nth-child(2) { transition-delay: 0.18s; }
+    .reveal-scale:nth-child(3) { transition-delay: 0.28s; }
+    .reveal-scale:nth-child(4) { transition-delay: 0.38s; }
+    .reveal-scale:nth-child(5) { transition-delay: 0.48s; }
+    .reveal-scale:nth-child(6) { transition-delay: 0.58s; }
+
+    /* =========================================== */
+    /* KEYFRAMES                                   */
+    /* =========================================== */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-14px); }
+    }
+
+    @keyframes breathe-orb {
+      0%, 100% { opacity: 0.35; transform: translate(-50%, -50%) scale(1); }
+      50%       { opacity: 0.8;  transform: translate(-50%, -50%) scale(1.22); }
+    }
+
+    @keyframes accent-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
+      50%       { box-shadow: 0 0 0 8px rgba(124, 58, 237, 0.15), 0 0 40px rgba(124, 58, 237, 0.2); }
+    }
+
+    /* Ambient orb behind title / section slides */
+    .ambient-orb {
+      position: absolute;
+      width: clamp(400px, 70vw, 900px);
+      height: clamp(400px, 70vw, 900px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.11) 0%, transparent 68%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: breathe-orb 8s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    /* Keep slide content above orb */
+    .title-slide .slide-content,
+    .section-slide .slide-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Float for Angular logo */
+    .slide.visible .animate-float img {
+      animation: float 4s ease-in-out 0.5s infinite;
+    }
+
+    /* Glow pulse on section-number badges */
+    .slide.visible .section-number {
+      animation: accent-pulse 3s ease-in-out 0.9s infinite;
+    }
+
+    /* Animated underline on title slide h1 */
+    .title-slide h1::after {
+      content: "";
+      display: block;
+      height: 3px;
+      width: 60%;
+      margin: 0.5rem auto 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.7s var(--ease-out-expo) 0.45s;
+    }
+    .slide.visible .title-slide h1::after,
+    .title-slide.slide.visible h1::after {
+      transform: scaleX(1);
+    }
+
     /* ===========================================
        TWO COLUMN LAYOUT
        =========================================== */
@@ -705,9 +1049,75 @@
       }
       html { scroll-behavior: auto; }
     }
+
+    /* ===========================================
+       LIGHTBOX
+       =========================================== */
+    .zoomable {
+      cursor: zoom-in;
+      transition: transform var(--duration-fast) ease,
+                  box-shadow var(--duration-fast) ease;
+    }
+    .zoomable:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 48px rgba(0,0,0,0.6) !important;
+    }
+
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    #lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 88vh;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+      transform: scale(0.92);
+      transition: transform 0.3s var(--ease-out-expo);
+    }
+    #lightbox.open img {
+      transform: scale(1);
+    }
+    #lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--duration-fast) ease;
+    }
+    #lightbox-close:hover { background: rgba(255,255,255,0.2); }
   </style>
 </head>
 <body>
+  <!-- Lightbox -->
+  <div id="lightbox" role="dialog" aria-modal="true">
+    <button id="lightbox-close" aria-label="Cerrar">✕</button>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
   <!-- Progress Bar -->
   <div class="progress-bar" id="progressBar"></div>
 
@@ -766,8 +1176,9 @@ barista.request(your_drink);</code>
        SLIDE 1: TITLE
        ========================================= -->
   <section class="slide title-slide">
+    <div class="ambient-orb"></div>
     <div class="slide-content center-content">
-      <div class="reveal">
+      <div class="reveal animate-float">
         <img src="../assets/angular.svg" alt="Angular" style="width: clamp(120px, 20vw, 200px); height: auto; margin-bottom: 1.5rem; filter: brightness(0) invert(1);">
       </div>
       <h1 class="reveal">Angular</h1>
@@ -818,22 +1229,35 @@ barista.request(your_drink);</code>
         <span class="section-label">Herramientas</span>
       </div>
       <h2 class="reveal">Setup del entorno</h2>
-      <div class="cards-grid reveal">
-        <div class="card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+      <div class="cards-grid">
+        <div class="card reveal-scale" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
           <img src="../assets/nodedotjs.svg" alt="Node.js" style="width: 48px; height: 48px; margin-bottom: 0.75rem; filter: brightness(0) invert(1);">
           <h3>Node.js</h3>
           <p>Necesario para Angular CLI y el servidor de desarrollo</p>
           <p style="margin-top: 0.5rem; color: var(--accent-light); font-size: var(--small-size);">nodejs.org</p>
         </div>
-        <div class="card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <img src="../assets/vscode.svg" alt="VS Code" style="width: 48px; height: 48px; margin-bottom: 0.75rem; filter: brightness(0) invert(1);">
-          <h3>VS Code</h3>
-          <p>Editor recomendado. También: Cursor, Antigravity</p>
+        <div class="card reveal-scale" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <div style="display: flex; gap: 1rem; margin-bottom: 1rem; justify-content: center;">
+            <a href="https://code.visualstudio.com" target="_blank"><img src="../assets/vscode.svg" alt="VS Code" style="width: 36px; height: 36px; filter: brightness(0) invert(1);"></a>
+            <a href="https://cursor.com" target="_blank"><img src="../assets/cursor.svg" alt="Cursor" style="width: 36px; height: 36px; filter: brightness(0) invert(1);"></a>
+            <a href="https://antigravity.google/" target="_blank"><img src="../assets/antigravity.png" alt="Antigravity" style="width: 36px; height: 36px; filter: brightness(0) invert(1);"></a>
+          </div>
+          <h3>Editor</h3>
+          <p>Recomendado: <a href="https://code.visualstudio.com" target="_blank">VS Code</a>, <a href="https://cursor.com" target="_blank">Cursor</a>, <a href="https://antigravity.google/" target="_blank">Antigravity</a></p>
         </div>
-        <div class="card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <img src="../assets/openai.svg" alt="IA" style="width: 48px; height: 48px; margin-bottom: 0.75rem; filter: brightness(0) invert(1);">
+        <div class="card reveal-scale" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <div style="display: flex; gap: 1rem; margin-bottom: 1rem; justify-content: center;">
+            <a href="https://claude.com/code" target="_blank"><img src="../assets/claude.svg" alt="Claude" style="width: 36px; height: 36px; filter: brightness(0) invert(1);"></a>
+            <a href="https://gemini.google.com" target="_blank"><img src="../assets/gemini.svg" alt="Gemini" style="width: 36px; height: 36px; filter: brightness(0) invert(1);"></a>
+            <a href="https://cline.bot" target="_blank"><img src="../assets/cline.svg" alt="Cline" style="width: 36px; height: 36px; filter: brightness(0) invert(1);"></a>
+          </div>
           <h3>IA Asistentes</h3>
-          <p>Claude Code, Gemini, Cline + OpenRouter</p>
+          <p>
+            <a href="https://claude.com/code" target="_blank">Claude Code</a>,
+            <a href="https://gemini.google.com" target="_blank">Gemini</a>,
+            <a href="https://cline.bot" target="_blank">Cline</a> +
+            <a href="https://openrouter.ai" target="_blank">OpenRouter</a>
+          </p>
         </div>
       </div>
     </div>
@@ -876,25 +1300,130 @@ barista.request(your_drink);</code>
         <div class="section-number">05</div>
         <span class="section-label">Angular</span>
       </div>
-      <h2 class="reveal">Qué es Angular</h2>
-      <ul class="bullet-list reveal" style="max-width: 700px;">
-        <li>Framework para construir aplicaciones web SPA</li>
-        <li>Combina templates declarativos, inyección de dependencias y comunicación Frontend-Backend</li>
-        <li>Divide el proyecto en <strong>componentes reutilizables</strong></li>
-        <li>Standalone por defecto desde Angular 17+</li>
-      </ul>
-      <div class="info-box reveal" style="max-width: 500px;">
-        <p><a href="https://angular.dev/overview" target="_blank">angular.dev/overview</a></p>
+      <div class="two-col reveal" style="align-items: center;">
+        <div>
+          <h2 style="margin-bottom: var(--content-gap);">Qué es Angular</h2>
+          <ul class="bullet-list">
+            <li>Framework para construir aplicaciones web SPA</li>
+            <li>Combina templates declarativos, inyección de dependencias y comunicación Frontend-Backend</li>
+            <li>Divide el proyecto en <strong>componentes reutilizables</strong></li>
+            <li>Standalone por defecto desde Angular 17+</li>
+          </ul>
+          <div class="info-box" style="margin-top: var(--content-gap);">
+            <p><a href="https://angular.dev/overview" target="_blank">angular.dev/overview</a></p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center;">
+          <img src="../assets/framework.png" alt="Angular Framework" class="zoomable"
+               style="width: 100%; max-width: 880px; border-radius: 12px;
+                      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+                      border: 1px solid var(--border);">
+        </div>
       </div>
     </div>
   </section>
 
   <!-- =========================================
-       SLIDE 6: TYPESCRIPT INTRO
+       SLIDE 6: ARQUITECTURA
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content" style="display:flex; flex-direction:column; justify-content:center; gap: var(--content-gap);">
+      <div class="section-header reveal">
+        <div class="section-number">06</div>
+        <span class="section-label">Angular</span>
+      </div>
+      <h2 class="reveal" style="margin-bottom:0;">Arquitectura de Angular</h2>
+
+      <svg class="arch-diagram reveal" viewBox="0 0 1600 800" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow-prop" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto">
+            <path d="M0,3 L0,11 L13,7 z" fill="#a78bfa"/>
+          </marker>
+          <marker id="arrow-event" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto">
+            <path d="M0,3 L0,11 L13,7 z" fill="#f59e0b"/>
+          </marker>
+          <marker id="arrow-di" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto">
+            <path d="M0,3 L0,11 L13,7 z" fill="#22c55e"/>
+          </marker>
+          <marker id="arrow-dir" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto">
+            <path d="M0,3 L0,11 L13,7 z" fill="#f59e0b"/>
+          </marker>
+        </defs>
+
+        <!-- Template box -->
+        <g class="arch-g-template">
+          <rect x="630" y="60" width="340" height="140" rx="20" fill="#13111e" stroke="#7c3aed" stroke-width="4"/>
+          <text x="800" y="130" text-anchor="middle" fill="#e2e8f0" font-size="40" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace">Template</text>
+          <text x="800" y="175" text-anchor="middle" fill="#a78bfa" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace">HTML + bindings</text>
+        </g>
+
+        <!-- Component box -->
+        <g class="arch-g-component">
+          <rect x="630" y="600" width="340" height="140" rx="20" fill="#13111e" stroke="#7c3aed" stroke-width="4"/>
+          <text x="800" y="670" text-anchor="middle" fill="#e2e8f0" font-size="40" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace">Component</text>
+          <text x="800" y="715" text-anchor="middle" fill="#a78bfa" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace">TypeScript</text>
+        </g>
+
+        <!-- Left arc: Property Binding -->
+        <g class="arch-g-prop">
+          <path d="M 630,600 C 400,550 400,250 630,200"
+                stroke="#a78bfa" stroke-width="8" fill="none"
+                stroke-dasharray="25 15"
+                class="arch-arc-prop"
+                marker-end="url(#arrow-prop)"/>
+          <text x="320" y="400" text-anchor="middle" fill="#a78bfa" font-size="36" font-weight="600" font-family="'JetBrains Mono','Fira Code',monospace">[property]</text>
+          <text x="320" y="450" text-anchor="middle" fill="#a78bfa" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace" opacity="0.8">binding</text>
+        </g>
+
+        <!-- Right arc: Event Binding -->
+        <g class="arch-g-event">
+          <path d="M 970,200 C 1200,250 1200,550 970,600"
+                stroke="#f59e0b" stroke-width="8" fill="none"
+                stroke-dasharray="25 15"
+                class="arch-arc-event"
+                marker-end="url(#arrow-event)"/>
+          <text x="1280" y="400" text-anchor="middle" fill="#f59e0b" font-size="36" font-weight="600" font-family="'JetBrains Mono','Fira Code',monospace">(event)</text>
+          <text x="1280" y="450" text-anchor="middle" fill="#f59e0b" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace" opacity="0.8">binding</text>
+        </g>
+
+        <!-- Services box -->
+        <g class="arch-g-services">
+          <rect x="50" y="580" width="300" height="140" rx="16" fill="#0d1a12" stroke="#22c55e" stroke-width="4"/>
+          <text x="200" y="640" text-anchor="middle" fill="#e2e8f0" font-size="32" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace">Services</text>
+          <text x="200" y="685" text-anchor="middle" fill="#22c55e" font-size="24" font-family="'JetBrains Mono','Fira Code',monospace">Dependency Injection</text>
+          <path d="M 350,650 L 620,670"
+                stroke="#22c55e" stroke-width="6" fill="none"
+                stroke-dasharray="16 10"
+                class="arch-arrow-di"
+                marker-end="url(#arrow-di)"/>
+        </g>
+
+        <!-- Directives box -->
+        <g class="arch-g-directives">
+          <rect x="1250" y="80" width="300" height="140" rx="16" fill="#1a1508" stroke="#f59e0b" stroke-width="4" stroke-dasharray="12 8"/>
+          <text x="1400" y="140" text-anchor="middle" fill="#e2e8f0" font-size="32" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace">Directives</text>
+          <text x="1400" y="185" text-anchor="middle" fill="#f59e0b" font-size="24" font-family="'JetBrains Mono','Fira Code',monospace">DOM modify</text>
+          <path d="M 1250,150 L 980,130"
+                stroke="#f59e0b" stroke-width="6" fill="none"
+                stroke-dasharray="16 10"
+                class="arch-arrow-dir"
+                marker-end="url(#arrow-dir)"/>
+        </g>
+
+      </svg>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 7: TYPESCRIPT INTRO
        ========================================= -->
   <section class="slide section-slide">
+    <div class="ambient-orb"></div>
     <div class="slide-content center-content">
-      <div class="section-number reveal">06</div>
+      <div class="section-number reveal">07</div>
+      <div class="reveal animate-float">
+        <img src="../assets/typescript.svg" alt="TypeScript" style="width: clamp(80px, 14vw, 140px); height: auto; margin-bottom: 1rem; filter: brightness(0) invert(1);">
+      </div>
       <h1 class="reveal">TypeScript</h1>
       <p class="subtitle reveal">Superset tipado de JavaScript que compila a JS</p>
       <p class="reveal" style="margin-top: 1rem;">
@@ -904,12 +1433,88 @@ barista.request(your_drink);</code>
   </section>
 
   <!-- =========================================
-       SLIDE 7: TYPESCRIPT CONCEPTOS
+       SLIDE 7.1: TYPESCRIPT SUPERSET DIAGRAM
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">07</div>
+        <div class="section-number">TS</div>
+        <span class="section-label">Concepto</span>
+      </div>
+      <h2 class="reveal" style="text-align:center;">TypeScript es un Superset</h2>
+
+      <div class="superset-container">
+        <!-- SVG Superset Diagram (Large) -->
+        <svg class="superset-diagram reveal" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+          <!-- TS Outer Circle -->
+          <circle cx="250" cy="250" r="235" fill="rgba(124, 58, 237, 0.08)" stroke="var(--accent)" stroke-width="2.5" class="superset-circle"/>
+          <text x="50%" y="65" text-anchor="middle" fill="var(--accent-light)" font-size="32" font-weight="800" font-family="Inter">TypeScript</text>
+          <text x="50%" y="95" text-anchor="middle" fill="var(--text-muted)" font-size="18" font-family="Inter">Types, Decorators, Interfaces</text>
+
+          <!-- ES6 Middle Circle -->
+          <circle cx="250" cy="300" r="165" fill="rgba(245, 158, 11, 0.12)" stroke="#f59e0b" stroke-width="2.5" class="superset-circle"/>
+          <text x="50%" y="235" text-anchor="middle" fill="#f59e0b" font-size="28" font-weight="700" font-family="Inter">ES6+</text>
+          <text x="50%" y="260" text-anchor="middle" fill="rgba(245, 158, 11, 0.8)" font-size="16" font-family="Inter">Classes, Arrow Functions, Modules</text>
+
+          <!-- ES5 Inner Circle -->
+          <circle cx="250" cy="360" r="95" fill="rgba(34, 197, 94, 0.15)" stroke="#22c55e" stroke-width="2.5" class="superset-circle"/>
+          <text x="50%" y="375" text-anchor="middle" fill="#22c55e" font-size="28" font-weight="700" font-family="Inter">ES5</text>
+          <text x="50%" y="405" text-anchor="middle" fill="rgba(34, 197, 94, 0.8)" font-size="16" font-family="Inter">Standard JavaScript</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 7.2: TYPESCRIPT TRANSPILATION
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">TS</div>
+        <span class="section-label">Transpilación</span>
+      </div>
+      <h2 class="reveal">Del lenguaje a la ejecución</h2>
+
+      <div class="ts-comparison reveal">
+        <div class="comparison-panel">
+          <span class="comparison-label">Desarrollo (TypeScript)</span>
+          <div class="code-block zoomable-code" style="font-size: 1.1em; flex: 1; cursor: pointer;">
+            <code><span class="code-keyword">interface</span> <span class="code-type">User</span> {
+  id: <span class="code-keyword">number</span>;
+  name: <span class="code-keyword">string</span>;
+}
+
+<span class="code-keyword">function</span> <span class="code-function">greet</span>(user: <span class="code-type">User</span>): <span class="code-keyword">string</span> {
+  <span class="code-keyword">return</span> <span class="code-string">`Hola ${user.name}`</span>;
+}</code>
+          </div>
+        </div>
+        <div class="comparison-panel">
+          <span class="comparison-label">Producción (JavaScript)</span>
+          <div class="code-block zoomable-code" style="font-size: 1.1em; flex: 1; border-color: var(--success); opacity: 0.9; cursor: pointer;">
+            <code><span class="code-comment">// Los tipos desaparecen (Type Erasure)</span>
+
+<span class="code-keyword">function</span> <span class="code-function">greet</span>(user) {
+  <span class="code-keyword">return</span> <span class="code-string">"Hola "</span> + user.name;
+}</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box reveal" style="margin-top: 1.5rem;">
+        <p><strong>Type Erasure:</strong> El compilador de TS (tsc) elimina todas las anotaciones de tipo antes de generar el archivo final para el navegador.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 8: TYPESCRIPT CONCEPTOS
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">08</div>
         <span class="section-label">TypeScript</span>
       </div>
       <h2 class="reveal">Conceptos clave</h2>
@@ -957,11 +1562,13 @@ barista.request(your_drink);</code>
       </div>
     </div>
   </section>
-
-         ========================================= -->
+  <!-- =========================================
+       SLIDE 9: ANGULAR CLI
+       ========================================= -->
   <section class="slide section-slide">
+    <div class="ambient-orb"></div>
     <div class="slide-content center-content">
-      <div class="section-number reveal">08</div>
+      <div class="section-number reveal">09</div>
       <h1 class="reveal">Angular CLI</h1>
       <p class="subtitle reveal">Command Line Interface</p>
       <p class="reveal">
@@ -976,7 +1583,7 @@ barista.request(your_drink);</code>
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">09</div>
+        <div class="section-number">10</div>
         <span class="section-label">Angular CLI</span>
       </div>
       <h2 class="reveal">Instalación y nuevo proyecto</h2>
@@ -1028,7 +1635,7 @@ barista.request(your_drink);</code>
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">10</div>
+        <div class="section-number">11</div>
         <span class="section-label">Angular CLI</span>
       </div>
       <h2 class="reveal">Estructura del proyecto</h2>
@@ -1068,8 +1675,9 @@ barista.request(your_drink);</code>
        SLIDE 12: COMPONENTES INTRO
        ========================================= -->
   <section class="slide section-slide">
+    <div class="ambient-orb"></div>
     <div class="slide-content center-content">
-      <div class="section-number reveal">11</div>
+      <div class="section-number reveal">12</div>
       <h1 class="reveal">Componentes</h1>
       <p class="subtitle reveal">Vista (HTML) + Lógica (TS) + Estilos (CSS)</p>
     </div>
@@ -1085,13 +1693,27 @@ barista.request(your_drink);</code>
         <span class="section-label">Componentes</span>
       </div>
       <h2 class="reveal">Decorador @Component</h2>
-      <div class="code-block reveal" style="max-width: 700px;">
-        <code><span class="code-keyword">@Component</span>({
+      <div class="two-col reveal" style="max-width: 1200px; font-size: 1.1rem;">
+        <div class="code-block zoomable-code" style="padding: 1.5rem; cursor: pointer;">
+          <code><span class="code-comment">// Inline</span>
+<span class="code-keyword">@Component</span>({
   selector: <span class="code-string">'app-book'</span>,
-  template: <span class="code-string">`<h2>{{ book().title }}</h2>`</span>,
+  template: <span class="code-string">`&lt;h2&gt;{{ book().title }}&lt;/h2&gt;`</span>,
   styles: [<span class="code-string">`h2 { color: blue; }`</span>],
-  imports: [],  <span class="code-comment">// componentes, directivas, pipes</span>
-})</code>
+  imports: [],
+})
+<span class="code-keyword">export class</span> <span class="code-type">BookComponent</span> { ... }</code>
+        </div>
+        <div class="code-block zoomable-code" style="padding: 1.5rem; cursor: pointer;">
+          <code><span class="code-comment">// Archivos externos</span>
+<span class="code-keyword">@Component</span>({
+  selector: <span class="code-string">'app-book'</span>,
+  templateUrl: <span class="code-string">'./book.html'</span>,
+  styleUrl: <span class="code-string">'./book.css'</span>,
+  imports: [],
+})
+<span class="code-keyword">export class</span> <span class="code-type">BookComponent</span> { ... }</code>
+        </div>
       </div>
       <div class="two-col reveal" style="margin-top: var(--content-gap);">
         <ul class="bullet-list">
@@ -1156,6 +1778,7 @@ barista.request(your_drink);</code>
        SLIDE 15: DATA BINDING
        ========================================= -->
   <section class="slide section-slide">
+    <div class="ambient-orb"></div>
     <div class="slide-content center-content">
       <div class="section-number reveal">15</div>
       <h1 class="reveal">Data Binding</h1>
@@ -1167,33 +1790,82 @@ barista.request(your_drink);</code>
        SLIDE 16: TIPOS DE BINDING
        ========================================= -->
   <section class="slide">
-    <div class="slide-content">
+    <div class="slide-content" style="display:flex; flex-direction:column; justify-content:center; gap: var(--content-gap);">
       <div class="section-header reveal">
         <div class="section-number">16</div>
         <span class="section-label">Data Binding</span>
       </div>
-      <h2 class="reveal">Tipos de binding</h2>
-      <div class="binding-grid reveal">
-        <div class="binding-item">
-          <h4>Interpolación</h4>
-          <span class="syntax">{{ expression }}</span>
-          <p>Usar expresiones dentro de {{ }}</p>
+      <h2 class="reveal" style="margin-bottom:0;">Tipos de binding</h2>
+
+      <div class="binding-diagram reveal">
+
+        <!-- LEFT: DOM -->
+        <div class="bd-side">
+          <svg class="bd-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+            <line x1="6" y1="8" x2="15" y2="8"/>
+            <line x1="6" y1="11" x2="13" y2="11"/>
+            <line x1="6" y1="14" x2="10" y2="14"/>
+          </svg>
+          <span class="bd-side-label">DOM</span>
         </div>
-        <div class="binding-item">
-          <h4>Property Binding</h4>
-          <span class="syntax">[prop]="value"</span>
-          <p>Pasar datos al elemento/propiedad</p>
+
+        <!-- CENTER: binding rows -->
+        <div class="bd-rows">
+
+          <div class="bd-row bd-row-interp">
+            <code class="bd-syntax">&#123;&#123;expression&#125;&#125;</code>
+            <div class="bd-arrow-track bd-left">
+              <div class="bd-arrow-line"></div>
+              <div class="bd-arrow-tip"></div>
+            </div>
+            <span class="bd-label">Interpolation</span>
+          </div>
+
+          <div class="bd-row bd-row-prop">
+            <code class="bd-syntax">[property] = "expression"</code>
+            <div class="bd-arrow-track bd-left">
+              <div class="bd-arrow-line"></div>
+              <div class="bd-arrow-tip"></div>
+            </div>
+            <span class="bd-label">One Way Binding</span>
+          </div>
+
+          <div class="bd-row bd-row-event">
+            <code class="bd-syntax">(event) = "statement"</code>
+            <div class="bd-arrow-track bd-right">
+              <div class="bd-arrow-line"></div>
+              <div class="bd-arrow-tip"></div>
+            </div>
+            <span class="bd-label">Event Binding</span>
+          </div>
+
+          <div class="bd-row bd-row-twoway">
+            <code class="bd-syntax">[(ngModel)] = "property"</code>
+            <div class="bd-arrow-track bd-twoway">
+              <div class="bd-arrow-line bd-line-a"></div>
+              <div class="bd-arrow-line bd-line-b"></div>
+              <div class="bd-arrow-tip bd-tip-l"></div>
+              <div class="bd-arrow-tip bd-tip-r"></div>
+            </div>
+            <span class="bd-label">Two Way Binding</span>
+          </div>
+
         </div>
-        <div class="binding-item">
-          <h4>Event Binding</h4>
-          <span class="syntax">(event)="handler()"</span>
-          <p>Manejar eventos del DOM</p>
+
+        <!-- RIGHT: Component -->
+        <div class="bd-side">
+          <svg class="bd-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <path d="M9 13l2 2-2 2"/>
+            <path d="M15 13l-2 2 2 2"/>
+          </svg>
+          <span class="bd-side-label">Component</span>
         </div>
-        <div class="binding-item">
-          <h4>Two-way Binding</h4>
-          <span class="syntax">[(ngModel)]="prop"</span>
-          <p>FormsModule — sincroniza en ambas direcciones</p>
-        </div>
+
       </div>
     </div>
   </section>
@@ -1202,6 +1874,7 @@ barista.request(your_drink);</code>
        SLIDE 17: CONTROL FLOW
        ========================================= -->
   <section class="slide section-slide">
+    <div class="ambient-orb"></div>
     <div class="slide-content center-content">
       <div class="section-number reveal">17</div>
       <h1 class="reveal">Control Flow</h1>
@@ -1290,6 +1963,7 @@ barista.request(your_drink);</code>
        SLIDE 20: INPUT OUTPUT
        ========================================= -->
   <section class="slide section-slide">
+    <div class="ambient-orb"></div>
     <div class="slide-content center-content">
       <div class="section-number reveal">20</div>
       <h1 class="reveal">input() / output()</h1>
@@ -1303,7 +1977,7 @@ barista.request(your_drink);</code>
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">22</div>
+        <div class="section-number">21</div>
         <span class="section-label">Comunicación</span>
       </div>
       <h2 class="reveal">input() y output()</h2>
@@ -1348,6 +2022,7 @@ onAdd() {
        SLIDE 22: LIFECYCLE HOOKS
        ========================================= -->
   <section class="slide section-slide">
+    <div class="ambient-orb"></div>
     <div class="slide-content center-content">
       <div class="section-number reveal">22</div>
       <h1 class="reveal">Lifecycle Hooks</h1>
@@ -1361,7 +2036,7 @@ onAdd() {
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">21</div>
+        <div class="section-number">23</div>
         <span class="section-label">Lifecycle</span>
       </div>
       <h2 class="reveal">ngOnInit y ngOnDestroy</h2>
@@ -1397,8 +2072,9 @@ onAdd() {
        SLIDE 24: DIRECTIVAS
        ========================================= -->
   <section class="slide section-slide">
+    <div class="ambient-orb"></div>
     <div class="slide-content center-content">
-      <div class="section-number reveal">22</div>
+      <div class="section-number reveal">24</div>
       <h1 class="reveal">Directivas</h1>
       <p class="subtitle reveal">Built-in y custom</p>
     </div>
@@ -1410,7 +2086,7 @@ onAdd() {
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">23</div>
+        <div class="section-number">25</div>
         <span class="section-label">Directivas</span>
       </div>
       <h2 class="reveal">ngStyle, ngClass y Custom</h2>
@@ -1446,42 +2122,79 @@ onAdd() {
     </div>
   </section>
 
-         ========================================= -->
+  <!-- =========================================
+       SLIDE 26: Conceptos clave
+       ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">24</div>
+        <div class="section-number">26</div>
         <span class="section-label">Resumen</span>
       </div>
       <h2 class="reveal">Conceptos clave</h2>
       <div class="concept-grid reveal">
         <div class="concept-item">
-          <img src="../assets/typescript.svg" alt="TypeScript" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <img src="../assets/typescript.svg" alt="TypeScript" style="filter: brightness(0) invert(1);">
           <h4>TypeScript</h4>
           <p>Tipos, interfaces, clases, generics</p>
         </div>
         <div class="concept-item">
-          <img src="../assets/codepen.svg" alt="Components" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <!-- Component / puzzle piece -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/>
+            <line x1="16" y1="8" x2="2" y2="22"/>
+            <line x1="17.5" y1="15" x2="9" y2="15"/>
+          </svg>
           <h4>Componentes</h4>
           <p>@Component, input(), output()</p>
         </div>
         <div class="concept-item">
-          <img src="../assets/code.svg" alt="Binding" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <!-- Data binding: two-way arrows -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 4l4 4-4 4"/>
+            <path d="M3 8h18"/>
+            <path d="M7 20l-4-4 4-4"/>
+            <path d="M21 16H3"/>
+          </svg>
           <h4>Binding</h4>
           <p>{{ }}, [prop], (event), [(ngModel)]</p>
         </div>
         <div class="concept-item">
-          <img src="../assets/repeat.svg" alt="Control Flow" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <!-- Control flow: branch/fork -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="6" cy="6" r="3"/>
+            <circle cx="18" cy="6" r="3"/>
+            <circle cx="12" cy="18" r="3"/>
+            <path d="M6 9v2a6 6 0 006 6"/>
+            <path d="M18 9v2a6 6 0 01-6 6"/>
+          </svg>
           <h4>Control Flow</h4>
           <p>@if, @for, @switch</p>
         </div>
         <div class="concept-item">
-          <img src="../assets/zap.svg" alt="Lifecycle" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <!-- Lifecycle: refresh/cycle -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="12" x2="15" y2="14"/>
+          </svg>
           <h4>Lifecycle</h4>
           <p>ngOnInit, ngOnDestroy</p>
         </div>
         <div class="concept-item">
-          <img src="../assets/box.svg" alt="Directivas" style="width: 36px; height: 36px; margin-bottom: 0.5rem; filter: brightness(0) invert(1);">
+          <!-- Directivas: magic wand / sparkle -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 4V2"/>
+            <path d="M15 16v-2"/>
+            <path d="M8 9h2"/>
+            <path d="M20 9h2"/>
+            <path d="M17.8 11.8L19 13"/>
+            <path d="M15 9h.01"/>
+            <path d="M17.8 6.2L19 5"/>
+            <path d="m3 21 9-9"/>
+            <path d="M12.2 6.2L11 5"/>
+          </svg>
           <h4>Directivas</h4>
           <p>ngStyle, ngClass, custom</p>
         </div>
@@ -1620,6 +2333,85 @@ onAdd() {
 
     document.addEventListener("DOMContentLoaded", () => {
       new SlidePresentation();
+
+      // Copy to Clipboard
+      function setupCopyButtons() {
+        const codeBlocks = document.querySelectorAll(".code-block");
+
+        codeBlocks.forEach(block => {
+          // Crear botón
+          const btn = document.createElement("button");
+          btn.className = "copy-btn";
+          btn.setAttribute("aria-label", "Copiar código");
+          btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+
+          block.appendChild(btn);
+
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation(); // Evitar zoom al copiar
+            const code = block.querySelector("code").innerText;
+
+            navigator.clipboard.writeText(code).then(() => {
+              btn.classList.add("copied");
+              btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+
+              setTimeout(() => {
+                btn.classList.remove("copied");
+                btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+              }, 2000);
+            });
+          });
+        });
+      }
+
+      setupCopyButtons();
+
+      // Lightbox
+      const lightbox    = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      const closeBtn    = document.getElementById("lightbox-close");
+
+      function openLightbox(src, alt, codeElement = null) {
+        if (codeElement) {
+          lightboxImg.style.display = "none";
+          let codeDisplay = document.getElementById("lightbox-code");
+          if (!codeDisplay) {
+            codeDisplay = document.createElement("div");
+            codeDisplay.id = "lightbox-code";
+            codeDisplay.style.cssText = "padding: 4rem; font-family: var(--font-mono); font-size: 1.5rem; white-space: pre-wrap; margin: auto;";
+            lightbox.appendChild(codeDisplay);
+          }
+          codeDisplay.innerHTML = codeElement.innerHTML;
+          codeDisplay.style.display = "block";
+        } else {
+          let codeDisplay = document.getElementById("lightbox-code");
+          if (codeDisplay) codeDisplay.style.display = "none";
+          lightboxImg.style.display = "block";
+          lightboxImg.src = src;
+          lightboxImg.alt = alt;
+        }
+        lightbox.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      document.querySelectorAll("img.zoomable, .zoomable-code").forEach(el => {
+        el.addEventListener("click", () => {
+          if (el.classList.contains("zoomable-code")) {
+            openLightbox(null, "Código", el.querySelector("code"));
+          } else {
+            openLightbox(el.src, el.alt);
+          }
+        });
+      });
+
+      closeBtn.addEventListener("click", closeLightbox);
+      lightbox.addEventListener("click", e => { if (e.target === lightbox) closeLightbox(); });
+      document.addEventListener("keydown", e => { if (e.key === "Escape") closeLightbox(); });
     });
   </script>
 </body>

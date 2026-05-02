@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Angular Course - Presentaciones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a24;
+      --text-primary: #ffffff;
+      --text-secondary: #8b8b9e;
+      --accent: #7c3aed;
+      --accent-light: #a78bfa;
+      --border: rgba(255, 255, 255, 0.08);
+      --font-main: "Inter", sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4rem 2rem;
+      background-image: radial-gradient(circle at top right, rgba(124, 58, 237, 0.05), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(124, 58, 237, 0.03), transparent 40%);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    header img {
+      width: 80px;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 0 20px rgba(124, 58, 237, 0.3));
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, #fff, var(--accent-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .lessons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .lesson-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Estado Activo */
+    .lesson-card.active {
+      cursor: pointer;
+    }
+
+    .lesson-card.active:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(124, 58, 237, 0.1);
+    }
+
+    .lesson-card.active .lesson-number {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* Estado Inactivo */
+    .lesson-card.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+    }
+
+    .lesson-card.disabled::after {
+      content: "PRÓXIMAMENTE";
+      position: absolute;
+      top: 1.5rem;
+      right: -2.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.25rem 3rem;
+      transform: rotate(45deg);
+    }
+
+    .lesson-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      transition: background 0.3s ease;
+    }
+
+    .lesson-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .lesson-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .arrow {
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--accent-light);
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: all 0.3s ease;
+    }
+
+    .lesson-card.active:hover .arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 2rem 1rem; }
+      .lessons-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="assets/angular.svg" alt="Angular Logo">
+    <h1>Angular Course</h1>
+    <p class="subtitle">Presentaciones de clase y material teórico</p>
+  </header>
+
+  <main class="lessons-grid">
+    <!-- Lección 1 - ACTIVA -->
+    <a href="lesson1/lesson1.html" class="lesson-card active">
+      <div>
+        <div class="lesson-number">01</div>
+        <h3>Fundamentos</h3>
+        <p>Introducción a Angular, transpilación, arquitectura bivariable y primer setup del entorno.</p>
+      </div>
+      <div class="arrow">Ver presentación <span>→</span></div>
+    </a>
+
+    <!-- Lección 2 - INACTIVA -->
+    <div class="lesson-card disabled">
+      <div>
+        <div class="lesson-number">02</div>
+        <h3>Templates & Data Binding</h3>
+        <p>Interpolación, property binding, event binding y directivas estructurales modernas.</p>
+      </div>
+    </div>
+
+    <!-- Lección 3 - INACTIVA -->
+    <div class="lesson-card disabled">
+      <div>
+        <div class="lesson-number">03</div>
+        <h3>Servicios & Injection</h3>
+        <p>Inyección de dependencias, singleton services y comunicación mediante señales.</p>
+      </div>
+    </div>
+
+    <!-- Lección 4 - INACTIVA -->
+    <div class="lesson-card disabled">
+      <div>
+        <div class="lesson-number">04</div>
+        <h3>Formularios</h3>
+        <p>Reactive Forms, validaciones custom y manejo de estado asíncrono.</p>
+      </div>
+    </div>
+
+    <!-- Lección 5 - INACTIVA -->
+    <div class="lesson-card disabled">
+      <div>
+        <div class="lesson-number">05</div>
+        <h3>Routing & Navegación</h3>
+        <p>Configuración de rutas, parámetros, guards y lazy loading de componentes.</p>
+      </div>
+    </div>
+
+    <!-- Lección 6 - INACTIVA -->
+    <div class="lesson-card disabled">
+      <div>
+        <div class="lesson-number">06</div>
+        <h3>HTTP & API Rest</h3>
+        <p>Consumo de servicios externos, observables, pipes y tratamiento de errores.</p>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

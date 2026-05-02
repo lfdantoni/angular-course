@@ -63,3 +63,8 @@ typings/
 **/dist
 
 /.claude
+
+# Firebase
+.firebase/
+firebase-debug.log*
+.firebaserc
