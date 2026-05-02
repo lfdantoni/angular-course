@@ -68,3 +68,4 @@ typings/
 .firebase/
 firebase-debug.log*
 .firebaserc
+.playwright-mcp/*

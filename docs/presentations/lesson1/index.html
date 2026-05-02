@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Angular - Lección 1: Fundamentos</title>
+  <title data-key="page-title">Angular - Lección 1: Fundamentos</title>
 
   <!-- Fonts: Angular.dev inspired - Geist Mono + Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1143,6 +1143,42 @@
 
     .export-btn svg { width: 18px; height: 18px; }
 
+    /* ===========================================
+       LANGUAGE SWITCH
+       =========================================== */
+    .lang-switch {
+      position: fixed;
+      top: 1.5rem;
+      right: clamp(8.5rem, 12vw, 11rem);
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2px;
+      z-index: 150;
+    }
+
+    .lang-btn {
+      padding: 0.35rem 0.7rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .lang-btn:hover:not(.active) {
+      color: var(--text-primary);
+    }
+
     @media print {
       @page {
         size: A4 landscape;
@@ -1182,7 +1218,7 @@
 <body>
   <!-- Lightbox -->
   <div id="lightbox" role="dialog" aria-modal="true">
-    <button id="lightbox-close" aria-label="Cerrar">✕</button>
+    <button id="lightbox-close" aria-label="Cerrar" data-key-aria="lightbox-close">✕</button>
     <img id="lightbox-img" src="" alt="">
   </div>
 
@@ -1198,6 +1234,12 @@
     PDF
   </button>
 
+  <!-- Language Switch -->
+  <div class="lang-switch">
+    <button class="lang-btn active" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+
   <!-- =========================================
        SLIDE 0: INSTRUCTOR
        ========================================= -->
@@ -1209,9 +1251,9 @@
             <img src="../assets/instructor.png" alt="Leonardo D'Antoni">
           </div>
           <div class="instructor-info reveal">
-            <p class="instructor-greeting">Hola!</p>
+            <p class="instructor-greeting" data-key="instructor-greeting">Hola!</p>
             <h1>Leonardo D'Antoni</h1>
-            <p class="instructor-tagline">Developer</p>
+            <p class="instructor-tagline" data-key="instructor-tagline">Developer</p>
             <div class="instructor-contact">
               <a href="https://github.com/lfdantoni" target="_blank">https://github.com/lfdantoni</a>
               <a href="mailto:lfdantoni@gmail.com">lfdantoni@gmail.com</a>
@@ -1256,7 +1298,7 @@ barista.request(your_drink);</code>
         <img src="../assets/angular.svg" alt="Angular" style="width: clamp(120px, 20vw, 200px); height: auto; margin-bottom: 1.5rem; filter: brightness(0) invert(1);">
       </div>
       <h1 class="reveal">Angular</h1>
-      <p class="subtitle reveal">Lección 1: Fundamentos y Arquitectura</p>
+      <p class="subtitle reveal" data-key="title-subtitle">Lección 1: Fundamentos y Arquitectura</p>
       <p class="reveal" style="margin-top: 2rem; color: var(--text-muted); font-size: var(--small-size);">
         EducaciónIT • 2026
       </p>
@@ -1270,25 +1312,25 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">02</div>
-        <span class="section-label">Agenda</span>
+        <span class="section-label" data-key="agenda-label">Agenda</span>
       </div>
-      <h2 class="reveal">Qué vamos a ver</h2>
+      <h2 class="reveal" data-key="agenda-title">Qué vamos a ver</h2>
       <div class="two-col reveal">
         <ul class="bullet-list">
-          <li>Herramientas de desarrollo</li>
-          <li>Librería vs Framework</li>
-          <li>Qué es Angular</li>
-          <li>TypeScript: tipos y conceptos</li>
+          <li data-key="agenda-1">Herramientas de desarrollo</li>
+          <li data-key="agenda-2">Librería vs Framework</li>
+          <li data-key="agenda-3">Qué es Angular</li>
+          <li data-key="agenda-4">TypeScript: tipos y conceptos</li>
         </ul>
         <ul class="bullet-list">
-          <li>Angular CLI y estructura</li>
-          <li>Componentes y Data Binding</li>
-          <li>Control Flow moderno</li>
-          <li>input/output y Lifecycle</li>
+          <li data-key="agenda-5">Angular CLI y estructura</li>
+          <li data-key="agenda-6">Componentes y Data Binding</li>
+          <li data-key="agenda-7">Control Flow moderno</li>
+          <li data-key="agenda-8">input/output y Lifecycle</li>
         </ul>
       </div>
       <div class="info-box reveal">
-        <p><strong>Proyecto integrador:</strong> BookStore — aplicación de gestión de libros</p>
+        <p><strong data-key="integrator-project">Proyecto integrador:</strong> <span data-key="bookstore-desc">BookStore — aplicación de gestión de libros</span></p>
       </div>
     </div>
   </section>
@@ -1300,14 +1342,14 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">03</div>
-        <span class="section-label">Herramientas</span>
+        <span class="section-label" data-key="setup-title">Setup del entorno</span>
       </div>
-      <h2 class="reveal">Setup del entorno</h2>
+      <h2 class="reveal" data-key="setup-title">Setup del entorno</h2>
       <div class="cards-grid">
         <div class="card reveal-scale" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
           <img src="../assets/nodedotjs.svg" alt="Node.js" style="width: 48px; height: 48px; margin-bottom: 0.75rem; filter: brightness(0) invert(1);">
           <h3>Node.js</h3>
-          <p>Necesario para Angular CLI y el servidor de desarrollo</p>
+          <p data-key="node-desc">Necesario para Angular CLI y el servidor de desarrollo</p>
           <p style="margin-top: 0.5rem; color: var(--accent-light); font-size: var(--small-size);">nodejs.org</p>
         </div>
         <div class="card reveal-scale" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
@@ -1316,8 +1358,8 @@ barista.request(your_drink);</code>
             <a href="https://cursor.com" target="_blank"><img src="../assets/cursor.svg" alt="Cursor" style="width: 36px; height: 36px; filter: brightness(0) invert(1);"></a>
             <a href="https://antigravity.google/" target="_blank"><img src="../assets/antigravity.png" alt="Antigravity" style="width: 36px; height: 36px; filter: brightness(0) invert(1);"></a>
           </div>
-          <h3>Editor</h3>
-          <p>Recomendado: <a href="https://code.visualstudio.com" target="_blank">VS Code</a>, <a href="https://cursor.com" target="_blank">Cursor</a>, <a href="https://antigravity.google/" target="_blank">Antigravity</a></p>
+          <h3 data-key="editor-title">Editor</h3>
+          <p data-key="editor-desc">Recomendado: <a href="https://code.visualstudio.com" target="_blank">VS Code</a>, <a href="https://cursor.com" target="_blank">Cursor</a>, <a href="https://antigravity.google/" target="_blank">Antigravity</a></p>
         </div>
         <div class="card reveal-scale" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
           <div style="display: flex; gap: 1rem; margin-bottom: 1rem; justify-content: center;">
@@ -1325,7 +1367,7 @@ barista.request(your_drink);</code>
             <a href="https://gemini.google.com" target="_blank"><img src="../assets/gemini.svg" alt="Gemini" style="width: 36px; height: 36px; filter: brightness(0) invert(1);"></a>
             <a href="https://cline.bot" target="_blank"><img src="../assets/cline.svg" alt="Cline" style="width: 36px; height: 36px; filter: brightness(0) invert(1);"></a>
           </div>
-          <h3>IA Asistentes</h3>
+          <h3 data-key="ai-title">IA Asistentes</h3>
           <p>
             <a href="https://claude.com/code" target="_blank">Claude Code</a>,
             <a href="https://gemini.google.com" target="_blank">Gemini</a>,
@@ -1344,23 +1386,23 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">04</div>
-        <span class="section-label">Concepto</span>
+        <span class="section-label" data-key="concept-title">Concepto</span>
       </div>
-      <h2 class="reveal">Librería vs Framework</h2>
+      <h2 class="reveal" data-key="lib-vs-fw">Librería vs Framework</h2>
       <div class="two-col reveal">
         <div class="card card-accent">
-          <h3>Librería</h3>
-          <p>Conjunto de objetos/funciones para una tarea específica</p>
-          <p style="margin-top: 1rem; color: var(--text-muted); font-size: var(--small-size);">Ej: manejo de fechas, validación</p>
+          <h3 data-key="lib-title">Librería</h3>
+          <p data-key="lib-desc">Conjunto de objetos/funciones para una tarea específica</p>
+          <p style="margin-top: 1rem; color: var(--text-muted); font-size: var(--small-size);" data-key="lib-example">Ej: manejo de fechas, validación</p>
         </div>
         <div class="card" style="border-color: var(--accent);">
-          <h3>Framework</h3>
-          <p>Define una forma de construir aplicaciones y provee herramientas</p>
-          <p style="margin-top: 1rem; color: var(--accent-light); font-size: var(--small-size);">Ej: Angular, .NET, Ruby on Rails, Django</p>
+          <h3 data-key="fw-title">Framework</h3>
+          <p data-key="fw-desc">Define una forma de construir aplicaciones y provee herramientas</p>
+          <p style="margin-top: 1rem; color: var(--accent-light); font-size: var(--small-size);" data-key="fw-example">Ej: Angular, .NET, Ruby on Rails, Django</p>
         </div>
       </div>
       <div class="info-box reveal">
-        <p><strong>Angular es un framework</strong> — define estructura, convenciones y herramientas completas</p>
+        <p><strong data-key="angular-is-fw">Angular es un framework — define estructura, convenciones y herramientas completas</strong></p>
       </div>
     </div>
   </section>
@@ -1372,16 +1414,16 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">05</div>
-        <span class="section-label">Angular</span>
+        <span class="section-label" data-key="angular-label">Angular</span>
       </div>
       <div class="two-col reveal" style="align-items: center;">
         <div>
-          <h2 style="margin-bottom: var(--content-gap);">Qué es Angular</h2>
+          <h2 style="margin-bottom: var(--content-gap);" data-key="angular-what">Qué es Angular</h2>
           <ul class="bullet-list">
-            <li>Framework para construir aplicaciones web SPA</li>
-            <li>Combina templates declarativos, inyección de dependencias y comunicación Frontend-Backend</li>
-            <li>Divide el proyecto en <strong>componentes reutilizables</strong></li>
-            <li>Standalone por defecto desde Angular 17+</li>
+            <li data-key="what-is-angular-1">Framework para construir aplicaciones web SPA</li>
+            <li data-key="what-is-angular-2">Combina templates declarativos, inyección de dependencias y comunicación Frontend-Backend</li>
+            <li data-key="what-is-angular-3">Divide el proyecto en <strong>componentes reutilizables</strong></li>
+            <li data-key="what-is-angular-4">Standalone por defecto desde Angular 17+</li>
           </ul>
           <div class="info-box" style="margin-top: var(--content-gap);">
             <p><a href="https://angular.dev/overview" target="_blank">angular.dev/overview</a></p>
@@ -1404,9 +1446,9 @@ barista.request(your_drink);</code>
     <div class="slide-content" style="display:flex; flex-direction:column; justify-content:center; gap: var(--content-gap);">
       <div class="section-header reveal">
         <div class="section-number">06</div>
-        <span class="section-label">Angular</span>
+        <span class="section-label" data-key="angular-label">Angular</span>
       </div>
-      <h2 class="reveal" style="margin-bottom:0;">Arquitectura de Angular</h2>
+      <h2 class="reveal" style="margin-bottom:0;" data-key="arch-title">Arquitectura de Angular</h2>
 
       <svg class="arch-diagram reveal" viewBox="0 0 1600 800" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -1427,15 +1469,15 @@ barista.request(your_drink);</code>
         <!-- Template box -->
         <g class="arch-g-template">
           <rect x="630" y="60" width="340" height="140" rx="20" fill="#13111e" stroke="#7c3aed" stroke-width="4"/>
-          <text x="800" y="130" text-anchor="middle" fill="#e2e8f0" font-size="40" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace">Template</text>
-          <text x="800" y="175" text-anchor="middle" fill="#a78bfa" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace">HTML + bindings</text>
+          <text x="800" y="130" text-anchor="middle" fill="#e2e8f0" font-size="40" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace" data-key="arch-template">Template</text>
+          <text x="800" y="175" text-anchor="middle" fill="#a78bfa" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace" data-key="arch-html">HTML + bindings</text>
         </g>
 
         <!-- Component box -->
         <g class="arch-g-component">
           <rect x="630" y="600" width="340" height="140" rx="20" fill="#13111e" stroke="#7c3aed" stroke-width="4"/>
-          <text x="800" y="670" text-anchor="middle" fill="#e2e8f0" font-size="40" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace">Component</text>
-          <text x="800" y="715" text-anchor="middle" fill="#a78bfa" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace">TypeScript</text>
+          <text x="800" y="670" text-anchor="middle" fill="#e2e8f0" font-size="40" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace" data-key="arch-comp">Component</text>
+          <text x="800" y="715" text-anchor="middle" fill="#a78bfa" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace" data-key="arch-ts">TypeScript</text>
         </g>
 
         <!-- Left arc: Property Binding -->
@@ -1446,7 +1488,7 @@ barista.request(your_drink);</code>
                 class="arch-arc-prop"
                 marker-end="url(#arrow-prop)"/>
           <text x="320" y="400" text-anchor="middle" fill="#a78bfa" font-size="36" font-weight="600" font-family="'JetBrains Mono','Fira Code',monospace">[property]</text>
-          <text x="320" y="450" text-anchor="middle" fill="#a78bfa" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace" opacity="0.8">binding</text>
+          <text x="320" y="450" text-anchor="middle" fill="#a78bfa" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace" opacity="0.8" data-key="arch-binding">binding</text>
         </g>
 
         <!-- Right arc: Event Binding -->
@@ -1457,14 +1499,14 @@ barista.request(your_drink);</code>
                 class="arch-arc-event"
                 marker-end="url(#arrow-event)"/>
           <text x="1280" y="400" text-anchor="middle" fill="#f59e0b" font-size="36" font-weight="600" font-family="'JetBrains Mono','Fira Code',monospace">(event)</text>
-          <text x="1280" y="450" text-anchor="middle" fill="#f59e0b" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace" opacity="0.8">binding</text>
+          <text x="1280" y="450" text-anchor="middle" fill="#f59e0b" font-size="28" font-family="'JetBrains Mono','Fira Code',monospace" opacity="0.8" data-key="arch-binding">binding</text>
         </g>
 
         <!-- Services box -->
         <g class="arch-g-services">
           <rect x="50" y="580" width="300" height="140" rx="16" fill="#0d1a12" stroke="#22c55e" stroke-width="4"/>
-          <text x="200" y="640" text-anchor="middle" fill="#e2e8f0" font-size="32" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace">Services</text>
-          <text x="200" y="685" text-anchor="middle" fill="#22c55e" font-size="24" font-family="'JetBrains Mono','Fira Code',monospace">Dependency Injection</text>
+          <text x="200" y="640" text-anchor="middle" fill="#e2e8f0" font-size="32" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace" data-key="arch-services">Services</text>
+          <text x="200" y="685" text-anchor="middle" fill="#22c55e" font-size="24" font-family="'JetBrains Mono','Fira Code',monospace" data-key="arch-di">Dependency Injection</text>
           <path d="M 350,650 L 620,670"
                 stroke="#22c55e" stroke-width="6" fill="none"
                 stroke-dasharray="16 10"
@@ -1475,8 +1517,8 @@ barista.request(your_drink);</code>
         <!-- Directives box -->
         <g class="arch-g-directives">
           <rect x="1250" y="80" width="300" height="140" rx="16" fill="#1a1508" stroke="#f59e0b" stroke-width="4" stroke-dasharray="12 8"/>
-          <text x="1400" y="140" text-anchor="middle" fill="#e2e8f0" font-size="32" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace">Directives</text>
-          <text x="1400" y="185" text-anchor="middle" fill="#f59e0b" font-size="24" font-family="'JetBrains Mono','Fira Code',monospace">DOM modify</text>
+          <text x="1400" y="140" text-anchor="middle" fill="#e2e8f0" font-size="32" font-weight="700" font-family="'JetBrains Mono','Fira Code',monospace" data-key="arch-directives">Directives</text>
+          <text x="1400" y="185" text-anchor="middle" fill="#f59e0b" font-size="24" font-family="'JetBrains Mono','Fira Code',monospace" data-key="arch-dom">DOM modify</text>
           <path d="M 1250,150 L 980,130"
                 stroke="#f59e0b" stroke-width="6" fill="none"
                 stroke-dasharray="16 10"
@@ -1499,7 +1541,7 @@ barista.request(your_drink);</code>
         <img src="../assets/typescript.svg" alt="TypeScript" style="width: clamp(80px, 14vw, 140px); height: auto; margin-bottom: 1rem; filter: brightness(0) invert(1);">
       </div>
       <h1 class="reveal">TypeScript</h1>
-      <p class="subtitle reveal">Superset tipado de JavaScript que compila a JS</p>
+      <p class="subtitle reveal" data-key="ts-superset-desc">Superset tipado de JavaScript que compila a JS</p>
       <p class="reveal" style="margin-top: 1rem;">
         <a href="https://www.typescriptlang.org/" target="_blank">typescriptlang.org</a>
       </p>
@@ -1513,9 +1555,9 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">TS</div>
-        <span class="section-label">Concepto</span>
+        <span class="section-label" data-key="concept-title">Concepto</span>
       </div>
-      <h2 class="reveal" style="text-align:center;">TypeScript es un Superset</h2>
+      <h2 class="reveal" style="text-align:center;" data-key="superset-title">TypeScript es un Superset</h2>
 
       <div class="superset-container">
         <!-- SVG Superset Diagram (Large) -->
@@ -1546,38 +1588,38 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">TS</div>
-        <span class="section-label">Transpilación</span>
+        <span class="section-label" data-key="transpilation-title">Transpilación</span>
       </div>
-      <h2 class="reveal">Del lenguaje a la ejecución</h2>
+      <h2 class="reveal" data-key="transpilation-title">Del lenguaje a la ejecución</h2>
 
       <div class="ts-comparison reveal">
         <div class="comparison-panel">
-          <span class="comparison-label">Desarrollo (TypeScript)</span>
+          <span class="comparison-label" data-key="ts-dev-label">Development (TypeScript)</span>
           <div class="code-block zoomable-code" style="font-size: 1.1em; flex: 1; cursor: pointer;">
             <code><span class="code-keyword">interface</span> <span class="code-type">User</span> {
-  id: <span class="code-keyword">number</span>;
-  name: <span class="code-keyword">string</span>;
+    id: <span class="code-keyword">number</span>;
+    name: <span class="code-keyword">string</span>;
 }
 
 <span class="code-keyword">function</span> <span class="code-function">greet</span>(user: <span class="code-type">User</span>): <span class="code-keyword">string</span> {
-  <span class="code-keyword">return</span> <span class="code-string">`Hola ${user.name}`</span>;
+    <span class="code-keyword">return</span> <span class="code-string" data-key="greet-result-es">`Hello ${user.name}`</span>;
 }</code>
           </div>
         </div>
         <div class="comparison-panel">
-          <span class="comparison-label">Producción (JavaScript)</span>
+          <span class="comparison-label" data-key="ts-prod-label">Production (JavaScript)</span>
           <div class="code-block zoomable-code" style="font-size: 1.1em; flex: 1; border-color: var(--success); opacity: 0.9; cursor: pointer;">
-            <code><span class="code-comment">// Los tipos desaparecen (Type Erasure)</span>
+            <code><span class="code-comment" data-key="code-erasure-comment">// Types disappear (Type Erasure)</span>
 
-<span class="code-keyword">function</span> <span class="code-function">greet</span>(user) {
-  <span class="code-keyword">return</span> <span class="code-string">"Hola "</span> + user.name;
-}</code>
+    <span class="code-keyword">function</span> <span class="code-function">greet</span>(user) {
+        <span class="code-keyword">return</span> <span class="code-string" data-key="greet-result-js">"Hello "</span> + user.name;
+    }</code>
           </div>
         </div>
       </div>
 
       <div class="info-box reveal" style="margin-top: 1.5rem;">
-        <p><strong>Type Erasure:</strong> El compilador de TS (tsc) elimina todas las anotaciones de tipo antes de generar el archivo final para el navegador.</p>
+        <p><strong data-key="ts-erasure-title">Type Erasure:</strong> <span data-key="ts-erasure-desc">El compilador de TS (tsc) elimina todas las anotaciones de tipo antes de generar el archivo final para el navegador.</span></p>
       </div>
     </div>
   </section>
@@ -1589,18 +1631,18 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">08</div>
-        <span class="section-label">TypeScript</span>
+        <span class="section-label" data-key="ts-label">TypeScript</span>
       </div>
-      <h2 class="reveal">Conceptos clave</h2>
+      <h2 class="reveal" data-key="concepts-title">Conceptos clave</h2>
       <div class="two-col reveal">
         <div>
-          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);">Tipos Primitivos</h3>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="ts-primitive">Tipos Primitivos</h3>
           <div class="code-block">
             <code><span class="code-keyword">number</span>, <span class="code-keyword">string</span>, <span class="code-keyword">boolean</span>, <span class="code-keyword">any</span>, <span class="code-keyword">void</span>, <span class="code-keyword">null</span>, <span class="code-keyword">undefined</span></code>
           </div>
           <div class="code-block" style="margin-top: var(--element-gap);">
             <code><span class="code-comment">// Arrays</span>
-<span class="code-type">string</span>[]  <span class="code-comment">// o</span>  <span class="code-type">Array</span>&lt;<span class="code-type">string</span>&gt;</code>
+<span class="code-type">string</span>[]  <span class="code-comment">// or</span>  <span class="code-type">Array</span>&lt;<span class="code-type">string</span>&gt;</code>
           </div>
           <div class="code-block" style="margin-top: var(--element-gap);">
             <code><span class="code-comment">// Union Types</span>
@@ -1611,12 +1653,12 @@ barista.request(your_drink);</code>
           </div>
         </div>
         <div>
-          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);">Interfaces y Clases</h3>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="ts-interface">Interfaces and Classes</h3>
           <div class="code-block">
             <code><span class="code-keyword">interface</span> <span class="code-type">Book</span> {
   id: <span class="code-keyword">number</span>;
   title: <span class="code-keyword">string</span>;
-  author?: <span class="code-keyword">string</span>;  <span class="code-comment">// opcional</span>
+  author?: <span class="code-keyword">string</span>;  <span class="code-comment">// optional</span>
 }</code>
           </div>
           <div class="code-block" style="margin-top: var(--element-gap);">
@@ -1658,9 +1700,9 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">10</div>
-        <span class="section-label">Angular CLI</span>
+        <span class="section-label" data-key="cli-label">Angular CLI</span>
       </div>
-      <h2 class="reveal">Instalación y nuevo proyecto</h2>
+      <h2 class="reveal" data-key="setup-title">Instalación y nuevo proyecto</h2>
       <div class="terminal reveal">
         <div class="terminal-header">
           <div class="terminal-dot red"></div>
@@ -1678,14 +1720,14 @@ barista.request(your_drink);</code>
             <span class="terminal-command">ng version</span>
           </div>
           <div class="terminal-line" style="margin-top: 1rem;">
-            <span class="terminal-comment"># Crear nuevo proyecto (Angular 21 default: standalone)</span>
+            <span class="terminal-comment" data-key="cli-new-comment"># Crear nuevo proyecto (Angular 21 default: standalone)</span>
           </div>
           <div class="terminal-line">
             <span class="terminal-prompt">$</span>
             <span class="terminal-command">ng new book-store</span>
           </div>
           <div class="terminal-line">
-            <span class="terminal-comment"># Seleccionar: CSS, sin SSR</span>
+            <span class="terminal-comment" data-key="cli-select"># Seleccionar: CSS, sin SSR</span>
           </div>
           <div class="terminal-line" style="margin-top: 1rem;">
             <span class="terminal-prompt">$</span>
@@ -1698,7 +1740,7 @@ barista.request(your_drink);</code>
         </div>
       </div>
       <div class="warning-box reveal">
-        <p><strong>Importante:</strong> No usar <span class="code-inline">--standalone=false</span> — standalone es el default desde v17</p>
+        <p data-key="cli-standalone-warn"><strong>Importante:</strong> No usar <span class="code-inline">--standalone=false</span> — standalone es el default desde v17</p>
       </div>
     </div>
   </section>
@@ -1710,17 +1752,17 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">11</div>
-        <span class="section-label">Angular CLI</span>
+        <span class="section-label" data-key="cli-label">Angular CLI</span>
       </div>
-      <h2 class="reveal">Estructura del proyecto</h2>
+      <h2 class="reveal" data-key="structure-title">Estructura del proyecto</h2>
       <div class="cards-grid reveal">
         <div class="card">
           <h3>src/main.ts</h3>
-          <p>Punto de entrada — bootstrapApplication</p>
+          <p data-key="struct-main">Punto de entrada — bootstrapApplication</p>
         </div>
         <div class="card">
           <h3>src/app/app.component.ts</h3>
-          <p>Componente raíz</p>
+          <p data-key="struct-root">Componente raíz</p>
         </div>
         <div class="card">
           <h3>src/app/app.config.ts</h3>
@@ -1728,19 +1770,19 @@ barista.request(your_drink);</code>
         </div>
         <div class="card">
           <h3>src/app/app.routes.ts</h3>
-          <p>Definición de rutas</p>
+          <p data-key="struct-routes">Definición de rutas</p>
         </div>
         <div class="card">
           <h3>angular.json</h3>
-          <p>Configuración del workspace</p>
+          <p data-key="struct-workspace">Configuración del workspace</p>
         </div>
         <div class="card">
           <h3>tsconfig.json</h3>
-          <p>Configuración de TypeScript</p>
+          <p data-key="struct-ts">Configuración de TypeScript</p>
         </div>
       </div>
       <div class="info-box reveal">
-        <p><strong>Ya no existe app.module.ts</strong> en proyectos standalone</p>
+        <p data-key="struct-standalone-info"><strong>Ya no existe app.module.ts</strong> en proyectos standalone</p>
       </div>
     </div>
   </section>
@@ -1752,8 +1794,8 @@ barista.request(your_drink);</code>
     <div class="ambient-orb"></div>
     <div class="slide-content center-content">
       <div class="section-number reveal">12</div>
-      <h1 class="reveal">Componentes</h1>
-      <p class="subtitle reveal">Vista (HTML) + Lógica (TS) + Estilos (CSS)</p>
+      <h1 class="reveal" data-key="component-title">Componentes</h1>
+      <p class="subtitle reveal" data-key="comp-logic">Vista (HTML) + Lógica (TS) + Estilos (CSS)</p>
     </div>
   </section>
 
@@ -1764,12 +1806,12 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">13</div>
-        <span class="section-label">Componentes</span>
+        <span class="section-label" data-key="components-label">Componentes</span>
       </div>
-      <h2 class="reveal">Decorador @Component</h2>
+      <h2 class="reveal" data-key="comp-decorator">@Component Decorator</h2>
       <div class="two-col reveal" style="max-width: 1200px; font-size: 1.1rem;">
         <div class="code-block zoomable-code" style="padding: 1.5rem; cursor: pointer;">
-          <code><span class="code-comment">// Inline</span>
+          <code><span class="code-comment" data-key="comp-inline">// Inline</span>
 <span class="code-keyword">@Component</span>({
   selector: <span class="code-string">'app-book'</span>,
   template: <span class="code-string">`&lt;h2&gt;{{ book().title }}&lt;/h2&gt;`</span>,
@@ -1779,7 +1821,7 @@ barista.request(your_drink);</code>
 <span class="code-keyword">export class</span> <span class="code-type">BookComponent</span> { ... }</code>
         </div>
         <div class="code-block zoomable-code" style="padding: 1.5rem; cursor: pointer;">
-          <code><span class="code-comment">// Archivos externos</span>
+          <code><span class="code-comment" data-key="comp-external">// External files</span>
 <span class="code-keyword">@Component</span>({
   selector: <span class="code-string">'app-book'</span>,
   templateUrl: <span class="code-string">'./book.html'</span>,
@@ -1791,13 +1833,13 @@ barista.request(your_drink);</code>
       </div>
       <div class="two-col reveal" style="margin-top: var(--content-gap);">
         <ul class="bullet-list">
-          <li><span class="code-inline">selector</span> — tag HTML</li>
-          <li><span class="code-inline">template</span> / <span class="code-inline">templateUrl</span> — HTML</li>
-          <li><span class="code-inline">styles</span> / <span class="code-inline">styleUrl</span> — estilos</li>
+          <li data-key="comp-selector"><span class="code-inline">selector</span> — HTML tag</li>
+          <li data-key="comp-template"><span class="code-inline">template</span> / <span class="code-inline">templateUrl</span> — HTML</li>
+          <li data-key="comp-styles"><span class="code-inline">styles</span> / <span class="code-inline">styleUrl</span> — styles</li>
         </ul>
         <ul class="bullet-list">
-          <li><span class="code-inline">standalone: true</span> — default en v17+</li>
-          <li><span class="code-inline">imports: []</span> — dependencias</li>
+          <li data-key="comp-standalone"><span class="code-inline">standalone: true</span> — default en v17+</li>
+          <li data-key="comp-imports"><span class="code-inline">imports: []</span> — dependencias</li>
         </ul>
       </div>
     </div>
@@ -1810,9 +1852,9 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">14</div>
-        <span class="section-label">Componentes</span>
+        <span class="section-label" data-key="component-title">Componentes</span>
       </div>
-      <h2 class="reveal">Generar componentes</h2>
+      <h2 class="reveal" data-key="component-title">Generar componentes</h2>
       <div class="terminal reveal">
         <div class="terminal-header">
           <div class="terminal-dot red"></div>
@@ -1843,7 +1885,7 @@ barista.request(your_drink);</code>
         </div>
       </div>
       <div class="info-box reveal">
-        <p><strong>Importante:</strong> Los componentes usados en el template deben estar en <span class="code-inline">imports</span></p>
+        <p data-key="comp-imports-warn"><strong>Importante:</strong> Los componentes usados en el template deben estar en <span class="code-inline">imports</span></p>
       </div>
     </div>
   </section>
@@ -1855,8 +1897,8 @@ barista.request(your_drink);</code>
     <div class="ambient-orb"></div>
     <div class="slide-content center-content">
       <div class="section-number reveal">15</div>
-      <h1 class="reveal">Data Binding</h1>
-      <p class="subtitle reveal">Comunicación entre componente y template</p>
+      <h1 class="reveal" data-key="binding-title">Data Binding</h1>
+      <p class="subtitle reveal" data-key="bind-desc">Comunicación entre componente y template</p>
     </div>
   </section>
 
@@ -1867,9 +1909,9 @@ barista.request(your_drink);</code>
     <div class="slide-content" style="display:flex; flex-direction:column; justify-content:center; gap: var(--content-gap);">
       <div class="section-header reveal">
         <div class="section-number">16</div>
-        <span class="section-label">Data Binding</span>
+        <span class="section-label" data-key="binding-title">Data Binding</span>
       </div>
-      <h2 class="reveal" style="margin-bottom:0;">Tipos de binding</h2>
+      <h2 class="reveal" style="margin-bottom:0;" data-key="binding-title">Tipos de binding</h2>
 
       <div class="binding-diagram reveal">
 
@@ -1951,8 +1993,8 @@ barista.request(your_drink);</code>
     <div class="ambient-orb"></div>
     <div class="slide-content center-content">
       <div class="section-number reveal">17</div>
-      <h1 class="reveal">Control Flow</h1>
-      <p class="subtitle reveal">Forma moderna en Angular 17+</p>
+      <h1 class="reveal" data-key="control-flow-title">Control Flow</h1>
+      <p class="subtitle reveal" data-key="flow-modern">Forma moderna en Angular 17+</p>
     </div>
   </section>
 
@@ -1963,7 +2005,7 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">18</div>
-        <span class="section-label">Control Flow</span>
+        <span class="section-label" data-key="control-flow-title">Control Flow</span>
       </div>
       <h2 class="reveal">@if, @for, @switch</h2>
       <div class="two-col reveal">
@@ -1987,7 +2029,7 @@ barista.request(your_drink);</code>
         </div>
         <div>
           <div class="code-block">
-            <code><span class="code-comment">// @for con track</span>
+            <code><span class="code-comment" data-key="flow-for">// @for con track</span></code>
 <span class="code-keyword">@for</span> (book <span class="code-keyword">of</span> books; <span class="code-keyword">track</span> book.id) {
   &lt;app-book [book]="book" /&gt;
 } <span class="code-keyword">@empty</span> {
@@ -1995,7 +2037,7 @@ barista.request(your_drink);</code>
 }</code>
           </div>
           <div class="warning-box">
-            <p><strong>track</strong> es obligatorio — mejora el rendimiento de la lista</p>
+            <p data-key="flow-track-warn"><strong>track</strong> es obligatorio — mejora el rendimiento de la lista</p>
           </div>
         </div>
       </div>
@@ -2009,24 +2051,24 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">19</div>
-        <span class="section-label">Control Flow</span>
+        <span class="section-label" data-key="cf-label">Control Flow</span>
       </div>
-      <h2 class="reveal">Directivas legacy</h2>
+      <h2 class="reveal" data-key="flow-legacy-title">Directivas legacy</h2>
       <div class="two-col reveal">
         <div class="card">
           <h3>*ngIf / *ngFor</h3>
-          <p>Todavía funcionan en Angular 21 por retrocompatibilidad</p>
-          <p style="margin-top: 1rem; color: var(--text-muted); font-size: var(--small-size);">
+          <p data-key="flow-legacy-desc">Todavía funcionan en Angular 21 por retrocompatibilidad</p>
+          <p style="margin-top: 1rem; color: var(--text-muted); font-size: var(--small-size);" data-key="flow-legacy-note">
             Se mencionan porque aparecen en proyectos existentes y exámenes
           </p>
         </div>
         <div>
           <ul class="bullet-list">
-            <li>Requieren importar <span class="code-inline">CommonModule</span></li>
-            <li>O importar <span class="code-inline">NgIf</span>, <span class="code-inline">NgFor</span> individualmente</li>
+            <li data-key="flow-legacy-req">Requieren importar <span class="code-inline">CommonModule</span></li>
+            <li data-key="flow-legacy-ind">O importar <span class="code-inline">NgIf</span>, <span class="code-inline">NgFor</span> individualmente</li>
           </ul>
           <div class="info-box">
-            <p><strong>Criterio:</strong> Usar @if/@for en proyectos nuevos. Reconocer legacy en proyectos existentes.</p>
+            <p><strong data-key="flow-legacy-crit-title">Criterio:</strong> <span data-key="flow-legacy-crit">Usar @if/@for en proyectos nuevos. Reconocer legacy en proyectos existentes.</span></p>
           </div>
         </div>
       </div>
@@ -2040,8 +2082,8 @@ barista.request(your_drink);</code>
     <div class="ambient-orb"></div>
     <div class="slide-content center-content">
       <div class="section-number reveal">20</div>
-      <h1 class="reveal">input() / output()</h1>
-      <p class="subtitle reveal">Comunicación entre componentes</p>
+      <h1 class="reveal" data-key="communication-title">input() / output()</h1>
+      <p class="subtitle reveal" data-key="comm-desc">Comunicación entre componentes</p>
     </div>
   </section>
 
@@ -2052,12 +2094,12 @@ barista.request(your_drink);</code>
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">21</div>
-        <span class="section-label">Comunicación</span>
+        <span class="section-label" data-key="communication-title">Comunicación</span>
       </div>
-      <h2 class="reveal">input() y output()</h2>
+      <h2 class="reveal" data-key="communication-title">input() y output()</h2>
       <div class="two-col reveal">
         <div>
-          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);">input() — Recibir datos</h3>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="comm-input-title">input() — Recibir datos</h3>
           <div class="code-block">
             <code><span class="code-keyword">import</span> { input } <span class="code-keyword">from</span> <span class="code-string">'@angular/core'</span>;
 
@@ -2067,7 +2109,7 @@ highlight = input&lt;<span class="code-keyword">boolean</span>&gt;(<span class="
           </div>
         </div>
         <div>
-          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);">output() — Emitir eventos</h3>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="comm-output-title">output() — Emitir eventos</h3>
           <div class="code-block">
             <code><span class="code-keyword">import</span> { output } <span class="code-keyword">from</span> <span class="code-string">'@angular/core'</span>;
 
@@ -2080,14 +2122,14 @@ onAdd() {
         </div>
       </div>
       <div class="code-block reveal" style="margin-top: var(--content-gap); max-width: 600px;">
-        <code><span class="code-comment">// Uso en el template del padre</span>
+        <code><span class="code-comment" data-key="comm-parent">// Uso en el template del padre</span>
 &lt;app-book
   [book]="selectedBook"
   (addToCart)="handleAdd($event)"
 /&gt;</code>
       </div>
       <div class="warning-box reveal">
-        <p><strong>Legacy:</strong> @Input() / @Output() decoradores siguen funcionando</p>
+        <p><strong>Legacy:</strong> <span data-key="comm-legacy-warn">@Input() / @Output() decoradores siguen funcionando</span></p>
       </div>
     </div>
   </section>
@@ -2099,8 +2141,8 @@ onAdd() {
     <div class="ambient-orb"></div>
     <div class="slide-content center-content">
       <div class="section-number reveal">22</div>
-      <h1 class="reveal">Lifecycle Hooks</h1>
-      <p class="subtitle reveal">Ciclo de vida de los componentes</p>
+      <h1 class="reveal" data-key="lifecycle-title">Lifecycle Hooks</h1>
+      <p class="subtitle reveal" data-key="life-desc">Ciclo de vida de los componentes</p>
     </div>
   </section>
 
@@ -2111,25 +2153,25 @@ onAdd() {
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">23</div>
-        <span class="section-label">Lifecycle</span>
+        <span class="section-label" data-key="lifecycle-title">Lifecycle</span>
       </div>
-      <h2 class="reveal">ngOnInit y ngOnDestroy</h2>
+      <h2 class="reveal" data-key="life-title">ngOnInit y ngOnDestroy</h2>
       <div class="two-col reveal">
         <div class="card card-accent">
           <h3>ngOnInit</h3>
-          <p>Se ejecuta una vez, después de que Angular inicializa los inputs</p>
+          <p data-key="life-init-desc">Se ejecuta una vez, después de que Angular inicializa los inputs</p>
           <div class="info-box">
-            <p><strong>Lugar correcto para:</strong><br/>Llamadas HTTP iniciales, lógica de inicialización</p>
+            <p><strong data-key="life-init-place">Lugar correcto para:</strong><br/><span data-key="life-init-usage">Llamadas HTTP iniciales, lógica de inicialización</span></p>
           </div>
           <div class="warning-box">
-            <p><strong>No usar el constructor para lógica de negocio</strong></p>
+            <p data-key="life-constructor-warn"><strong>No usar el constructor para lógica de negocio</strong></p>
           </div>
         </div>
         <div class="card card-accent">
           <h3>ngOnDestroy</h3>
-          <p>Se ejecuta antes de que el componente sea eliminado del DOM</p>
+          <p data-key="life-destroy-desc">Se ejecuta antes de que el componente sea eliminado del DOM</p>
           <div class="info-box">
-            <p><strong>Lugar correcto para:</strong><br/>Cancelar subscriptions, limpiar timers</p>
+            <p><strong data-key="life-destroy-place">Lugar correcto para:</strong><br/><span data-key="life-destroy-usage">Cancelar subscriptions, limpiar timers</span></p>
           </div>
         </div>
       </div>
@@ -2149,8 +2191,8 @@ onAdd() {
     <div class="ambient-orb"></div>
     <div class="slide-content center-content">
       <div class="section-number reveal">24</div>
-      <h1 class="reveal">Directivas</h1>
-      <p class="subtitle reveal">Built-in y custom</p>
+      <h1 class="reveal" data-key="directives-title">Directivas</h1>
+      <p class="subtitle reveal" data-key="dir-builtin">Built-in y custom</p>
     </div>
   </section>
 
@@ -2161,9 +2203,9 @@ onAdd() {
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">25</div>
-        <span class="section-label">Directivas</span>
+        <span class="section-label" data-key="directives-title">Directivas</span>
       </div>
-      <h2 class="reveal">ngStyle, ngClass y Custom</h2>
+      <h2 class="reveal" data-key="dir-title">ngStyle, ngClass y Custom</h2>
       <div class="two-col reveal">
         <div>
           <div class="code-block">
@@ -2176,7 +2218,7 @@ onAdd() {
         </div>
         <div>
           <div class="code-block">
-            <code><span class="code-comment">// Directiva custom con host object</span>
+            <code><span class="code-comment" data-key="dir-custom">// Directiva custom con host object</span>
 <span class="code-keyword">@Directive</span>({
   selector: <span class="code-string">'[appBookStatus]'</span>,
   host: {
@@ -2203,14 +2245,14 @@ onAdd() {
     <div class="slide-content">
       <div class="section-header reveal">
         <div class="section-number">26</div>
-        <span class="section-label">Resumen</span>
+        <span class="section-label" data-key="summary-title">Resumen</span>
       </div>
-      <h2 class="reveal">Conceptos clave</h2>
+      <h2 class="reveal" data-key="concepts-title">Conceptos clave</h2>
       <div class="concept-grid reveal">
         <div class="concept-item">
           <img src="../assets/typescript.svg" alt="TypeScript" style="filter: brightness(0) invert(1);">
-          <h4>TypeScript</h4>
-          <p>Tipos, interfaces, clases, generics</p>
+          <h4 data-key="sum-ts-title">TypeScript</h4>
+          <p data-key="sum-ts-desc">Tipos, interfaces, clases, generics</p>
         </div>
         <div class="concept-item">
           <!-- Component / puzzle piece -->
@@ -2219,8 +2261,8 @@ onAdd() {
             <line x1="16" y1="8" x2="2" y2="22"/>
             <line x1="17.5" y1="15" x2="9" y2="15"/>
           </svg>
-          <h4>Componentes</h4>
-          <p>@Component, input(), output()</p>
+          <h4 data-key="sum-comp-title">Componentes</h4>
+          <p data-key="sum-comp-desc">@Component, input(), output()</p>
         </div>
         <div class="concept-item">
           <!-- Data binding: two-way arrows -->
@@ -2230,8 +2272,8 @@ onAdd() {
             <path d="M7 20l-4-4 4-4"/>
             <path d="M21 16H3"/>
           </svg>
-          <h4>Binding</h4>
-          <p>{{ }}, [prop], (event), [(ngModel)]</p>
+          <h4 data-key="sum-bind-title">Binding</h4>
+          <p data-key="sum-bind-desc">{{ }}, [prop], (event), [(ngModel)]</p>
         </div>
         <div class="concept-item">
           <!-- Control flow: branch/fork -->
@@ -2242,8 +2284,8 @@ onAdd() {
             <path d="M6 9v2a6 6 0 006 6"/>
             <path d="M18 9v2a6 6 0 01-6 6"/>
           </svg>
-          <h4>Control Flow</h4>
-          <p>@if, @for, @switch</p>
+          <h4 data-key="sum-flow-title">Control Flow</h4>
+          <p data-key="sum-flow-desc">@if, @for, @switch</p>
         </div>
         <div class="concept-item">
           <!-- Lifecycle: refresh/cycle -->
@@ -2253,8 +2295,8 @@ onAdd() {
             <line x1="12" y1="8" x2="12" y2="12"/>
             <line x1="12" y1="12" x2="15" y2="14"/>
           </svg>
-          <h4>Lifecycle</h4>
-          <p>ngOnInit, ngOnDestroy</p>
+          <h4 data-key="sum-life-title">Lifecycle</h4>
+          <p data-key="sum-life-desc">ngOnInit, ngOnDestroy</p>
         </div>
         <div class="concept-item">
           <!-- Directivas: magic wand / sparkle -->
@@ -2269,8 +2311,8 @@ onAdd() {
             <path d="m3 21 9-9"/>
             <path d="M12.2 6.2L11 5"/>
           </svg>
-          <h4>Directivas</h4>
-          <p>ngStyle, ngClass, custom</p>
+          <h4 data-key="sum-dir-title">Directivas</h4>
+          <p data-key="sum-dir-desc">ngStyle, ngClass, custom</p>
         </div>
       </div>
     </div>
@@ -2408,6 +2450,379 @@ onAdd() {
     document.addEventListener("DOMContentLoaded", () => {
       new SlidePresentation();
 
+      // Internationalization (i18n)
+      const translations = {
+        es: {
+          "page-title": "Angular - Lección 1: Fundamentos",
+          "title-subtitle": "Lección 1: Fundamentos y Arquitectura",
+          "agenda-title": "Qué vamos a ver",
+          "concept-title": "Librería vs Framework",
+          "angular-what": "Qué es Angular",
+          "superset-title": "TypeScript es un Superset",
+          "export-pdf": "Descargar como PDF",
+          "instructor-tagline": "Developer",
+          "instructor-greeting": "Hola!",
+          "setup-title": "Setup del entorno",
+          "lib-vs-fw": "Librería vs Framework",
+          "arch-title": "Arquitectura de Angular",
+          "transpilation-title": "Del lenguaje a la ejecución",
+          "concepts-title": "Conceptos clave",
+          "structure-title": "Estructura del proyecto",
+          "component-title": "Componentes",
+          "binding-title": "Data Binding",
+          "control-flow-title": "Control Flow",
+          "communication-title": "Comunicación",
+          "lifecycle-title": "Lifecycle Hooks",
+          "directives-title": "Directivas",
+          "summary-title": "Resumen",
+          "agenda-1": "Herramientas de desarrollo",
+          "agenda-2": "Librería vs Framework",
+          "agenda-3": "Qué es Angular",
+          "agenda-4": "TypeScript: tipos y conceptos",
+          "agenda-5": "Angular CLI y estructura",
+          "agenda-6": "Componentes y Data Binding",
+          "agenda-7": "Control Flow moderno",
+          "agenda-8": "input/output y Lifecycle",
+          "integrator-project": "Proyecto integrador:",
+          "bookstore-desc": "BookStore — aplicación de gestión de libros",
+          "node-desc": "Necesario para Angular CLI y el servidor de desarrollo",
+          "editor-title": "Editor",
+          "editor-desc": "Recomendado: VS Code, Cursor, Antigravity",
+          "ai-title": "IA Asistentes",
+          "lib-title": "Librería",
+          "lib-desc": "Conjunto de objetos/functions para una tarea específica",
+          "lib-example": "Ej: manejo de fechas, validación",
+          "fw-title": "Framework",
+          "fw-desc": "Define una forma de construir aplicaciones y provee herramientas",
+          "fw-example": "Ej: Angular, .NET, Ruby on Rails, Django",
+          "angular-is-fw": "Angular es un framework — define estructura, convenciones y herramientas completas",
+          "what-is-angular-1": "Framework para construir aplicaciones web SPA",
+          "what-is-angular-2": "Combina templates declarativos, inyección de dependencias y comunicación Frontend-Backend",
+          "what-is-angular-3": "Divide el proyecto en componentes reutilizables",
+          "what-is-angular-4": "Standalone por defecto desde Angular 17+",
+          "arch-template": "Template",
+          "arch-html": "HTML + bindings",
+          "arch-comp": "Component",
+          "arch-ts": "TypeScript",
+          "arch-prop": "[property] binding",
+          "arch-event": "(event) binding",
+          "arch-binding": "binding",
+          "arch-services": "Services",
+          "arch-di": "Dependency Injection",
+          "arch-directives": "Directives",
+          "arch-dom": "DOM modify",
+          "ts-superset-desc": "Superset tipado de JavaScript que compila a JS",
+          "agenda-label": "Agenda",
+          "angular-label": "Angular",
+          "ts-label": "TypeScript",
+          "cli-label": "Angular CLI",
+          "components-label": "Componentes",
+          "cf-label": "Control Flow",
+          "ts-dev": "Desarrollo (TypeScript)",
+          "ts-prod": "Producción (JavaScript)",
+          "ts-erasure-title": "Type Erasure:",
+          "ts-erasure-desc": "El compilador de TS (tsc) elimina todas las anotaciones de tipo antes de generar el archivo final para el navegador.",
+          "code-erasure-comment": "// Los tipos desaparecen (Type Erasure)",
+          "ts-dev-label": "Desarrollo (TypeScript)",
+          "ts-prod-label": "Producción (JavaScript)",
+          "greet-result-es": "`Hola ${user.name}`",
+          "greet-result-js": "\"Hola \"",
+          "ts-primitive": "Tipos Primitivos",
+          "ts-array": "Arrays",
+          "ts-union": "Union Types",
+          "ts-alias": "Type Alias",
+          "ts-interface": "Interfaces y Clases",
+          "ts-generic": "Generics",
+          "cli-title": "Angular CLI",
+          "cli-desc": "Command Line Interface",
+          "cli-install": "Instalación y nuevo proyecto",
+          "cli-new-comment": "# Crear nuevo proyecto (Angular 21 default: standalone)",
+          "cli-select": "# Seleccionar: CSS, sin SSR",
+          "cli-shorthand": "# shorthand:",
+          "cli-important": "Importante:",
+          "cli-standalone-warn": "No usar --standalone=false — standalone es el default desde v17",
+          "struct-main": "Punto de entrada — bootstrapApplication",
+          "struct-root": "Componente raíz",
+          "struct-config": "Providers globales (router, http)",
+          "struct-routes": "Definición de rutas",
+          "struct-workspace": "Configuración del workspace",
+          "struct-ts": "Configuración de TypeScript",
+          "struct-standalone-info": "Ya no existe app.module.ts en proyectos standalone",
+          "comp-logic": "Vista (HTML) + Lógica (TS) + Estilos (CSS)",
+          "comp-decorator": "Decorador @Component",
+          "comp-inline": "// Inline",
+          "comp-external": "// Archivos externos",
+          "comp-selector": "selector — tag HTML",
+          "comp-template": "template / templateUrl — HTML",
+          "comp-styles": "styles / styleUrl — estilos",
+          "comp-standalone": "standalone: true — default en v17+",
+          "comp-imports": "imports: [] — dependencias",
+          "comp-generate": "Generar componentes",
+          "comp-imports-warn": "Importante: Los componentes usados en el template deben estar en imports",
+          "bind-desc": "Comunicación entre componente y template",
+          "bind-types": "Tipos de binding",
+          "bind-interpolation": "Interpolation",
+          "bind-oneway": "One Way Binding",
+          "bind-event": "Event Binding",
+          "bind-twoway": "Two Way Binding",
+          "flow-modern": "Forma moderna en Angular 17+",
+          "flow-if": "// @if / @else",
+          "flow-available": "Disponible",
+          "flow-out": "Sin stock",
+          "flow-active": "Activo",
+          "flow-inactive": "Inactivo",
+          "flow-unknown": "Desconocido",
+          "flow-for": "// @for con track",
+          "flow-empty": "No hay libros",
+          "flow-track-warn": "track es obligatorio — mejora el rendimiento de la lista",
+          "flow-legacy": "Directivas legacy",
+          "flow-legacy-desc": "Todavía funcionan en Angular 21 por retrocompatibilidad",
+          "flow-legacy-note": "Se mencionan porque aparecen en proyectos existentes y exámenes",
+          "flow-legacy-req": "Requieren importar CommonModule",
+          "flow-legacy-ind": "O importar NgIf, NgFor individualmente",
+          "flow-legacy-crit": "Usar @if/@for en proyectos nuevos. Reconocer legacy en proyectos existentes.",
+          "flow-legacy-crit-title": "Criterio:",
+          "comm-desc": "Comunicación entre componentes",
+          "comm-input-title": "input() — Recibir datos",
+          "comm-input-child": "// Hijo",
+          "comm-output-title": "output() — Emitir eventos",
+          "comm-parent": "// Uso en el template del padre",
+          "comm-legacy-warn": "@Input() / @Output() decoradores siguen funcionando",
+          "life-desc": "Ciclo de vida de los componentes",
+          "life-title": "ngOnInit y ngOnDestroy",
+          "life-init-desc": "Se ejecuta una vez, después de que Angular inicializa los inputs",
+          "life-init-place": "Lugar correcto para:",
+          "life-init-usage": "Llamadas HTTP iniciales, lógica de inicialización",
+          "life-constructor-warn": "No usar el constructor para lógica de negocio",
+          "life-destroy-desc": "Se ejecuta antes de que el componente sea eliminado del DOM",
+          "life-destroy-usage": "Cancelar subscriptions, limpiar timers",
+          "life-destroy-place": "Lugar correcto para:",
+          "dir-builtin": "Built-in y custom",
+          "dir-title": "ngStyle, ngClass y Custom",
+          "dir-custom": "Directiva custom con host object",
+          "sum-ts-desc": "Tipos, interfaces, clases, generics",
+          "sum-comp-desc": "@Component, input(), output()",
+          "sum-bind-desc": "{{ }}, [prop], (event), [(ngModel)]",
+          "sum-flow-desc": "@if, @for, @switch",
+          "sum-life-desc": "ngOnInit, ngOnDestroy",
+          "sum-dir-desc": "ngStyle, ngClass, custom",
+          "lightbox-close": "Cerrar",
+          "copy-code": "Copiar código"
+        },
+        en: {
+          "page-title": "Angular - Lesson 1: Fundamentals",
+          "title-subtitle": "Lesson 1: Fundamentals & Architecture",
+          "agenda-title": "What we'll see",
+          "concept-title": "Library vs Framework",
+          "angular-what": "What is Angular",
+          "superset-title": "TypeScript is a Superset",
+          "export-pdf": "Download as PDF",
+          "instructor-tagline": "Developer",
+          "instructor-greeting": "Hi!",
+          "setup-title": "Environment Setup",
+          "lib-vs-fw": "Library vs Framework",
+          "arch-title": "Angular Architecture",
+          "transpilation-title": "From language to execution",
+          "concepts-title": "Key concepts",
+          "structure-title": "Project structure",
+          "component-title": "Components",
+          "binding-title": "Data Binding",
+          "control-flow-title": "Control Flow",
+          "communication-title": "Communication",
+          "lifecycle-title": "Lifecycle Hooks",
+          "directives-title": "Directives",
+          "summary-title": "Summary",
+          "agenda-1": "Development tools",
+          "agenda-2": "Library vs Framework",
+          "agenda-3": "What is Angular",
+          "agenda-4": "TypeScript: types and concepts",
+          "agenda-5": "Angular CLI and structure",
+          "agenda-6": "Components and Data Binding",
+          "agenda-7": "Modern Control Flow",
+          "agenda-8": "input/output and Lifecycle",
+          "integrator-project": "Integrator project:",
+          "bookstore-desc": "BookStore — book management application",
+          "node-desc": "Required for Angular CLI and development server",
+          "editor-title": "Editor",
+          "editor-desc": "Recommended: VS Code, Cursor, Antigravity",
+          "ai-title": "AI Assistants",
+          "lib-title": "Library",
+          "lib-desc": "Collection of objects/functions for a specific task",
+          "lib-example": "Ex: date handling, validation",
+          "fw-title": "Framework",
+          "fw-desc": "Defines a way to build applications and provides tools",
+          "fw-example": "Ex: Angular, .NET, Ruby on Rails, Django",
+          "angular-is-fw": "Angular is a framework — defines structure, conventions and complete tools",
+          "what-is-angular-1": "Framework for building SPA web applications",
+          "what-is-angular-2": "Combines declarative templates, dependency injection and Frontend-Backend communication",
+          "what-is-angular-3": "Divides the project into reusable components",
+          "what-is-angular-4": "Standalone by default since Angular 17+",
+          "arch-template": "Template",
+          "arch-html": "HTML + bindings",
+          "arch-comp": "Component",
+          "arch-ts": "TypeScript",
+          "arch-prop": "[property] binding",
+          "arch-event": "(event) binding",
+          "arch-binding": "binding",
+          "arch-services": "Services",
+          "arch-di": "Dependency Injection",
+          "arch-directives": "Directives",
+          "arch-dom": "DOM modify",
+          "ts-superset-desc": "Typed superset of JavaScript that compiles to JS",
+          "agenda-label": "Agenda",
+          "angular-label": "Angular",
+          "ts-label": "TypeScript",
+          "cli-label": "Angular CLI",
+          "components-label": "Components",
+          "cf-label": "Control Flow",
+          "ts-dev": "Development (TypeScript)",
+          "ts-prod": "Production (JavaScript)",
+          "ts-erasure-title": "Type Erasure:",
+          "ts-erasure-desc": "The TS compiler (tsc) removes all type annotations before generating the final file for the browser.",
+          "code-erasure-comment": "// Types disappear (Type Erasure)",
+          "ts-dev-label": "Development (TypeScript)",
+          "ts-prod-label": "Production (JavaScript)",
+          "greet-result-es": "`Hello ${user.name}`",
+          "greet-result-js": "\"Hello \"",
+          "ts-primitive": "Primitive Types",
+          "ts-array": "Arrays",
+          "ts-union": "Union Types",
+          "ts-alias": "Type Alias",
+          "ts-interface": "Interfaces and Classes",
+          "ts-generic": "Generics",
+          "cli-title": "Angular CLI",
+          "cli-desc": "Command Line Interface",
+          "cli-install": "Installation and new project",
+          "cli-new-comment": "# Create new project (Angular 21 default: standalone)",
+          "cli-select": "# Select: CSS, no SSR",
+          "cli-shorthand": "# shorthand:",
+          "cli-important": "Important:",
+          "cli-standalone-warn": "Do not use --standalone=false — standalone is default since v17",
+          "struct-main": "Entry point — bootstrapApplication",
+          "struct-root": "Root component",
+          "struct-config": "Global providers (router, http)",
+          "struct-routes": "Route definition",
+          "struct-workspace": "Workspace configuration",
+          "struct-ts": "TypeScript configuration",
+          "struct-standalone-info": "app.module.ts no longer exists in standalone projects",
+          "comp-logic": "View (HTML) + Logic (TS) + Styles (CSS)",
+          "comp-decorator": "@Component Decorator",
+          "comp-inline": "// Inline",
+          "comp-external": "// External files",
+          "comp-selector": "selector — HTML tag",
+          "comp-template": "template / templateUrl — HTML",
+          "comp-styles": "styles / styleUrl — styles",
+          "comp-standalone": "standalone: true — default in v17+",
+          "comp-imports": "imports: [] — dependencies",
+          "comp-generate": "Generate components",
+          "comp-imports-warn": "Important: Components used in the template must be in imports",
+          "bind-desc": "Communication between component and template",
+          "bind-types": "Binding types",
+          "bind-interpolation": "Interpolation",
+          "bind-oneway": "One Way Binding",
+          "bind-event": "Event Binding",
+          "bind-twoway": "Two Way Binding",
+          "flow-modern": "Modern way in Angular 17+",
+          "flow-if": "// @if / @else",
+          "flow-available": "Available",
+          "flow-out": "Out of stock",
+          "flow-active": "Active",
+          "flow-inactive": "Inactive",
+          "flow-unknown": "Unknown",
+          "flow-for": "// @for with track",
+          "flow-empty": "No books found",
+          "flow-track-warn": "track is mandatory — improves list performance",
+          "flow-legacy": "Legacy directives",
+          "flow-legacy-desc": "Still working in Angular 21 for backward compatibility",
+          "flow-legacy-note": "Mentioned because they appear in existing projects and exams",
+          "flow-legacy-req": "Require importing CommonModule",
+          "flow-legacy-ind": "Or import NgIf, NgFor individually",
+          "flow-legacy-crit": "Use @if/@for in new projects. Recognize legacy in existing projects.",
+          "flow-legacy-crit-title": "Criterion:",
+          "comm-desc": "Communication between components",
+          "comm-input-title": "input() — Receive data",
+          "comm-input-child": "// Child",
+          "comm-output-title": "output() — Emit events",
+          "comm-parent": "// Parent template usage",
+          "comm-legacy-warn": "@Input() / @Output() decorators still work",
+          "life-desc": "Component lifecycle",
+          "life-title": "ngOnInit and ngOnDestroy",
+          "life-init-desc": "Runs once, after Angular initializes inputs",
+          "life-init-place": "Correct place for:",
+          "life-init-usage": "Initial HTTP calls, initialization logic",
+          "life-constructor-warn": "Do not use constructor for business logic",
+          "life-destroy-desc": "Runs before component is removed from DOM",
+          "life-destroy-usage": "Cancel subscriptions, clear timers",
+          "life-destroy-place": "Correct place for:",
+          "dir-builtin": "Built-in and custom",
+          "dir-title": "ngStyle, ngClass and Custom",
+          "dir-custom": "Custom directive with host object",
+          "sum-ts-desc": "Types, interfaces, classes, generics",
+          "sum-comp-desc": "@Component, input(), output()",
+          "sum-bind-desc": "{{ }}, [prop], (event), [(ngModel)]",
+          "sum-flow-desc": "@if, @for, @switch",
+          "sum-life-desc": "ngOnInit, ngOnDestroy",
+          "sum-dir-desc": "ngStyle, ngClass, custom",
+          "lightbox-close": "Close",
+          "copy-code": "Copy code",
+          "sum-ts-title": "TypeScript",
+          "sum-comp-title": "Components",
+          "sum-bind-title": "Binding",
+          "sum-flow-title": "Control Flow",
+          "sum-life-title": "Lifecycle",
+          "sum-dir-title": "Directives"
+        }
+      };
+
+      function updateLanguage(lang) {
+        document.querySelectorAll("[data-key]").forEach(el => {
+          const key = el.getAttribute("data-key");
+          if (translations[lang] && translations[lang][key]) {
+            if (el.tagName === "TITLE") {
+              document.title = translations[lang][key];
+            } else {
+              el.innerText = translations[lang][key];
+            }
+          }
+        });
+
+        // Update aria-label attributes
+        document.querySelectorAll("[data-key-aria]").forEach(el => {
+          const key = el.getAttribute("data-key-aria");
+          if (translations[lang] && translations[lang][key]) {
+            el.setAttribute("aria-label", translations[lang][key]);
+          }
+        });
+
+        // Update copy buttons aria-label
+        const copyLabel = translations[lang]["copy-code"];
+        if (copyLabel) {
+          document.querySelectorAll(".copy-btn").forEach(btn => {
+            if (!btn.classList.contains("copied")) {
+              btn.setAttribute("aria-label", copyLabel);
+            }
+          });
+        }
+
+        // Actualizar UI del switch
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+          btn.classList.toggle("active", btn.getAttribute("data-lang") === lang);
+        });
+
+        localStorage.setItem("preferred-lang", lang);
+        document.documentElement.lang = lang;
+      }
+
+      document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          updateLanguage(btn.getAttribute("data-lang"));
+        });
+      });
+
+      // Inicializar idioma (Spanish default)
+      const savedLang = localStorage.getItem("preferred-lang") || "es";
+      updateLanguage(savedLang);
+
       // Copy to Clipboard
       function setupCopyButtons() {
         const codeBlocks = document.querySelectorAll(".code-block");
@@ -2416,7 +2831,8 @@ onAdd() {
           // Crear botón
           const btn = document.createElement("button");
           btn.className = "copy-btn";
-          btn.setAttribute("aria-label", "Copiar código");
+          const currentLang = localStorage.getItem("preferred-lang") || "es";
+          btn.setAttribute("aria-label", translations[currentLang]["copy-code"] || "Copiar código");
           btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
 
           block.appendChild(btn);
