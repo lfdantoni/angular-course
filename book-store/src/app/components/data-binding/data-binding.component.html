@@ -1,0 +1,62 @@
+<div class="demo-section">
+  <h3>Data Binding Demo</h3>
+
+  <!-- 1. Interpolation: {{ expression }} -->
+  <section>
+    <h4>1. Interpolation</h4>
+    <p>Book: {{ bookTitle }}</p>
+    <p>Total: {{ quantity * 10 }} USD</p>
+    <p>Uppercase: {{ bookTitle.toUpperCase() }}</p>
+  </section>
+
+  <!-- 2. Property binding: [property]="expression" -->
+  <section>
+    <h4>2. Property Binding</h4>
+    <img [src]="imageUrl" [alt]="bookTitle" width="60" />
+    <br />
+    <button [disabled]="isDisabled">Disabled button: {{ isDisabled }}</button>
+    <button (click)="isDisabled = !isDisabled">Toggle disabled</button>
+  </section>
+
+  <!-- 3. Event binding: (event)="handler()" -->
+  <section>
+    <h4>3. Event Binding</h4>
+    <button (click)="onButtonClick()">Clicked: {{ clickCount }} times</button>
+    <br />
+    <input placeholder="Type something..." (keyup)="onKeyPress($event)" />
+    <p>Last key: {{ lastKey }}</p>
+  </section>
+
+  <!-- 4. Two-way binding: [(ngModel)]="property" — requires FormsModule -->
+  <section>
+    <h4>4. Two-Way Binding</h4>
+    <input [(ngModel)]="searchText" placeholder="Search..." />
+    <p>You typed: {{ searchText }}</p>
+  </section>
+
+  <!-- Control flow: switch -->
+  <section>
+    <h4>Control Flow: switch</h4>
+    <select [(ngModel)]="bookStatus">
+      <option value="available">available</option>
+      <option value="limited">limited</option>
+      <option value="out-of-stock">out-of-stock</option>
+    </select>
+
+    @switch (bookStatus) {
+      @case ('available') { <span class="status-available">In Stock</span> }
+      @case ('limited') { <span class="status-limited">Limited Stock</span> }
+      @default { <span class="status-out">Out of Stock</span> }
+    }
+
+    <!-- Legacy *ngSwitch — same result, common in existing projects and exams -->
+    <!-- Requires importing NgSwitch (or CommonModule) in the component's imports array -->
+    <!--
+    <span [ngSwitch]="bookStatus">
+      <span *ngSwitchCase="'available'" class="status-available">In Stock</span>
+      <span *ngSwitchCase="'limited'" class="status-limited">Limited Stock</span>
+      <span *ngSwitchDefault class="status-out">Out of Stock</span>
+    </span>
+    -->
+  </section>
+</div>

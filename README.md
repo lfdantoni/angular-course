@@ -21,7 +21,6 @@ Use Firebase in Angular projects -> https://www.youtube.com/watch?v=UNCggEPZQ0c
 
 ### IMPORTANT
 - Check deploy folder path, the deploy folder is in dist folder, the deploy folder should have the index.html
-  - E.g. `dist/lessons-standalone/browser`
+  - E.g. `dist/book-store/browser`
   - you can change it on `firebase.json` file (`public` config)
 - The project should be built before deploying
-  
