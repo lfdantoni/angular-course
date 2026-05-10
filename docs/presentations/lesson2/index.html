@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-key="page-title">Angular - Lección 2: Routing &amp; Navegación</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a24;
+      --bg-terminal: #0d0d12;
+      --text-primary: #ffffff;
+      --text-secondary: #8b8b9e;
+      --text-muted: #5a5a6e;
+      --accent: #7c3aed;
+      --accent-light: #a78bfa;
+      --accent-glow: rgba(124, 58, 237, 0.15);
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --border: rgba(255, 255, 255, 0.08);
+
+      --font-display: "Inter", sans-serif;
+      --font-body: "Inter", sans-serif;
+      --font-mono: "Geist Mono", "JetBrains Mono", monospace;
+
+      --title-size: clamp(2rem, 5vw, 3.5rem);
+      --h2-size: clamp(1.5rem, 3.5vw, 2.5rem);
+      --h3-size: clamp(1.1rem, 2vw, 1.5rem);
+      --body-size: clamp(0.85rem, 1.5vw, 1.1rem);
+      --small-size: clamp(0.7rem, 1vw, 0.9rem);
+      --code-size: clamp(0.75rem, 1.2vw, 0.95rem);
+      --mono-size: clamp(0.7rem, 1.1vw, 0.9rem);
+
+      --slide-padding: clamp(1.5rem, 5vw, 5rem);
+      --content-gap: clamp(0.75rem, 2vw, 1.5rem);
+      --element-gap: clamp(0.4rem, 1vw, 0.75rem);
+
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-normal: 0.5s;
+      --duration-fast: 0.25s;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background: var(--bg-primary);
+    }
+
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-height: 100%;
+      overflow: hidden;
+      padding: var(--slide-padding);
+    }
+
+    h1 { font-family: var(--font-display); font-size: var(--title-size); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; }
+    h2 { font-family: var(--font-display); font-size: var(--h2-size); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: var(--content-gap); }
+    h3 { font-family: var(--font-body); font-size: var(--h3-size); font-weight: 600; margin-bottom: var(--element-gap); }
+    p, li { font-size: var(--body-size); color: var(--text-secondary); line-height: 1.65; }
+    a { color: var(--accent-light); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: var(--content-gap);
+      margin-bottom: var(--content-gap);
+    }
+
+    .section-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(2rem, 3vw, 2.5rem);
+      height: clamp(2rem, 3vw, 2.5rem);
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      font-size: var(--small-size);
+      border-radius: 8px;
+    }
+
+    .section-label {
+      font-size: var(--small-size);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 500;
+    }
+
+    .bullet-list { list-style: none; display: flex; flex-direction: column; gap: var(--element-gap); }
+    .bullet-list li { display: flex; align-items: flex-start; gap: clamp(0.5rem, 1vw, 0.75rem); font-size: var(--body-size); padding-left: var(--element-gap); }
+    .bullet-list li::before { content: "›"; color: var(--accent-light); font-weight: 600; font-size: 1.2em; flex-shrink: 0; margin-top: -2px; }
+
+    .terminal { background: var(--bg-terminal); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; font-family: var(--font-mono); font-size: var(--mono-size); }
+    .terminal-header { display: flex; align-items: center; gap: 6px; padding: 12px 16px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); }
+    .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green { background: #28c840; }
+    .terminal-title { flex: 1; text-align: center; color: var(--text-muted); font-size: var(--small-size); }
+    .terminal-body { padding: clamp(1rem, 2vw, 1.5rem); }
+    .terminal-line { display: flex; align-items: flex-start; gap: var(--element-gap); margin-bottom: var(--element-gap); }
+    .terminal-line:last-child { margin-bottom: 0; }
+    .terminal-prompt { color: var(--success); user-select: none; }
+    .terminal-command { color: var(--text-primary); white-space: pre-wrap; word-break: break-all; }
+    .terminal-comment { color: var(--text-muted); font-style: italic; }
+
+    .code-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: clamp(1rem, 2vw, 1.5rem);
+      font-family: var(--font-mono);
+      font-size: var(--code-size);
+      overflow-x: auto;
+      position: relative;
+    }
+    .code-block code { color: #e2e2e6; line-height: 1.7; white-space: pre-wrap; }
+    .code-inline { background: var(--bg-card); padding: 0.15em 0.5em; border-radius: 4px; font-family: var(--font-mono); font-size: 0.9em; color: var(--accent-light); }
+    .code-keyword { color: #c792ea; }
+    .code-string { color: #c3e88d; }
+    .code-comment { color: #546e7a; font-style: italic; }
+    .code-type { color: #82aaff; }
+    .code-function { color: #82aaff; }
+    .code-variable { color: #f78c6c; }
+    .code-operator { color: #89ddff; }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--duration-fast) ease;
+      z-index: 10;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); border-color: var(--accent); }
+    .copy-btn.copied { color: var(--success); border-color: var(--success); }
+    .copy-btn svg { width: 16px; height: 16px; }
+
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--content-gap); }
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: var(--content-gap); transition: all var(--duration-fast) ease; }
+    .card:hover { border-color: rgba(124,58,237,0.3); transform: translateY(-2px); }
+    .card h3 { color: var(--text-primary); margin-bottom: var(--element-gap); font-size: var(--h3-size); }
+    .card p { font-size: var(--small-size); }
+    .card-accent { border-left: 3px solid var(--accent); }
+
+    .concept-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--content-gap); margin-top: var(--content-gap); }
+    @media (max-width: 800px) { .concept-grid { grid-template-columns: repeat(2, 1fr); } }
+    .concept-item { display: flex; flex-direction: column; align-items: center; text-align: center; padding: var(--content-gap); background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; gap: 0.5rem; transition: border-color var(--duration-fast) ease; }
+    .concept-item:hover { border-color: var(--accent); }
+    .concept-item svg { width: clamp(40px,5vw,56px); height: clamp(40px,5vw,56px); color: var(--accent-light); flex-shrink: 0; }
+    .concept-item h4 { font-size: var(--h3-size); font-weight: 600; color: var(--text-primary); margin: 0; }
+    .concept-item p { font-size: var(--body-size); margin: 0; }
+
+    .info-box { background: var(--accent-glow); border: 1px solid rgba(124,58,237,0.2); border-radius: 8px; padding: var(--content-gap); margin-top: var(--content-gap); }
+    .info-box p { color: var(--text-primary); font-size: var(--body-size); }
+    .info-box strong { color: var(--accent-light); }
+    .warning-box { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); border-radius: 8px; padding: var(--content-gap); margin-top: var(--element-gap); }
+    .warning-box p { color: var(--warning); }
+
+    .title-slide { justify-content: center; align-items: center; text-align: center; background: radial-gradient(ellipse at center, var(--bg-secondary) 0%, var(--bg-primary) 70%); }
+    .title-slide h1 { margin-bottom: var(--content-gap); }
+    .title-slide .subtitle { font-size: var(--h3-size); color: var(--text-secondary); font-weight: 400; }
+    .section-slide { justify-content: center; background: radial-gradient(ellipse at top, rgba(124,58,237,0.08) 0%, transparent 50%); }
+    .center-content { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--content-gap); }
+
+    .nav-dots { position: fixed; right: clamp(0.75rem,1.5vw,1.5rem); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 6px; z-index: 100; }
+    .nav-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.15); border: none; cursor: pointer; transition: all var(--duration-fast) ease; }
+    .nav-dot:hover { background: rgba(255,255,255,0.4); transform: scale(1.3); }
+    .nav-dot.active { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+
+    .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); z-index: 200; }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity var(--duration-normal) var(--ease-out-expo), transform var(--duration-normal) var(--ease-out-expo); }
+    .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+    .reveal:nth-child(1) { transition-delay: 0.05s; }
+    .reveal:nth-child(2) { transition-delay: 0.1s; }
+    .reveal:nth-child(3) { transition-delay: 0.15s; }
+    .reveal:nth-child(4) { transition-delay: 0.2s; }
+    .reveal:nth-child(5) { transition-delay: 0.25s; }
+    .reveal:nth-child(6) { transition-delay: 0.3s; }
+
+    .reveal-scale { opacity: 0; transform: scale(0.92) translateY(12px); transition: opacity var(--duration-normal) var(--ease-out-expo), transform var(--duration-normal) var(--ease-out-expo); }
+    .slide.visible .reveal-scale { opacity: 1; transform: scale(1) translateY(0); }
+    .reveal-scale:nth-child(1) { transition-delay: 0.08s; }
+    .reveal-scale:nth-child(2) { transition-delay: 0.18s; }
+    .reveal-scale:nth-child(3) { transition-delay: 0.28s; }
+    .reveal-scale:nth-child(4) { transition-delay: 0.38s; }
+    .reveal-scale:nth-child(5) { transition-delay: 0.48s; }
+    .reveal-scale:nth-child(6) { transition-delay: 0.58s; }
+
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+    @keyframes breathe-orb { 0%, 100% { opacity: 0.35; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 0.8; transform: translate(-50%,-50%) scale(1.22); } }
+    @keyframes accent-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(124,58,237,0); } 50% { box-shadow: 0 0 0 8px rgba(124,58,237,0.15), 0 0 40px rgba(124,58,237,0.2); } }
+
+    .ambient-orb { position: absolute; width: clamp(400px,70vw,900px); height: clamp(400px,70vw,900px); border-radius: 50%; background: radial-gradient(circle, rgba(124,58,237,0.11) 0%, transparent 68%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; animation: breathe-orb 8s ease-in-out infinite; z-index: 0; }
+    .title-slide .slide-content, .section-slide .slide-content { position: relative; z-index: 1; }
+    .slide.visible .animate-float img { animation: float 4s ease-in-out 0.5s infinite; }
+    .slide.visible .section-number { animation: accent-pulse 3s ease-in-out 0.9s infinite; }
+    .title-slide h1::after { content: ""; display: block; height: 3px; width: 60%; margin: 0.5rem auto 0; background: linear-gradient(90deg, var(--accent), var(--accent-light)); border-radius: 2px; transform: scaleX(0); transform-origin: left; transition: transform 0.7s var(--ease-out-expo) 0.45s; }
+    .slide.visible .title-slide h1::after, .title-slide.slide.visible h1::after { transform: scaleX(1); }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--slide-padding); align-items: start; }
+    @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* URL Anatomy */
+    .url-anatomy { display: flex; flex-direction: column; gap: var(--content-gap); align-items: center; width: 100%; }
+    .url-string { font-family: var(--font-mono); font-size: clamp(0.85rem,1.8vw,1.2rem); background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; display: flex; flex-wrap: wrap; gap: 0; align-items: center; justify-content: center; }
+    .url-part { position: relative; padding: 0.2em 0.1em; }
+    .url-origin { color: var(--text-secondary); }
+    .url-path { color: var(--accent-light); }
+    .url-param-key { color: var(--warning); }
+    .url-param-sep { color: var(--text-muted); }
+    .url-param-val { color: var(--success); }
+    .url-fragment { color: #89ddff; }
+    .url-labels { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .url-label-item { display: flex; align-items: center; gap: 0.4rem; font-size: var(--small-size); }
+    .url-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Route Table */
+    .route-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: var(--code-size); }
+    .route-table th { text-align: left; padding: 0.6rem 1rem; background: rgba(124,58,237,0.1); color: var(--accent-light); font-size: var(--small-size); text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid var(--border); }
+    .route-table td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: var(--body-size); }
+    .route-table tr:last-child td { border-bottom: none; }
+    .route-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .route-table td:first-child { color: var(--accent-light); font-family: var(--font-mono); }
+
+    /* Export & Lang Switch */
+    .export-btn {
+      position: fixed;
+      top: 1.5rem;
+      right: clamp(4rem, 6vw, 5rem);
+      padding: 0.6rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all var(--duration-fast) ease;
+      z-index: 150;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .export-btn:hover { background: var(--accent); color: white; border-color: var(--accent); transform: translateY(-2px); }
+    .export-btn svg { width: 18px; height: 18px; }
+
+    .lang-switch {
+      position: fixed;
+      top: 1.5rem;
+      right: clamp(8.5rem, 12vw, 11rem);
+      display: flex;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2px;
+      z-index: 150;
+    }
+    .lang-btn { padding: 0.35rem 0.7rem; border: none; background: transparent; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; cursor: pointer; border-radius: 6px; transition: all 0.2s ease; }
+    .lang-btn.active { background: var(--accent); color: white; }
+    .lang-btn:hover:not(.active) { color: var(--text-primary); }
+
+    @media (max-height: 700px) { :root { --slide-padding: clamp(1rem,3vw,2rem); --content-gap: clamp(0.5rem,1.5vw,1rem); --title-size: clamp(1.5rem,4.5vw,2.5rem); } }
+    @media (max-height: 600px) { :root { --slide-padding: clamp(0.75rem,2vw,1.5rem); --title-size: clamp(1.25rem,4vw,2rem); } .nav-dots { display: none; } }
+    @media (max-width: 600px) { :root { --title-size: clamp(1.5rem,7vw,2.5rem); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.15s !important; } html { scroll-behavior: auto; } }
+
+    /* ===========================================
+       LIFECYCLE DIAGRAM (SPA vs MPA)
+       =========================================== */
+    .lc-diagram {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: var(--content-gap);
+      flex: 1;
+      min-height: 0;
+    }
+
+    .lc-divider {
+      width: 1px;
+      background: var(--border);
+      align-self: stretch;
+      margin: 0 0.5rem;
+    }
+
+    .lc-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-height: 0;
+    }
+
+    .lc-panel-title {
+      font-size: var(--small-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      text-align: center;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .lc-area {
+      display: flex;
+      align-items: center;
+      gap: clamp(0.5rem, 2vw, 1.25rem);
+      flex: 1;
+      min-height: 0;
+    }
+
+    .lc-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: clamp(0.5rem, 1.5vw, 1rem) clamp(0.5rem, 1.5vw, 1rem);
+      font-weight: 700;
+      font-size: var(--body-size);
+      color: var(--text-primary);
+      min-width: clamp(56px, 7vw, 84px);
+      max-width: clamp(70px, 9vw, 100px);
+      text-align: center;
+      position: relative;
+      align-self: stretch;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .lc-box.highlight {
+      border-color: var(--warning);
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
+    }
+
+    .lc-reload-badge {
+      position: absolute;
+      bottom: -2.8rem;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .lc-reload-badge.active { opacity: 1; }
+
+    @keyframes spin-cw {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .lc-reload-badge.active svg { animation: spin-cw 0.9s linear infinite; }
+
+    .lc-reload-text {
+      font-size: var(--small-size);
+      color: var(--warning);
+      font-weight: 600;
+    }
+
+    .lc-arrows-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      gap: clamp(0.25rem, 1.5vh, 0.75rem);
+      min-width: 0;
+    }
+
+    .lc-arrow-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      opacity: 0.12;
+      transition: opacity 0.35s ease;
+    }
+
+    .lc-arrow-row.active { opacity: 1; }
+
+    .lc-arrow-meta {
+      display: flex;
+      align-items: center;
+      min-height: clamp(18px, 2.5vh, 26px);
+    }
+
+    .lc-arrow-meta.right { justify-content: flex-start; }
+    .lc-arrow-meta.left  { justify-content: flex-end; }
+
+    .lc-arrow-label {
+      font-size: var(--small-size);
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .lc-icon {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 8px;
+      font-size: var(--small-size);
+      font-family: var(--font-mono);
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .lc-track {
+      display: flex;
+      align-items: center;
+      height: clamp(10px, 1.8vh, 16px);
+    }
+
+    /* Right-pointing arrow */
+    .lc-track.right .lc-line {
+      flex: 1;
+      height: 2px;
+      background: currentColor;
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 0.5s var(--ease-out-expo);
+    }
+    .lc-track.right .lc-head {
+      width: 0; height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 9px solid currentColor;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.2s ease 0.45s;
+    }
+    .lc-arrow-row.active .lc-track.right .lc-line { transform: scaleX(1); }
+    .lc-arrow-row.active .lc-track.right .lc-head { opacity: 1; }
+
+    /* Left-pointing arrow */
+    .lc-track.left .lc-head {
+      width: 0; height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-right: 9px solid currentColor;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.2s ease 0.45s;
+    }
+    .lc-track.left .lc-line {
+      flex: 1;
+      height: 2px;
+      background: currentColor;
+      transform-origin: right;
+      transform: scaleX(0);
+      transition: transform 0.5s var(--ease-out-expo);
+    }
+    .lc-arrow-row.active .lc-track.left .lc-head { opacity: 1; }
+    .lc-arrow-row.active .lc-track.left .lc-line  { transform: scaleX(1); }
+
+    /* Arrow colors */
+    .lc-req { color: var(--accent-light); }
+    .lc-res { color: var(--success); }
+
+    @media (max-width: 700px) {
+      .lc-diagram { grid-template-columns: 1fr; }
+      .lc-divider { display: none; }
+    }
+
+    @media print {
+      @page { size: A4 landscape; margin: 0; }
+      html, body { height: auto !important; overflow: visible !important; scroll-snap-type: none !important; }
+      .slide { height: 100vh !important; width: 100vw !important; page-break-after: always !important; break-after: page !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      .export-btn, .lang-switch, .nav-dots, .progress-bar, .copy-btn { display: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progressBar"></div>
+  <nav class="nav-dots" id="navDots"></nav>
+
+  <button class="export-btn" id="exportBtn" title="Descargar como PDF">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+    PDF
+  </button>
+
+  <div class="lang-switch">
+    <button class="lang-btn active" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+
+  <!-- =========================================
+       SLIDE 1: TITLE
+       ========================================= -->
+  <section class="slide title-slide">
+    <div class="ambient-orb"></div>
+    <div class="slide-content center-content">
+      <div class="reveal animate-float">
+        <img src="../assets/angular.svg" alt="Angular" style="width: clamp(120px,20vw,200px); height: auto; margin-bottom: 1.5rem; filter: brightness(0) invert(1);">
+      </div>
+      <h1 class="reveal">Angular</h1>
+      <p class="subtitle reveal" data-key="title-subtitle">Lección 2: Routing &amp; Navegación</p>
+      <p class="reveal" style="margin-top: 2rem; color: var(--text-muted); font-size: var(--small-size);">
+        EducaciónIT • 2026
+      </p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 2: AGENDA
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">01</div>
+        <span class="section-label" data-key="agenda-label">Agenda</span>
+      </div>
+      <h2 class="reveal" data-key="agenda-title">Qué vamos a ver</h2>
+      <div class="two-col reveal">
+        <ul class="bullet-list">
+          <li data-key="agenda-1">SPA vs MPA</li>
+          <li data-key="agenda-2">Angular Router — configuración</li>
+          <li data-key="agenda-3">Navegación con routerLink</li>
+          <li data-key="agenda-4">routerLinkActive — estilos activos</li>
+        </ul>
+        <ul class="bullet-list">
+          <li data-key="agenda-5">Parámetros de ruta dinámicos</li>
+          <li data-key="agenda-6">Query params &amp; fragmentos</li>
+          <li data-key="agenda-7">Navegación programática</li>
+          <li data-key="agenda-8">Environments &amp; LocalStorage</li>
+        </ul>
+      </div>
+      <div class="info-box reveal">
+        <p><strong data-key="integrator-project">Proyecto integrador:</strong> <span data-key="bookstore-desc">BookStore — agregar routing, detalle de libro y filtros por categoría</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 3: SECTION — SPA vs MPA
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="ambient-orb"></div>
+    <div class="slide-content center-content">
+      <div class="section-number reveal">01</div>
+      <h1 class="reveal" data-key="spa-section-title">SPA vs MPA</h1>
+      <p class="subtitle reveal" data-key="spa-section-sub">¿Cómo navega el usuario?</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 4: SPA vs MPA DIAGRAM
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content" style="gap: var(--content-gap);">
+      <div class="section-header reveal">
+        <div class="section-number">01</div>
+        <span class="section-label" data-key="spa-label">SPA vs MPA</span>
+      </div>
+      <h2 class="reveal" data-key="spa-heading">Single Page vs Multi Page Application</h2>
+
+      <div class="lc-diagram reveal" id="lcDiagram">
+
+        <!-- MPA Panel -->
+        <div class="lc-panel">
+          <div class="lc-panel-title" data-key="mpa-diagram-title">Traditional Page Lifecycle</div>
+          <div class="lc-area">
+
+            <!-- Client box -->
+            <div class="lc-box" id="mpa-client-box">
+              <span data-key="lc-client">Cliente</span>
+              <div class="lc-reload-badge" id="mpa-reload">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                  <path d="M21 3v5h-5"/>
+                  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                  <path d="M8 16H3v5"/>
+                </svg>
+                <span class="lc-reload-text" data-key="lc-page-reload">Recarga</span>
+              </div>
+            </div>
+
+            <!-- Arrows -->
+            <div class="lc-arrows-col">
+              <div class="lc-arrow-row lc-req" id="mpa-step1">
+                <div class="lc-arrow-meta right">
+                  <span class="lc-arrow-label" data-key="lc-initial-req">Petición inicial</span>
+                </div>
+                <div class="lc-track right"><div class="lc-line"></div><div class="lc-head"></div></div>
+              </div>
+              <div class="lc-arrow-row lc-res" id="mpa-step2">
+                <div class="lc-arrow-meta left">
+                  <span class="lc-icon" data-key="lc-html-doc">📄 HTML</span>
+                </div>
+                <div class="lc-track left"><div class="lc-head"></div><div class="lc-line"></div></div>
+              </div>
+              <div class="lc-arrow-row lc-req" id="mpa-step3">
+                <div class="lc-arrow-meta right">
+                  <span class="lc-arrow-label" data-key="lc-navigation">Navegación</span>
+                </div>
+                <div class="lc-track right"><div class="lc-line"></div><div class="lc-head"></div></div>
+              </div>
+              <div class="lc-arrow-row lc-res" id="mpa-step4">
+                <div class="lc-arrow-meta left">
+                  <span class="lc-icon" data-key="lc-html-doc">📄 HTML</span>
+                </div>
+                <div class="lc-track left"><div class="lc-head"></div><div class="lc-line"></div></div>
+              </div>
+            </div>
+
+            <!-- Server box -->
+            <div class="lc-box"><span data-key="lc-server">Servidor</span></div>
+          </div>
+        </div>
+
+        <div class="lc-divider"></div>
+
+        <!-- SPA Panel -->
+        <div class="lc-panel">
+          <div class="lc-panel-title" data-key="spa-diagram-title">SPA Lifecycle</div>
+          <div class="lc-area">
+
+            <!-- Client box -->
+            <div class="lc-box" id="spa-client-box">
+              <span data-key="lc-client">Cliente</span>
+            </div>
+
+            <!-- Arrows -->
+            <div class="lc-arrows-col">
+              <div class="lc-arrow-row lc-req" id="spa-step1">
+                <div class="lc-arrow-meta right">
+                  <span class="lc-arrow-label" data-key="lc-initial-req">Petición inicial</span>
+                </div>
+                <div class="lc-track right"><div class="lc-line"></div><div class="lc-head"></div></div>
+              </div>
+              <div class="lc-arrow-row lc-res" id="spa-step2">
+                <div class="lc-arrow-meta left">
+                  <span class="lc-icon" data-key="lc-html-doc">📄 HTML</span>
+                </div>
+                <div class="lc-track left"><div class="lc-head"></div><div class="lc-line"></div></div>
+              </div>
+              <div class="lc-arrow-row lc-req" id="spa-step3">
+                <div class="lc-arrow-meta right">
+                  <span class="lc-arrow-label" data-key="lc-ajax">AJAX</span>
+                </div>
+                <div class="lc-track right"><div class="lc-line"></div><div class="lc-head"></div></div>
+              </div>
+              <div class="lc-arrow-row lc-res" id="spa-step4">
+                <div class="lc-arrow-meta left">
+                  <span class="lc-icon" data-key="lc-json-icon">&#123; &#125; JSON</span>
+                </div>
+                <div class="lc-track left"><div class="lc-head"></div><div class="lc-line"></div></div>
+              </div>
+            </div>
+
+            <!-- Server box -->
+            <div class="lc-box"><span data-key="lc-server">Servidor</span></div>
+          </div>
+        </div>
+      </div><!-- end lc-diagram -->
+
+      <div class="info-box reveal" style="flex-shrink: 0;">
+        <p data-key="spa-note"><strong>Angular es SPA por defecto</strong> — el Router intercepta la navegación y renderiza el componente correcto sin recargar el browser</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 5: SECTION — ANGULAR ROUTER
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="ambient-orb"></div>
+    <div class="slide-content center-content">
+      <div class="section-number reveal">02</div>
+      <h1 class="reveal" data-key="router-section-title">Angular Router</h1>
+      <p class="subtitle reveal" data-key="router-section-sub">Configuración en proyectos standalone</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 6: ROUTER SETUP
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">02</div>
+        <span class="section-label" data-key="router-label">Angular Router</span>
+      </div>
+      <h2 class="reveal" data-key="router-pieces-heading">Las tres piezas del Router</h2>
+      <div class="cards-grid reveal">
+        <div class="card card-accent">
+          <h3><span class="code-inline">app.routes.ts</span></h3>
+          <p data-key="router-piece-1">Define el array de rutas — qué path lleva a qué componente</p>
+        </div>
+        <div class="card card-accent">
+          <h3><span class="code-inline">app.config.ts</span></h3>
+          <p data-key="router-piece-2">Registra el router con <span class="code-inline">provideRouter(routes)</span> en los providers de la aplicación</p>
+        </div>
+        <div class="card card-accent">
+          <h3><span class="code-inline">&lt;router-outlet /&gt;</span></h3>
+          <p data-key="router-piece-3">Placeholder en el template donde Angular inyecta el componente de la ruta activa</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 7: DEFINIENDO RUTAS
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">02</div>
+        <span class="section-label" data-key="router-label">Angular Router</span>
+      </div>
+      <h2 class="reveal" data-key="routes-heading">Definiendo rutas</h2>
+      <div class="reveal" style="overflow: auto;">
+        <table class="route-table">
+          <thead>
+            <tr>
+              <th data-key="routes-col-path">path</th>
+              <th data-key="routes-col-comp">component</th>
+              <th data-key="routes-col-desc">descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>''</code></td>
+              <td>HomeComponent</td>
+              <td data-key="route-home-desc">Ruta raíz / home</td>
+            </tr>
+            <tr>
+              <td><code>'books'</code></td>
+              <td>BookListComponent</td>
+              <td data-key="route-list-desc">Listado de libros</td>
+            </tr>
+            <tr>
+              <td><code>'books/:id'</code></td>
+              <td>BookDetailComponent</td>
+              <td data-key="route-detail-desc">Detalle — parámetro dinámico</td>
+            </tr>
+            <tr>
+              <td><code>'**'</code></td>
+              <td>NotFoundComponent</td>
+              <td data-key="route-wildcard-desc">Wildcard — cualquier ruta no encontrada</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="warning-box reveal">
+        <p data-key="routes-wildcard-warn">La ruta <strong>'**'</strong> debe ir siempre al final — Angular evalúa las rutas en orden</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 8: SECTION — NAVEGACIÓN
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="ambient-orb"></div>
+    <div class="slide-content center-content">
+      <div class="section-number reveal">03</div>
+      <h1 class="reveal" data-key="nav-section-title">Navegación</h1>
+      <p class="subtitle reveal" data-key="nav-section-sub">routerLink y routerLinkActive</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 9: routerLink
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">03</div>
+        <span class="section-label" data-key="nav-label">Navegación</span>
+      </div>
+      <h2 class="reveal">routerLink</h2>
+      <div class="two-col reveal">
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="routerlink-what-title">¿Qué hace?</h3>
+          <ul class="bullet-list">
+            <li data-key="routerlink-1">Reemplaza el <span class="code-inline">href</span> en SPAs</li>
+            <li data-key="routerlink-2">Intercepta el click — sin recarga de página</li>
+            <li data-key="routerlink-3">Actualiza la URL en el browser</li>
+            <li data-key="routerlink-4">Renderiza el componente de la ruta</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="routerlink-syntax-title">Sintaxis</h3>
+          <div class="code-block">
+            <code><span class="code-comment" data-key="routerlink-comment-1">// String simple</span>
+&lt;a <span class="code-keyword">routerLink</span>=<span class="code-string">"/books"</span>&gt;Libros&lt;/a&gt;
+
+<span class="code-comment" data-key="routerlink-comment-2">// Array con parámetro</span>
+&lt;a [<span class="code-keyword">routerLink</span>]=<span class="code-string">"['/books', book.id]"</span>&gt;
+  &#123;&#123; book.title &#125;&#125;
+&lt;/a&gt;</code>
+          </div>
+        </div>
+      </div>
+      <div class="info-box reveal">
+        <p><strong data-key="routerlink-import-title">Importante:</strong> <span data-key="routerlink-import-note">Importar <span class="code-inline">RouterLink</span> en el array <span class="code-inline">imports</span> del componente</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 10: routerLinkActive
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">03</div>
+        <span class="section-label" data-key="nav-label">Navegación</span>
+      </div>
+      <h2 class="reveal">routerLinkActive</h2>
+      <div class="two-col reveal">
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="rla-what-title">¿Qué hace?</h3>
+          <ul class="bullet-list">
+            <li data-key="rla-1">Agrega una clase CSS cuando la ruta está activa</li>
+            <li data-key="rla-2">Ideal para resaltar el ítem activo en la navbar</li>
+            <li data-key="rla-3">Se aplica al elemento que tiene <span class="code-inline">routerLink</span></li>
+          </ul>
+          <div class="code-block" style="margin-top: var(--element-gap);">
+            <code>&lt;a
+  routerLink=<span class="code-string">"/books"</span>
+  routerLinkActive=<span class="code-string">"active"</span>
+  [routerLinkActiveOptions]=<span class="code-string">"{ exact: true }"</span>
+&gt;
+  Libros
+&lt;/a&gt;</code>
+          </div>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="rla-exact-title">exact: true</h3>
+          <ul class="bullet-list">
+            <li data-key="rla-exact-1">Sin <span class="code-inline">exact</span>: <code>/</code> queda activo en todas las rutas</li>
+            <li data-key="rla-exact-2">Con <span class="code-inline">exact: true</span>: solo activo cuando el path coincide exactamente</li>
+          </ul>
+          <div class="warning-box" style="margin-top: var(--content-gap);">
+            <p data-key="rla-exact-warn">Usar <strong>exact: true</strong> en la ruta raíz <strong>'/'</strong> para evitar que siempre esté activa</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 11: SECTION — PARÁMETROS DE RUTA
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="ambient-orb"></div>
+    <div class="slide-content center-content">
+      <div class="section-number reveal">04</div>
+      <h1 class="reveal" data-key="params-section-title">Parámetros de Ruta</h1>
+      <p class="subtitle reveal" data-key="params-section-sub">Rutas dinámicas con <span style="color: var(--accent-light);">:param</span></p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 12: RUTAS DINÁMICAS
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">04</div>
+        <span class="section-label" data-key="params-label">Parámetros de Ruta</span>
+      </div>
+      <h2 class="reveal" data-key="dynamic-routes-heading">Rutas dinámicas</h2>
+      <div class="reveal" style="display: flex; flex-direction: column; gap: var(--content-gap);">
+        <div class="url-anatomy">
+          <div class="url-string">
+            <span class="url-part url-origin">localhost:4200</span>
+            <span class="url-part url-path">/books/</span>
+            <span class="url-part" style="color: var(--warning); font-weight: 700; background: rgba(245,158,11,0.1); border-radius: 4px; padding: 0 0.4em;">42</span>
+          </div>
+          <div class="url-labels">
+            <div class="url-label-item">
+              <div class="url-dot" style="background: var(--accent-light);"></div>
+              <span style="color: var(--text-secondary);" data-key="url-label-path">path estático</span>
+            </div>
+            <div class="url-label-item">
+              <div class="url-dot" style="background: var(--warning);"></div>
+              <span style="color: var(--text-secondary);" data-key="url-label-param">:id — parámetro dinámico</span>
+            </div>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="card card-accent">
+            <h3 data-key="dynamic-route-def-title">Definición de la ruta</h3>
+            <p data-key="dynamic-route-def-desc">En <span class="code-inline">app.routes.ts</span>: <code style="color: var(--accent-light);">path: 'books/:id'</code></p>
+            <p style="margin-top: 0.5rem;" data-key="dynamic-route-def-note">El <span class="code-inline">:id</span> es el nombre del parámetro — puede ser cualquier nombre</p>
+          </div>
+          <div class="card card-accent">
+            <h3 data-key="dynamic-route-read-title">Leer el parámetro</h3>
+            <p data-key="dynamic-route-read-desc">Usar <span class="code-inline">ActivatedRoute</span> inyectado en el componente para acceder al valor de <span class="code-inline">:id</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 13: ACTIVATEDROUTE
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">04</div>
+        <span class="section-label" data-key="params-label">Parámetros de Ruta</span>
+      </div>
+      <h2 class="reveal">ActivatedRoute</h2>
+      <div class="two-col reveal">
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="ar-snapshot-title">snapshot.params</h3>
+          <div class="code-block">
+            <code><span class="code-comment" data-key="ar-snapshot-comment">// Lectura puntual (una sola vez)</span>
+<span class="code-keyword">const</span> id = <span class="code-keyword">this</span>.route
+  .snapshot.params[<span class="code-string">'id'</span>];</code>
+          </div>
+          <p style="margin-top: 0.75rem; font-size: var(--small-size);" data-key="ar-snapshot-note">Útil cuando el componente se destruye y recrea al navegar</p>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="ar-obs-title">paramMap observable</h3>
+          <div class="code-block">
+            <code><span class="code-comment" data-key="ar-obs-comment">// Reactivo — escucha cambios</span>
+<span class="code-keyword">this</span>.route.paramMap.subscribe(
+  params => {
+    <span class="code-keyword">const</span> id = params.get(<span class="code-string">'id'</span>);
+  }
+);</code>
+          </div>
+          <p style="margin-top: 0.75rem; font-size: var(--small-size);" data-key="ar-obs-note">Útil cuando el componente se reutiliza y solo cambia el parámetro</p>
+        </div>
+      </div>
+      <div class="info-box reveal">
+        <p data-key="ar-note">En la mayoría de los casos, <span class="code-inline">snapshot</span> es suficiente. Usar el observable cuando el usuario navega entre instancias del mismo componente</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 14: SECTION — QUERY PARAMS
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="ambient-orb"></div>
+    <div class="slide-content center-content">
+      <div class="section-number reveal">05</div>
+      <h1 class="reveal" data-key="query-section-title">Query Params</h1>
+      <p class="subtitle reveal" data-key="query-section-sub">Filtros y estado en la URL</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 15: QUERY PARAMS DETALLE
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">05</div>
+        <span class="section-label" data-key="query-label">Query Params</span>
+      </div>
+      <h2 class="reveal" data-key="query-anatomy-heading">Anatomía de la URL</h2>
+      <div class="reveal" style="display: flex; flex-direction: column; gap: var(--content-gap);">
+        <div class="url-anatomy">
+          <div class="url-string">
+            <span class="url-part url-origin">localhost:4200</span>
+            <span class="url-part url-path">/books</span>
+            <span class="url-part url-param-sep">?</span>
+            <span class="url-part url-param-key">category</span>
+            <span class="url-part url-param-sep">=</span>
+            <span class="url-part url-param-val">fiction</span>
+            <span class="url-part url-param-sep">&amp;</span>
+            <span class="url-part url-param-key">page</span>
+            <span class="url-part url-param-sep">=</span>
+            <span class="url-part url-param-val">1</span>
+            <span class="url-part url-fragment">#contact</span>
+          </div>
+          <div class="url-labels">
+            <div class="url-label-item">
+              <div class="url-dot" style="background: var(--accent-light);"></div>
+              <span style="color: var(--text-secondary);" data-key="url-leg-path">path</span>
+            </div>
+            <div class="url-label-item">
+              <div class="url-dot" style="background: var(--warning);"></div>
+              <span style="color: var(--text-secondary);" data-key="url-leg-key">query param key</span>
+            </div>
+            <div class="url-label-item">
+              <div class="url-dot" style="background: var(--success);"></div>
+              <span style="color: var(--text-secondary);" data-key="url-leg-val">query param value</span>
+            </div>
+            <div class="url-label-item">
+              <div class="url-dot" style="background: #89ddff;"></div>
+              <span style="color: var(--text-secondary);" data-key="url-leg-frag">fragmento / anchor</span>
+            </div>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="card card-accent">
+            <h3 data-key="query-when-title">¿Cuándo usar query params?</h3>
+            <ul class="bullet-list" style="margin-top: 0.5rem;">
+              <li data-key="query-when-1">Filtros (categoría, precio, stock)</li>
+              <li data-key="query-when-2">Paginación (?page=2)</li>
+              <li data-key="query-when-3">Búsqueda (?q=angular)</li>
+              <li data-key="query-when-4">Estado que el usuario puede compartir/guardar</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3 data-key="query-read-title">Leer query params</h3>
+            <p data-key="query-read-desc">También via <span class="code-inline">ActivatedRoute</span>:</p>
+            <div class="code-block" style="margin-top: 0.5rem;">
+              <code>route.snapshot.queryParams[<span class="code-string">'category'</span>]
+
+<span class="code-comment" data-key="query-read-comment">// o reactivo:</span>
+route.queryParamMap.subscribe(...)</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 15b: FRAGMENTOS
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">05</div>
+        <span class="section-label" data-key="query-label">Query Params</span>
+      </div>
+      <h2 class="reveal" data-key="frag-heading">Fragmentos (Anchors)</h2>
+      <div class="reveal" style="display: flex; flex-direction: column; gap: var(--content-gap);">
+        <div class="url-anatomy">
+          <div class="url-string">
+            <span class="url-part url-origin">localhost:4200</span>
+            <span class="url-part url-path">/books</span>
+            <span class="url-part url-fragment">#reviews</span>
+          </div>
+          <div class="url-labels">
+            <div class="url-label-item">
+              <div class="url-dot" style="background: var(--accent-light);"></div>
+              <span style="color: var(--text-secondary);" data-key="url-leg-path">path</span>
+            </div>
+            <div class="url-label-item">
+              <div class="url-dot" style="background: #89ddff;"></div>
+              <span style="color: var(--text-secondary);" data-key="url-leg-frag">fragmento / anchor</span>
+            </div>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="card card-accent">
+            <h3 data-key="frag-when-title">¿Para qué sirven?</h3>
+            <ul class="bullet-list" style="margin-top: 0.5rem;">
+              <li data-key="frag-when-1">Anclar a una sección dentro de la misma página</li>
+              <li data-key="frag-when-2">Deep-links a secciones (reviews, specs, comments)</li>
+              <li data-key="frag-when-3">Historial del navegador sin recargar</li>
+              <li data-key="frag-when-4">Accesibilidad: scroll automático al elemento</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3 data-key="frag-nav-title">Navegar con fragmento</h3>
+            <p data-key="frag-nav-desc" style="margin-bottom: 0.5rem;">Con <span class="code-inline">routerLink</span>:</p>
+            <div class="code-block">
+              <code>[routerLink]="[<span class="code-string">'/books'</span>, id]"
+[fragment]="<span class="code-string">'reviews'</span>"</code>
+            </div>
+            <p data-key="frag-nav-desc2" style="margin-top: 0.75rem; margin-bottom: 0.5rem;"><span data-key="frag-or">O programático:</span></p>
+            <div class="code-block">
+              <code><span class="code-keyword">this</span>.router.navigate(
+  [<span class="code-string">'/books'</span>, id],
+  { fragment: <span class="code-string">'reviews'</span> }
+);</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 16: SECTION — NAVEGACIÓN PROGRAMÁTICA
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="ambient-orb"></div>
+    <div class="slide-content center-content">
+      <div class="section-number reveal">06</div>
+      <h1 class="reveal" data-key="prognav-section-title">Navegación Programática</h1>
+      <p class="subtitle reveal" data-key="prognav-section-sub">Navegar desde TypeScript con el servicio Router</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 17: ROUTER.NAVIGATE
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">06</div>
+        <span class="section-label" data-key="prognav-label">Navegación Programática</span>
+      </div>
+      <h2 class="reveal">Router.navigate()</h2>
+      <div class="two-col reveal">
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="prognav-when-title">¿Cuándo usarlo?</h3>
+          <ul class="bullet-list">
+            <li data-key="prognav-1">Después de guardar un formulario</li>
+            <li data-key="prognav-2">Redirect post-login</li>
+            <li data-key="prognav-3">Navegación condicional (si hay errores, no navegar)</li>
+            <li data-key="prognav-4">Cuando no hay un elemento de template para hacer click</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="prognav-syntax-title">Sintaxis</h3>
+          <div class="code-block">
+            <code><span class="code-comment" data-key="prognav-comment-1">// Navegar a una ruta</span>
+<span class="code-keyword">this</span>.router.navigate([<span class="code-string">'/books'</span>]);
+
+<span class="code-comment" data-key="prognav-comment-2">// Con parámetro</span>
+<span class="code-keyword">this</span>.router.navigate([<span class="code-string">'/books'</span>, id]);
+
+<span class="code-comment" data-key="prognav-comment-3">// Con query params</span>
+<span class="code-keyword">this</span>.router.navigate([<span class="code-string">'/books'</span>], {
+  queryParams: { category: <span class="code-string">'fiction'</span> }
+});</code>
+          </div>
+        </div>
+      </div>
+      <div class="info-box reveal">
+        <p data-key="prognav-note"><strong>Diferencia clave:</strong> <span class="code-inline">routerLink</span> es declarativo (template), <span class="code-inline">Router.navigate()</span> es imperativo (TypeScript). Usar el que corresponda al contexto.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 18: SECTION — CONFIGURACIÓN DE LA APP
+       ========================================= -->
+  <section class="slide section-slide">
+    <div class="ambient-orb"></div>
+    <div class="slide-content center-content">
+      <div class="section-number reveal">07</div>
+      <h1 class="reveal" data-key="config-section-title">Configuración de la App</h1>
+      <p class="subtitle reveal" data-key="config-section-sub">Environments &amp; LocalStorage</p>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 19: ENVIRONMENTS
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">07</div>
+        <span class="section-label" data-key="config-label">Configuración</span>
+      </div>
+      <h2 class="reveal" data-key="env-heading">Environments</h2>
+      <div class="two-col reveal">
+        <div class="card" style="border-color: var(--success);">
+          <h3 style="color: var(--success);">environment.ts <span style="font-size: var(--small-size); color: var(--text-muted);" data-key="env-dev-badge">(development)</span></h3>
+          <ul class="bullet-list" style="margin-top: 0.75rem;">
+            <li><span class="code-inline">production: false</span></li>
+            <li data-key="env-dev-1">API local o de staging</li>
+            <li data-key="env-dev-2">Logs y debugging habilitado</li>
+          </ul>
+        </div>
+        <div class="card" style="border-color: var(--accent);">
+          <h3 style="color: var(--accent-light);">environment.prod.ts <span style="font-size: var(--small-size); color: var(--text-muted);" data-key="env-prod-badge">(production)</span></h3>
+          <ul class="bullet-list" style="margin-top: 0.75rem;">
+            <li><span class="code-inline">production: true</span></li>
+            <li data-key="env-prod-1">API de producción real</li>
+            <li data-key="env-prod-2">Logs deshabilitados</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-box reveal">
+        <p data-key="env-note"><span class="code-inline">ng build</span> usa <strong>environment.prod.ts</strong> automáticamente — nunca hay que cambiar la URL a mano para deploys</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 20: LOCALSTORAGE
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">07</div>
+        <span class="section-label" data-key="config-label">Configuración</span>
+      </div>
+      <h2 class="reveal">LocalStorage</h2>
+      <div class="two-col reveal">
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="ls-what-title">¿Qué es?</h3>
+          <ul class="bullet-list">
+            <li data-key="ls-1">API del browser para persistir datos en el cliente</li>
+            <li data-key="ls-2">Sobrevive recargas y cierre del browser</li>
+            <li data-key="ls-3">Almacena strings — se serializa con JSON</li>
+            <li data-key="ls-4">Scoped al dominio (no se comparte entre sitios)</li>
+          </ul>
+          <div class="warning-box" style="margin-top: var(--content-gap);">
+            <p data-key="ls-warn">No guardar datos sensibles — es accesible desde cualquier JS en la página</p>
+          </div>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="ls-use-cases-title">Casos de uso</h3>
+          <div class="cards-grid" style="grid-template-columns: 1fr; gap: var(--element-gap);">
+            <div class="card">
+              <h3 data-key="ls-uc-1-title">Tokens de sesión</h3>
+              <p data-key="ls-uc-1-desc">Recordar que el usuario está logueado</p>
+            </div>
+            <div class="card">
+              <h3 data-key="ls-uc-2-title">Preferencias</h3>
+              <p data-key="ls-uc-2-desc">Tema, idioma, configuración de UI</p>
+            </div>
+            <div class="card">
+              <h3 data-key="ls-uc-3-title">Cache local</h3>
+              <p data-key="ls-uc-3-desc">Evitar peticiones HTTP repetidas para datos que cambian poco</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 21: RESUMEN
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">08</div>
+        <span class="section-label" data-key="summary-label">Resumen</span>
+      </div>
+      <h2 class="reveal" data-key="summary-heading">Conceptos clave</h2>
+      <div class="concept-grid reveal">
+        <div class="concept-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <h4 data-key="sum-spa-title">SPA</h4>
+          <p data-key="sum-spa-desc">Sin recargas — Angular maneja la navegación</p>
+        </div>
+        <div class="concept-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
+            <line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>
+          </svg>
+          <h4 data-key="sum-router-title">Router</h4>
+          <p data-key="sum-router-desc">provideRouter, routes, router-outlet</p>
+        </div>
+        <div class="concept-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+          <h4 data-key="sum-routerlink-title">routerLink</h4>
+          <p data-key="sum-routerlink-desc">Navegación declarativa sin recargas</p>
+        </div>
+        <div class="concept-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/>
+            <line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>
+            <line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>
+          </svg>
+          <h4 data-key="sum-params-title">Route Params</h4>
+          <p data-key="sum-params-desc">:param dinámico — ActivatedRoute</p>
+        </div>
+        <div class="concept-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <h4 data-key="sum-query-title">Query Params</h4>
+          <p data-key="sum-query-desc">?key=value — filtros en la URL</p>
+        </div>
+        <div class="concept-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <h4 data-key="sum-config-title">Config</h4>
+          <p data-key="sum-config-desc">Environments &amp; LocalStorage</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    class SlidePresentation {
+      constructor() {
+        this.slides = document.querySelectorAll(".slide");
+        this.currentSlide = 0;
+        this.progressBar = document.getElementById("progressBar");
+        this.navDotsContainer = document.getElementById("navDots");
+        this.init();
+      }
+
+      init() {
+        this.setupIntersectionObserver();
+        this.setupKeyboardNav();
+        this.setupTouchNav();
+        this.setupNavDots();
+        this.updateProgress();
+      }
+
+      setupIntersectionObserver() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              this.currentSlide = Array.from(this.slides).indexOf(entry.target);
+              this.updateProgress();
+              this.updateNavDots();
+            }
+          });
+        }, { root: null, threshold: 0.5 });
+        this.slides.forEach(slide => observer.observe(slide));
+      }
+
+      setupKeyboardNav() {
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
+            e.preventDefault(); this.nextSlide();
+          } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+            e.preventDefault(); this.prevSlide();
+          } else if (e.key === "Home") {
+            e.preventDefault(); this.goToSlide(0);
+          } else if (e.key === "End") {
+            e.preventDefault(); this.goToSlide(this.slides.length - 1);
+          }
+        });
+      }
+
+      setupTouchNav() {
+        let touchStartY = 0;
+        document.addEventListener("touchstart", (e) => { touchStartY = e.changedTouches[0].screenY; }, { passive: true });
+        document.addEventListener("touchend", (e) => {
+          const diff = touchStartY - e.changedTouches[0].screenY;
+          if (Math.abs(diff) > 50) { diff > 0 ? this.nextSlide() : this.prevSlide(); }
+        }, { passive: true });
+      }
+
+      setupNavDots() {
+        this.navDotsContainer.innerHTML = "";
+        this.slides.forEach((_, index) => {
+          const dot = document.createElement("button");
+          dot.classList.add("nav-dot");
+          dot.setAttribute("aria-label", `Ir a slide ${index + 1}`);
+          dot.addEventListener("click", () => this.goToSlide(index));
+          this.navDotsContainer.appendChild(dot);
+        });
+        this.updateNavDots();
+      }
+
+      updateProgress() {
+        const progress = ((this.currentSlide + 1) / this.slides.length) * 100;
+        this.progressBar.style.width = `${progress}%`;
+      }
+
+      updateNavDots() {
+        this.navDotsContainer.querySelectorAll(".nav-dot").forEach((dot, index) => {
+          dot.classList.toggle("active", index === this.currentSlide);
+        });
+      }
+
+      nextSlide() { if (this.currentSlide < this.slides.length - 1) this.goToSlide(this.currentSlide + 1); }
+      prevSlide() { if (this.currentSlide > 0) this.goToSlide(this.currentSlide - 1); }
+      goToSlide(index) { this.slides[index].scrollIntoView({ behavior: "smooth" }); }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      new SlidePresentation();
+
+      const translations = {
+        es: {
+          "page-title": "Angular - Lección 2: Routing & Navegación",
+          "title-subtitle": "Lección 2: Routing & Navegación",
+          "agenda-label": "Agenda",
+          "agenda-title": "Qué vamos a ver",
+          "agenda-1": "SPA vs MPA",
+          "agenda-2": "Angular Router — configuración",
+          "agenda-3": "Navegación con routerLink",
+          "agenda-4": "routerLinkActive — estilos activos",
+          "agenda-5": "Parámetros de ruta dinámicos",
+          "agenda-6": "Query params & fragmentos",
+          "agenda-7": "Navegación programática",
+          "agenda-8": "Environments & LocalStorage",
+          "integrator-project": "Proyecto integrador:",
+          "bookstore-desc": "BookStore — agregar routing, detalle de libro y filtros por categoría",
+          "spa-section-title": "SPA vs MPA",
+          "spa-section-sub": "¿Cómo navega el usuario?",
+          "spa-label": "SPA vs MPA",
+          "spa-heading": "Single Page vs Multi Page Application",
+          "mpa-title": "MPA — Multi Page",
+          "mpa-1": "Cada navegación recarga la página completa",
+          "mpa-2": "El servidor envía un nuevo HTML",
+          "mpa-3": "El browser pierde el estado en memoria",
+          "mpa-4": "Ejemplos: sitios tradicionales, e-commerce básico",
+          "spa-title": "SPA — Single Page",
+          "spa-1": "La página se carga una sola vez",
+          "spa-2": "La navegación actualiza solo el contenido",
+          "spa-3": "Sin recargas — experiencia fluida",
+          "spa-4": "Ejemplos: Gmail, Twitter, aplicaciones Angular",
+          "spa-note": "Angular es SPA por defecto — el Router intercepta la navegación y renderiza el componente correcto sin recargar el browser",
+          "router-section-title": "Angular Router",
+          "router-section-sub": "Configuración en proyectos standalone",
+          "router-label": "Angular Router",
+          "router-pieces-heading": "Las tres piezas del Router",
+          "router-piece-1": "Define el array de rutas — qué path lleva a qué componente",
+          "router-piece-2": "Registra el router con provideRouter(routes) en los providers de la aplicación",
+          "router-piece-3": "Placeholder en el template donde Angular inyecta el componente de la ruta activa",
+          "routes-heading": "Definiendo rutas",
+          "routes-col-path": "path",
+          "routes-col-comp": "component",
+          "routes-col-desc": "descripción",
+          "route-home-desc": "Ruta raíz / home",
+          "route-list-desc": "Listado de libros",
+          "route-detail-desc": "Detalle — parámetro dinámico",
+          "route-wildcard-desc": "Wildcard — cualquier ruta no encontrada",
+          "routes-wildcard-warn": "La ruta '**' debe ir siempre al final — Angular evalúa las rutas en orden",
+          "nav-section-title": "Navegación",
+          "nav-section-sub": "routerLink y routerLinkActive",
+          "nav-label": "Navegación",
+          "routerlink-what-title": "¿Qué hace?",
+          "routerlink-1": "Reemplaza el href en SPAs",
+          "routerlink-2": "Intercepta el click — sin recarga de página",
+          "routerlink-3": "Actualiza la URL en el browser",
+          "routerlink-4": "Renderiza el componente de la ruta",
+          "routerlink-syntax-title": "Sintaxis",
+          "routerlink-comment-1": "// String simple",
+          "routerlink-comment-2": "// Array con parámetro",
+          "routerlink-import-title": "Importante:",
+          "routerlink-import-note": "Importar RouterLink en el array imports del componente",
+          "rla-what-title": "¿Qué hace?",
+          "rla-1": "Agrega una clase CSS cuando la ruta está activa",
+          "rla-2": "Ideal para resaltar el ítem activo en la navbar",
+          "rla-3": "Se aplica al elemento que tiene routerLink",
+          "rla-exact-title": "exact: true",
+          "rla-exact-1": "Sin exact: / queda activo en todas las rutas",
+          "rla-exact-2": "Con exact: true: solo activo cuando el path coincide exactamente",
+          "rla-exact-warn": "Usar exact: true en la ruta raíz '/' para evitar que siempre esté activa",
+          "params-section-title": "Parámetros de Ruta",
+          "params-section-sub": "Rutas dinámicas con :param",
+          "params-label": "Parámetros de Ruta",
+          "dynamic-routes-heading": "Rutas dinámicas",
+          "url-label-path": "path estático",
+          "url-label-param": ":id — parámetro dinámico",
+          "dynamic-route-def-title": "Definición de la ruta",
+          "dynamic-route-def-desc": "En app.routes.ts: path: 'books/:id'",
+          "dynamic-route-def-note": "El :id es el nombre del parámetro — puede ser cualquier nombre",
+          "dynamic-route-read-title": "Leer el parámetro",
+          "dynamic-route-read-desc": "Usar ActivatedRoute inyectado en el componente para acceder al valor de :id",
+          "ar-snapshot-title": "snapshot.params",
+          "ar-snapshot-comment": "// Lectura puntual (una sola vez)",
+          "ar-snapshot-note": "Útil cuando el componente se destruye y recrea al navegar",
+          "ar-obs-title": "paramMap observable",
+          "ar-obs-comment": "// Reactivo — escucha cambios",
+          "ar-obs-note": "Útil cuando el componente se reutiliza y solo cambia el parámetro",
+          "ar-note": "En la mayoría de los casos, snapshot es suficiente. Usar el observable cuando el usuario navega entre instancias del mismo componente",
+          "query-section-title": "Query Params",
+          "query-section-sub": "Filtros y estado en la URL",
+          "query-label": "Query Params",
+          "query-anatomy-heading": "Anatomía de la URL",
+          "url-leg-path": "path",
+          "url-leg-key": "query param key",
+          "url-leg-val": "query param value",
+          "url-leg-frag": "fragmento / anchor",
+          "query-when-title": "¿Cuándo usar query params?",
+          "query-when-1": "Filtros (categoría, precio, stock)",
+          "query-when-2": "Paginación (?page=2)",
+          "query-when-3": "Búsqueda (?q=angular)",
+          "query-when-4": "Estado que el usuario puede compartir/guardar",
+          "query-read-title": "Leer query params",
+          "query-read-desc": "También via ActivatedRoute:",
+          "query-read-comment": "// o reactivo:",
+          "frag-heading": "Fragmentos (Anchors)",
+          "frag-when-title": "¿Para qué sirven?",
+          "frag-when-1": "Anclar a una sección dentro de la misma página",
+          "frag-when-2": "Deep-links a secciones (reviews, specs, comments)",
+          "frag-when-3": "Historial del navegador sin recargar",
+          "frag-when-4": "Accesibilidad: scroll automático al elemento",
+          "frag-nav-title": "Navegar con fragmento",
+          "frag-nav-desc": "Con routerLink:",
+          "frag-nav-desc2": "",
+          "frag-or": "O programático:",
+          "prognav-section-title": "Navegación Programática",
+          "prognav-section-sub": "Navegar desde TypeScript con el servicio Router",
+          "prognav-label": "Navegación Programática",
+          "prognav-when-title": "¿Cuándo usarlo?",
+          "prognav-1": "Después de guardar un formulario",
+          "prognav-2": "Redirect post-login",
+          "prognav-3": "Navegación condicional (si hay errores, no navegar)",
+          "prognav-4": "Cuando no hay un elemento de template para hacer click",
+          "prognav-syntax-title": "Sintaxis",
+          "prognav-comment-1": "// Navegar a una ruta",
+          "prognav-comment-2": "// Con parámetro",
+          "prognav-comment-3": "// Con query params",
+          "prognav-note": "Diferencia clave: routerLink es declarativo (template), Router.navigate() es imperativo (TypeScript). Usar el que corresponda al contexto.",
+          "config-section-title": "Configuración de la App",
+          "config-section-sub": "Environments & LocalStorage",
+          "config-label": "Configuración",
+          "env-heading": "Environments",
+          "env-dev-badge": "(development)",
+          "env-dev-1": "API local o de staging",
+          "env-dev-2": "Logs y debugging habilitado",
+          "env-prod-badge": "(production)",
+          "env-prod-1": "API de producción real",
+          "env-prod-2": "Logs deshabilitados",
+          "env-note": "ng build usa environment.prod.ts automáticamente — nunca hay que cambiar la URL a mano para deploys",
+          "ls-what-title": "¿Qué es?",
+          "ls-1": "API del browser para persistir datos en el cliente",
+          "ls-2": "Sobrevive recargas y cierre del browser",
+          "ls-3": "Almacena strings — se serializa con JSON",
+          "ls-4": "Scoped al dominio (no se comparte entre sitios)",
+          "ls-warn": "No guardar datos sensibles — es accesible desde cualquier JS en la página",
+          "ls-use-cases-title": "Casos de uso",
+          "ls-uc-1-title": "Tokens de sesión",
+          "ls-uc-1-desc": "Recordar que el usuario está logueado",
+          "ls-uc-2-title": "Preferencias",
+          "ls-uc-2-desc": "Tema, idioma, configuración de UI",
+          "ls-uc-3-title": "Cache local",
+          "ls-uc-3-desc": "Evitar peticiones HTTP repetidas para datos que cambian poco",
+          "summary-label": "Resumen",
+          "summary-heading": "Conceptos clave",
+          "sum-spa-title": "SPA",
+          "sum-spa-desc": "Sin recargas — Angular maneja la navegación",
+          "sum-router-title": "Router",
+          "sum-router-desc": "provideRouter, routes, router-outlet",
+          "sum-routerlink-title": "routerLink",
+          "sum-routerlink-desc": "Navegación declarativa sin recargas",
+          "sum-params-title": "Route Params",
+          "sum-params-desc": ":param dinámico — ActivatedRoute",
+          "sum-query-title": "Query Params",
+          "sum-query-desc": "?key=value — filtros en la URL",
+          "sum-config-title": "Config",
+          "sum-config-desc": "Environments & LocalStorage",
+          "mpa-diagram-title": "Ciclo de vida tradicional",
+          "spa-diagram-title": "Ciclo de vida SPA",
+          "lc-client": "Cliente",
+          "lc-server": "Servidor",
+          "lc-initial-req": "Petición inicial",
+          "lc-html-doc": "📄 HTML",
+          "lc-navigation": "Navegación",
+          "lc-page-reload": "Recarga",
+          "lc-ajax": "AJAX",
+          "lc-json-icon": "{ } JSON",
+          "copy-code": "Copiar código"
+        },
+        en: {
+          "page-title": "Angular - Lesson 2: Routing & Navigation",
+          "title-subtitle": "Lesson 2: Routing & Navigation",
+          "agenda-label": "Agenda",
+          "agenda-title": "What we'll cover",
+          "agenda-1": "SPA vs MPA",
+          "agenda-2": "Angular Router — setup",
+          "agenda-3": "Navigation with routerLink",
+          "agenda-4": "routerLinkActive — active styles",
+          "agenda-5": "Dynamic route parameters",
+          "agenda-6": "Query params & fragments",
+          "agenda-7": "Programmatic navigation",
+          "agenda-8": "Environments & LocalStorage",
+          "integrator-project": "Integrator project:",
+          "bookstore-desc": "BookStore — add routing, book detail page and category filters",
+          "spa-section-title": "SPA vs MPA",
+          "spa-section-sub": "How does the user navigate?",
+          "spa-label": "SPA vs MPA",
+          "spa-heading": "Single Page vs Multi Page Application",
+          "mpa-title": "MPA — Multi Page",
+          "mpa-1": "Every navigation reloads the full page",
+          "mpa-2": "The server sends a new HTML document",
+          "mpa-3": "The browser loses in-memory state",
+          "mpa-4": "Examples: traditional sites, basic e-commerce",
+          "spa-title": "SPA — Single Page",
+          "spa-1": "The page loads only once",
+          "spa-2": "Navigation updates only the content",
+          "spa-3": "No reloads — smooth experience",
+          "spa-4": "Examples: Gmail, Twitter, Angular apps",
+          "spa-note": "Angular is SPA by default — the Router intercepts navigation and renders the right component without reloading the browser",
+          "router-section-title": "Angular Router",
+          "router-section-sub": "Setup in standalone projects",
+          "router-label": "Angular Router",
+          "router-pieces-heading": "The three pieces of the Router",
+          "router-piece-1": "Defines the routes array — which path maps to which component",
+          "router-piece-2": "Registers the router with provideRouter(routes) in the app providers",
+          "router-piece-3": "Placeholder in the template where Angular injects the active route component",
+          "routes-heading": "Defining routes",
+          "routes-col-path": "path",
+          "routes-col-comp": "component",
+          "routes-col-desc": "description",
+          "route-home-desc": "Root / home route",
+          "route-list-desc": "Book list",
+          "route-detail-desc": "Detail — dynamic parameter",
+          "route-wildcard-desc": "Wildcard — any unmatched route",
+          "routes-wildcard-warn": "The '**' route must always be last — Angular evaluates routes in order",
+          "nav-section-title": "Navigation",
+          "nav-section-sub": "routerLink and routerLinkActive",
+          "nav-label": "Navigation",
+          "routerlink-what-title": "What does it do?",
+          "routerlink-1": "Replaces href in SPAs",
+          "routerlink-2": "Intercepts clicks — no page reload",
+          "routerlink-3": "Updates the browser URL",
+          "routerlink-4": "Renders the route component",
+          "routerlink-syntax-title": "Syntax",
+          "routerlink-comment-1": "// Simple string",
+          "routerlink-comment-2": "// Array with parameter",
+          "routerlink-import-title": "Important:",
+          "routerlink-import-note": "Import RouterLink in the component's imports array",
+          "rla-what-title": "What does it do?",
+          "rla-1": "Adds a CSS class when the route is active",
+          "rla-2": "Ideal for highlighting the active item in the navbar",
+          "rla-3": "Applied to the element that has routerLink",
+          "rla-exact-title": "exact: true",
+          "rla-exact-1": "Without exact: / stays active on all routes",
+          "rla-exact-2": "With exact: true: active only when the path matches exactly",
+          "rla-exact-warn": "Use exact: true on the root route '/' to prevent it from always being active",
+          "params-section-title": "Route Parameters",
+          "params-section-sub": "Dynamic routes with :param",
+          "params-label": "Route Parameters",
+          "dynamic-routes-heading": "Dynamic routes",
+          "url-label-path": "static path",
+          "url-label-param": ":id — dynamic parameter",
+          "dynamic-route-def-title": "Route definition",
+          "dynamic-route-def-desc": "In app.routes.ts: path: 'books/:id'",
+          "dynamic-route-def-note": "The :id is the parameter name — it can be any name",
+          "dynamic-route-read-title": "Read the parameter",
+          "dynamic-route-read-desc": "Use ActivatedRoute injected in the component to access the :id value",
+          "ar-snapshot-title": "snapshot.params",
+          "ar-snapshot-comment": "// One-time read",
+          "ar-snapshot-note": "Useful when the component is destroyed and recreated on navigation",
+          "ar-obs-title": "paramMap observable",
+          "ar-obs-comment": "// Reactive — listens to changes",
+          "ar-obs-note": "Useful when the component is reused and only the parameter changes",
+          "ar-note": "In most cases, snapshot is enough. Use the observable when the user navigates between instances of the same component",
+          "query-section-title": "Query Params",
+          "query-section-sub": "Filters and state in the URL",
+          "query-label": "Query Params",
+          "query-anatomy-heading": "URL anatomy",
+          "url-leg-path": "path",
+          "url-leg-key": "query param key",
+          "url-leg-val": "query param value",
+          "url-leg-frag": "fragment / anchor",
+          "query-when-title": "When to use query params?",
+          "query-when-1": "Filters (category, price, stock)",
+          "query-when-2": "Pagination (?page=2)",
+          "query-when-3": "Search (?q=angular)",
+          "query-when-4": "State the user can share or bookmark",
+          "query-read-title": "Reading query params",
+          "query-read-desc": "Also via ActivatedRoute:",
+          "query-read-comment": "// or reactive:",
+          "frag-heading": "Fragments (Anchors)",
+          "frag-when-title": "What are they for?",
+          "frag-when-1": "Anchor to a section within the same page",
+          "frag-when-2": "Deep-links to sections (reviews, specs, comments)",
+          "frag-when-3": "Browser history without page reload",
+          "frag-when-4": "Accessibility: automatic scroll to element",
+          "frag-nav-title": "Navigate with fragment",
+          "frag-nav-desc": "With routerLink:",
+          "frag-nav-desc2": "",
+          "frag-or": "Or programmatically:",
+          "prognav-section-title": "Programmatic Navigation",
+          "prognav-section-sub": "Navigate from TypeScript using the Router service",
+          "prognav-label": "Programmatic Navigation",
+          "prognav-when-title": "When to use it?",
+          "prognav-1": "After saving a form",
+          "prognav-2": "Post-login redirect",
+          "prognav-3": "Conditional navigation (skip if there are errors)",
+          "prognav-4": "When there's no template element to click",
+          "prognav-syntax-title": "Syntax",
+          "prognav-comment-1": "// Navigate to a route",
+          "prognav-comment-2": "// With parameter",
+          "prognav-comment-3": "// With query params",
+          "prognav-note": "Key difference: routerLink is declarative (template), Router.navigate() is imperative (TypeScript). Use whichever fits the context.",
+          "config-section-title": "App Configuration",
+          "config-section-sub": "Environments & LocalStorage",
+          "config-label": "Configuration",
+          "env-heading": "Environments",
+          "env-dev-badge": "(development)",
+          "env-dev-1": "Local or staging API",
+          "env-dev-2": "Logs and debugging enabled",
+          "env-prod-badge": "(production)",
+          "env-prod-1": "Real production API",
+          "env-prod-2": "Logs disabled",
+          "env-note": "ng build uses environment.prod.ts automatically — no need to change URLs manually for deploys",
+          "ls-what-title": "What is it?",
+          "ls-1": "Browser API to persist data on the client",
+          "ls-2": "Survives page reloads and browser close",
+          "ls-3": "Stores strings — serialized with JSON",
+          "ls-4": "Scoped to the domain (not shared between sites)",
+          "ls-warn": "Do not store sensitive data — accessible from any JS on the page",
+          "ls-use-cases-title": "Use cases",
+          "ls-uc-1-title": "Session tokens",
+          "ls-uc-1-desc": "Remember that the user is logged in",
+          "ls-uc-2-title": "Preferences",
+          "ls-uc-2-desc": "Theme, language, UI settings",
+          "ls-uc-3-title": "Local cache",
+          "ls-uc-3-desc": "Avoid repeated HTTP requests for rarely changing data",
+          "summary-label": "Summary",
+          "summary-heading": "Key concepts",
+          "sum-spa-title": "SPA",
+          "sum-spa-desc": "No reloads — Angular handles navigation",
+          "sum-router-title": "Router",
+          "sum-router-desc": "provideRouter, routes, router-outlet",
+          "sum-routerlink-title": "routerLink",
+          "sum-routerlink-desc": "Declarative navigation without reloads",
+          "sum-params-title": "Route Params",
+          "sum-params-desc": "Dynamic :param — ActivatedRoute",
+          "sum-query-title": "Query Params",
+          "sum-query-desc": "?key=value — filters in the URL",
+          "sum-config-title": "Config",
+          "sum-config-desc": "Environments & LocalStorage",
+          "mpa-diagram-title": "Traditional Page Lifecycle",
+          "spa-diagram-title": "SPA Lifecycle",
+          "lc-client": "Client",
+          "lc-server": "Server",
+          "lc-initial-req": "Initial Request",
+          "lc-html-doc": "📄 HTML",
+          "lc-navigation": "Navigation",
+          "lc-page-reload": "Page Reload",
+          "lc-ajax": "AJAX",
+          "lc-json-icon": "{ } JSON",
+          "copy-code": "Copy code"
+        }
+      };
+
+      function updateLanguage(lang) {
+        document.querySelectorAll("[data-key]").forEach(el => {
+          const key = el.getAttribute("data-key");
+          if (translations[lang] && translations[lang][key]) {
+            if (el.tagName === "TITLE") {
+              document.title = translations[lang][key];
+            } else {
+              el.innerText = translations[lang][key];
+            }
+          }
+        });
+
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+          btn.classList.toggle("active", btn.getAttribute("data-lang") === lang);
+        });
+
+        const copyLabel = translations[lang]["copy-code"];
+        if (copyLabel) {
+          document.querySelectorAll(".copy-btn").forEach(btn => {
+            if (!btn.classList.contains("copied")) {
+              btn.setAttribute("aria-label", copyLabel);
+            }
+          });
+        }
+
+        localStorage.setItem("preferred-lang", lang);
+        document.documentElement.lang = lang;
+      }
+
+      document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.addEventListener("click", () => updateLanguage(btn.getAttribute("data-lang")));
+      });
+
+      const savedLang = localStorage.getItem("preferred-lang") || "es";
+      updateLanguage(savedLang);
+
+      // Copy to clipboard
+      function setupCopyButtons() {
+        document.querySelectorAll(".code-block").forEach(block => {
+          const btn = document.createElement("button");
+          btn.className = "copy-btn";
+          const currentLang = localStorage.getItem("preferred-lang") || "es";
+          btn.setAttribute("aria-label", translations[currentLang]["copy-code"] || "Copiar código");
+          btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+          block.appendChild(btn);
+
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const code = block.querySelector("code").innerText;
+            navigator.clipboard.writeText(code).then(() => {
+              btn.classList.add("copied");
+              btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+              setTimeout(() => {
+                btn.classList.remove("copied");
+                btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+              }, 2000);
+            });
+          });
+        });
+      }
+
+      setupCopyButtons();
+
+      document.getElementById("exportBtn").addEventListener("click", () => window.print());
+
+      // Lifecycle Diagram Animation
+      function animateLifecycle() {
+        const allIds = ['mpa-step1','mpa-step2','mpa-step3','mpa-step4','mpa-reload','spa-step1','spa-step2','spa-step3','spa-step4'];
+        const mpaBox = document.getElementById('mpa-client-box');
+
+        const sequence = [
+          { activate: ['mpa-step1','spa-step1'],                                 duration: 900  },
+          { activate: ['mpa-step2','spa-step2'],                                 duration: 900  },
+          { activate: ['mpa-step3','spa-step3'],                                 duration: 900  },
+          { activate: ['mpa-step4','mpa-reload','spa-step4'],                    duration: 1500 },
+          { activate: [],                         deactivateAll: true,           duration: 700  },
+        ];
+
+        let idx = 0;
+
+        function runStep() {
+          const step = sequence[idx];
+
+          if (step.deactivateAll) {
+            allIds.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
+            if (mpaBox) mpaBox.classList.remove('highlight');
+          }
+
+          step.activate.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('active'); });
+
+          if (mpaBox) mpaBox.classList.toggle('highlight', step.activate.includes('mpa-reload'));
+
+          idx = (idx + 1) % sequence.length;
+          setTimeout(runStep, step.duration);
+        }
+
+        setTimeout(runStep, 600);
+      }
+
+      animateLifecycle();
+    });
+  </script>
+</body>
+</html>
