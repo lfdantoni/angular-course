@@ -10,8 +10,14 @@ import { Book } from '../../models/book';
 export class BookComponent {
   @Input({ required: true }) book!: Book;
   @Output() addToCart = new EventEmitter<Book>();
+  @Output() viewDetail = new EventEmitter<Book>();
 
-  onAdd() {
+  onAdd(event: MouseEvent) {
+    event.stopPropagation();
     this.addToCart.emit(this.book);
+  }
+
+  onViewDetail() {
+    this.viewDetail.emit(this.book);
   }
 }

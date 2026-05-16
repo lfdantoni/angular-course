@@ -1,0 +1,96 @@
+.detail-card {
+  max-width: 600px;
+  margin: 2rem auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 2rem;
+  background-color: #fff;
+}
+
+.detail-header {
+  margin-bottom: 1.5rem;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #1976d2;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+h2 {
+  font-size: 1.6rem;
+  margin: 0 0 0.5rem;
+  color: #212121;
+}
+
+.author {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0 0 1rem;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.category-tag {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border-radius: 4px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.category-tag:hover {
+  background-color: #bbdefb;
+}
+
+.fragment-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: #1976d2;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.fragment-link:hover {
+  text-decoration: underline;
+}
+
+.status {
+  margin-bottom: 0.5rem;
+}
+
+.in-stock {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.out-of-stock {
+  color: #c62828;
+  font-weight: bold;
+}
+
+.book-id {
+  color: #aaa;
+  font-size: 0.8rem;
+}
+
+.not-found {
+  text-align: center;
+  padding: 3rem;
+  color: #555;
+}

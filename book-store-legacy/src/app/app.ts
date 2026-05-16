@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
-  title = 'book-store-legacy';
-}
+export class App {}

@@ -9,3 +9,54 @@ h2 {
   gap: 1rem;
   margin-top: 1rem;
 }
+
+.cart-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.cart-bar p {
+  margin: 0;
+}
+
+.clear-cart-btn {
+  padding: 0.25rem 0.7rem;
+  background: none;
+  border: 1px solid #c62828;
+  color: #c62828;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.clear-cart-btn:hover {
+  background-color: #ffebee;
+}
+
+.category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.filter-tag {
+  padding: 0.25rem 0.7rem;
+  border: 1px solid #1976d2;
+  border-radius: 20px;
+  color: #1976d2;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.filter-tag:hover {
+  background-color: #e3f2fd;
+}
+
+.filter-tag.active {
+  background-color: #1976d2;
+  color: #fff;
+}

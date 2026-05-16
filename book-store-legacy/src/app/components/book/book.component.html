@@ -1,5 +1,5 @@
-<!-- [appBookStatus] es una directiva de atributo que establece backgroundColor via @HostBinding -->
-<div class="book-card" [appBookStatus]="book.inStock">
+<!-- (click) en la card navega al detalle; el botón usa stopPropagation para no disparar esto -->
+<div class="book-card" [appBookStatus]="book.inStock" (click)="onViewDetail()">
   <div class="book-info">
     <h3 class="book-title">{{ book.title }}</h3>
 
@@ -8,32 +8,40 @@
       {{ book.author }}
     </p>
 
-    <!-- [ngClass]: agrega/quita clases CSS dinámicamente -->
+    <!-- [ngClass]: agrega/quita clases CSS dinámicamente — requiere NgClass o CommonModule -->
     <!-- <p class="book-author" [ngClass]="{ 'author-unavailable': !book.inStock }">{{ book.author }}</p> -->
 
     <div class="book-categories">
+      <!-- *ngFor — directiva estructural clásica (NgModule) -->
       <span class="category-tag" *ngFor="let category of book.categories">{{ category }}</span>
+
+      <!-- Equivalente con control flow moderno (Angular 17+) — preferido en standalone
+      @for (category of book.categories; track category) {
+        <span class="category-tag">{{ category }}</span>
+      }
+      -->
     </div>
 
-    <!-- *ngIf con else usando ng-template (directiva estructural clásica) -->
+    <!-- *ngIf con else usando ng-template — directiva estructural clásica (NgModule) -->
     <div class="book-status">
       <ng-container *ngIf="book.inStock; else outOfStock">
         <span class="in-stock">In Stock</span>
-        <button (click)="onAdd()">Add to Cart</button>
+        <button (click)="onAdd($event)">Add to Cart</button>
       </ng-container>
       <ng-template #outOfStock>
         <span class="out-of-stock">Out of Stock</span>
       </ng-template>
     </div>
 
-    <!-- Equivalente con control flow moderno (@if / @for) — requiere Angular 17+ -->
-    <!--
-    @if (book.inStock) {
-      <span class="in-stock">In Stock</span>
-      <button (click)="onAdd()">Add to Cart</button>
-    } @else {
-      <span class="out-of-stock">Out of Stock</span>
-    }
+    <!-- Equivalente con control flow moderno (Angular 17+) — preferido en standalone
+    <div class="book-status">
+      @if (book.inStock) {
+        <span class="in-stock">In Stock</span>
+        <button (click)="onAdd($event)">Add to Cart</button>
+      } @else {
+        <span class="out-of-stock">Out of Stock</span>
+      }
+    </div>
     -->
   </div>
 </div>

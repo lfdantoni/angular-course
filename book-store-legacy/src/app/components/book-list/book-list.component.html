@@ -1,22 +1,63 @@
 <h2>Book Catalog</h2>
 
-<p>Cart items: {{ cart.length }}</p>
+<!-- Filtro por categoría: routerLink con [queryParams]; "All" limpia el filtro -->
+<div class="category-filter">
+  <a class="filter-tag"
+     [class.active]="!activeCategory"
+     routerLink="/books">
+    All
+  </a>
+  <!-- *ngFor — directiva estructural clásica (NgModule) -->
+  <a class="filter-tag"
+     *ngFor="let category of categories"
+     [class.active]="activeCategory === category"
+     routerLink="/books"
+     [queryParams]="{ category: category }">
+    {{ category }}
+  </a>
 
-<!-- *ngFor: directiva estructural clásica — requiere CommonModule en el módulo -->
+  <!-- Equivalente con control flow moderno (Angular 17+) — preferido en standalone
+  @for (category of categories; track category) {
+    <a class="filter-tag"
+       [class.active]="activeCategory === category"
+       routerLink="/books"
+       [queryParams]="{ category: category }">
+      {{ category }}
+    </a>
+  }
+  -->
+</div>
+
+<div class="cart-bar">
+  <p>Cart items: {{ cart.length }}</p>
+  <!-- *ngIf — directiva estructural clásica (NgModule) -->
+  <button class="clear-cart-btn" *ngIf="cart.length > 0" (click)="clearCart()">Clear Cart</button>
+
+  <!-- Equivalente con control flow moderno (Angular 17+)
+  @if (cart.length > 0) {
+    <button class="clear-cart-btn" (click)="clearCart()">Clear Cart</button>
+  }
+  -->
+</div>
+
+<!-- *ngFor con *ngIf como fallback — directivas estructurales clásicas (NgModule) -->
 <div class="book-grid">
   <app-book
     *ngFor="let book of books"
     [book]="book"
-    (addToCart)="addToCart($event)">
+    (addToCart)="addToCart($event)"
+    (viewDetail)="navigateToDetail($event)">
   </app-book>
   <p *ngIf="books.length === 0">No books available.</p>
 </div>
 
-<!-- Equivalente con control flow moderno (@for / @empty) — requiere Angular 17+ -->
-<!--
+<!-- Equivalente con control flow moderno (Angular 17+) — preferido en standalone
 <div class="book-grid">
   @for (book of books; track book.id) {
-    <app-book [book]="book" (addToCart)="addToCart($event)" />
+    <app-book
+      [book]="book"
+      (addToCart)="addToCart($event)"
+      (viewDetail)="navigateToDetail($event)" />
   } @empty {
     <p>No books available.</p>
   }

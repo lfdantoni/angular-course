@@ -1,0 +1,80 @@
+<!-- *ngIf con else usando ng-template — directiva estructural clásica (NgModule) -->
+<ng-container *ngIf="book; else notFound">
+  <div class="detail-card" [appBookStatus]="book!.inStock">
+    <div class="detail-header">
+      <button class="back-btn" (click)="goBack()">← Back to Books</button>
+    </div>
+
+    <h2>{{ book!.title }}</h2>
+
+    <!-- [ngStyle] requiere CommonModule en el módulo -->
+    <p class="author" [ngStyle]="{ color: book!.inStock ? '#00bfc5' : '#999' }">
+      {{ book!.author }}
+    </p>
+
+    <div class="categories">
+      <!-- *ngFor — directiva estructural clásica (NgModule) -->
+      <a class="category-tag"
+         *ngFor="let category of book!.categories"
+         routerLink="/books"
+         [queryParams]="{ category: category }">
+        {{ category }}
+      </a>
+
+      <!-- Equivalente con control flow moderno (Angular 17+) — preferido en standalone
+      @for (category of book.categories; track category) {
+        <a class="category-tag"
+           routerLink="/books"
+           [queryParams]="{ category: category }">
+          {{ category }}
+        </a>
+      }
+      -->
+    </div>
+
+    <p class="status">
+      <!-- *ngIf con else usando ng-template — directiva estructural clásica (NgModule) -->
+      <ng-container *ngIf="book!.inStock; else outOfStock">
+        <span class="in-stock">In Stock</span>
+      </ng-container>
+      <ng-template #outOfStock>
+        <span class="out-of-stock">Out of Stock</span>
+      </ng-template>
+
+      <!-- Equivalente con control flow moderno (Angular 17+) — preferido en standalone
+      @if (book.inStock) {
+        <span class="in-stock">In Stock</span>
+      } @else {
+        <span class="out-of-stock">Out of Stock</span>
+      }
+      -->
+    </p>
+
+    <p class="book-id">Book ID: {{ book!.id }}</p>
+
+    <!-- fragment="top" establece el hash de la URL: /books#top -->
+    <a class="fragment-link" routerLink="/books" fragment="top">
+      ↑ Back to top of book list
+    </a>
+  </div>
+</ng-container>
+
+<ng-template #notFound>
+  <div class="not-found">
+    <p>Book not found.</p>
+    <button (click)="goBack()">Back to Books</button>
+  </div>
+</ng-template>
+
+<!-- Equivalente con control flow moderno (Angular 17+) — preferido en standalone
+@if (book) {
+  <div class="detail-card" [appBookStatus]="book.inStock">
+    ...
+  </div>
+} @else {
+  <div class="not-found">
+    <p>Book not found.</p>
+    <button (click)="goBack()">Back to Books</button>
+  </div>
+}
+-->
