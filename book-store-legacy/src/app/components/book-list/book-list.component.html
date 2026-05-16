@@ -1,0 +1,24 @@
+<h2>Book Catalog</h2>
+
+<p>Cart items: {{ cart.length }}</p>
+
+<!-- *ngFor: directiva estructural clásica — requiere CommonModule en el módulo -->
+<div class="book-grid">
+  <app-book
+    *ngFor="let book of books"
+    [book]="book"
+    (addToCart)="addToCart($event)">
+  </app-book>
+  <p *ngIf="books.length === 0">No books available.</p>
+</div>
+
+<!-- Equivalente con control flow moderno (@for / @empty) — requiere Angular 17+ -->
+<!--
+<div class="book-grid">
+  @for (book of books; track book.id) {
+    <app-book [book]="book" (addToCart)="addToCart($event)" />
+  } @empty {
+    <p>No books available.</p>
+  }
+</div>
+-->

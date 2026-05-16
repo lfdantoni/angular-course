@@ -1,0 +1,11 @@
+h2 {
+  margin-bottom: 0.5rem;
+  color: #1976d2;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
