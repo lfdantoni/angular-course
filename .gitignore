@@ -45,3 +45,6 @@ testem.log
 Thumbs.db
 
 .claude
+
+.firebase/
+firebase-debug.log*
