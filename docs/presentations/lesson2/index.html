@@ -571,6 +571,7 @@
           <li data-key="agenda-6">Query params &amp; fragmentos</li>
           <li data-key="agenda-7">Navegación programática</li>
           <li data-key="agenda-8">Environments &amp; LocalStorage</li>
+          <li data-key="agenda-9">📦 Módulos (legacy) — @NgModule</li>
         </ul>
       </div>
       <div class="info-box reveal">
@@ -1267,6 +1268,107 @@ route.queryParamMap.subscribe(...)</code>
   </section>
 
   <!-- =========================================
+       SLIDE 20b: MÓDULOS (LEGACY) — concepto
+       Nota: insertada como adición sin renumerar el resto.
+       Usa marcador "📦" en lugar de número para no
+       interferir con la secuencia 01-08 existente.
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number" style="background: var(--bg-card); border: 1px solid var(--border); color: var(--accent-light);">📦</div>
+        <span class="section-label" data-key="mod-label">Módulos (Legacy)</span>
+      </div>
+      <h2 class="reveal" data-key="mod-heading">NgModules — el patrón previo a standalone</h2>
+
+      <div class="two-col reveal">
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="mod-what-title">¿Qué eran?</h3>
+          <ul class="bullet-list">
+            <li data-key="mod-what-1">Clases con @NgModule que agrupaban componentes, directivas y pipes</li>
+            <li data-key="mod-what-2">declarations = piezas propias, exports = lo que se ve afuera</li>
+            <li data-key="mod-what-3">imports = otros módulos (FormsModule, HttpClientModule…)</li>
+            <li data-key="mod-what-4">Bootstrap con AppModule + bootstrapModule()</li>
+          </ul>
+          <div class="warning-box" style="margin-top: var(--content-gap);">
+            <p data-key="mod-warn"><strong>Legacy:</strong> standalone existe desde v14 y es default desde v17. @NgModule sigue funcionando pero no se recomienda para proyectos nuevos.</p>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="mod-uses-title">¿Para qué se usaban?</h3>
+          <div class="cards-grid" style="grid-template-columns: 1fr; gap: var(--element-gap);">
+            <div class="card">
+              <h3 data-key="mod-card-1-title">Encapsulación</h3>
+              <p data-key="mod-card-1-desc">Scope de compilación: qué piezas podía usar cada template</p>
+            </div>
+            <div class="card">
+              <h3 data-key="mod-card-2-title">Routing por feature</h3>
+              <p data-key="mod-card-2-desc">RouterModule.forChild() en cada módulo, forRoot() en la raíz</p>
+            </div>
+            <div class="card">
+              <h3 data-key="mod-card-3-title">Lazy loading</h3>
+              <p data-key="mod-card-3-desc">Unidad de carga diferida: un .module.ts por chunk</p>
+            </div>
+            <div class="card">
+              <h3 data-key="mod-card-4-title">SharedModule</h3>
+              <p data-key="mod-card-4-desc">Re-exportar piezas comunes para no repetir imports</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 20c: MÓDULOS (LEGACY) — código + equivalencias
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number" style="background: var(--bg-card); border: 1px solid var(--border); color: var(--accent-light);">📦</div>
+        <span class="section-label" data-key="mod-label">Módulos (Legacy)</span>
+      </div>
+      <h2 class="reveal" data-key="mod-migration-heading">De AppModule a standalone</h2>
+
+      <div class="two-col reveal" style="align-items: start;">
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="mod-classic-title">Estilo clásico — app.module.ts</h3>
+          <div class="code-block">
+<code><span class="code-comment">// Angular &lt; 14</span>
+<span class="code-keyword">import</span> { NgModule } <span class="code-keyword">from</span> <span class="code-string">'@angular/core'</span>;
+<span class="code-keyword">import</span> { BrowserModule } <span class="code-keyword">from</span> <span class="code-string">'@angular/platform-browser'</span>;
+<span class="code-keyword">import</span> { RouterModule } <span class="code-keyword">from</span> <span class="code-string">'@angular/router'</span>;
+
+@<span class="code-function">NgModule</span>({
+  declarations: [AppComponent, BookListComponent],
+  imports:      [BrowserModule,
+                 RouterModule.<span class="code-function">forRoot</span>(routes)],
+  providers:    [BookService],
+  bootstrap:    [AppComponent]
+})
+<span class="code-keyword">export class</span> <span class="code-type">AppModule</span> {}</code>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="mod-modern-title">Equivalente moderno</h3>
+          <ul class="bullet-list">
+            <li data-key="mod-modern-1">declarations → desaparece — cada componente trae su propio imports</li>
+            <li data-key="mod-modern-2">providers globales → app.config.ts (ApplicationConfig)</li>
+            <li data-key="mod-modern-3">RouterModule.forRoot(routes) → provideRouter(routes)</li>
+            <li data-key="mod-modern-4">HttpClientModule → provideHttpClient()</li>
+            <li data-key="mod-modern-5">bootstrap: [AppComponent] → bootstrapApplication(AppComponent, appConfig) en main.ts</li>
+          </ul>
+          <div class="info-box" style="margin-top: var(--content-gap);">
+            <p data-key="mod-when-info"><strong>¿Cuándo me lo voy a cruzar?</strong> Proyectos legacy, librerías de terceros que aún exportan módulos (se pueden importar desde un componente standalone) y tutoriales de Angular ≤ 13.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
        SLIDE 21: RESUMEN
        ========================================= -->
   <section class="slide">
@@ -1430,6 +1532,7 @@ route.queryParamMap.subscribe(...)</code>
           "agenda-6": "Query params & fragmentos",
           "agenda-7": "Navegación programática",
           "agenda-8": "Environments & LocalStorage",
+          "agenda-9": "📦 Módulos (legacy) — @NgModule",
           "integrator-project": "Proyecto integrador:",
           "bookstore-desc": "BookStore — agregar routing, detalle de libro y filtros por categoría",
           "spa-section-title": "SPA vs MPA",
@@ -1589,7 +1692,33 @@ route.queryParamMap.subscribe(...)</code>
           "lc-page-reload": "Recarga",
           "lc-ajax": "AJAX",
           "lc-json-icon": "{ } JSON",
-          "copy-code": "Copiar código"
+          "copy-code": "Copiar código",
+          "mod-label": "Módulos (Legacy)",
+          "mod-heading": "NgModules — el patrón previo a standalone",
+          "mod-what-title": "¿Qué eran?",
+          "mod-what-1": "Clases con @NgModule que agrupaban componentes, directivas y pipes",
+          "mod-what-2": "declarations = piezas propias, exports = lo que se ve afuera",
+          "mod-what-3": "imports = otros módulos (FormsModule, HttpClientModule…)",
+          "mod-what-4": "Bootstrap con AppModule + bootstrapModule()",
+          "mod-warn": "Legacy: standalone existe desde v14 y es default desde v17. @NgModule sigue funcionando pero no se recomienda para proyectos nuevos.",
+          "mod-uses-title": "¿Para qué se usaban?",
+          "mod-card-1-title": "Encapsulación",
+          "mod-card-1-desc": "Scope de compilación: qué piezas podía usar cada template",
+          "mod-card-2-title": "Routing por feature",
+          "mod-card-2-desc": "RouterModule.forChild() en cada módulo, forRoot() en la raíz",
+          "mod-card-3-title": "Lazy loading",
+          "mod-card-3-desc": "Unidad de carga diferida: un .module.ts por chunk",
+          "mod-card-4-title": "SharedModule",
+          "mod-card-4-desc": "Re-exportar piezas comunes para no repetir imports",
+          "mod-migration-heading": "De AppModule a standalone",
+          "mod-classic-title": "Estilo clásico — app.module.ts",
+          "mod-modern-title": "Equivalente moderno",
+          "mod-modern-1": "declarations → desaparece — cada componente trae su propio imports",
+          "mod-modern-2": "providers globales → app.config.ts (ApplicationConfig)",
+          "mod-modern-3": "RouterModule.forRoot(routes) → provideRouter(routes)",
+          "mod-modern-4": "HttpClientModule → provideHttpClient()",
+          "mod-modern-5": "bootstrap: [AppComponent] → bootstrapApplication(AppComponent, appConfig) en main.ts",
+          "mod-when-info": "¿Cuándo me lo voy a cruzar? Proyectos legacy, librerías de terceros que aún exportan módulos (se pueden importar desde un componente standalone) y tutoriales de Angular ≤ 13."
         },
         en: {
           "page-title": "Angular - Lesson 2: Routing & Navigation",
@@ -1604,6 +1733,7 @@ route.queryParamMap.subscribe(...)</code>
           "agenda-6": "Query params & fragments",
           "agenda-7": "Programmatic navigation",
           "agenda-8": "Environments & LocalStorage",
+          "agenda-9": "📦 Modules (legacy) — @NgModule",
           "integrator-project": "Integrator project:",
           "bookstore-desc": "BookStore — add routing, book detail page and category filters",
           "spa-section-title": "SPA vs MPA",
@@ -1763,7 +1893,33 @@ route.queryParamMap.subscribe(...)</code>
           "lc-page-reload": "Page Reload",
           "lc-ajax": "AJAX",
           "lc-json-icon": "{ } JSON",
-          "copy-code": "Copy code"
+          "copy-code": "Copy code",
+          "mod-label": "Modules (Legacy)",
+          "mod-heading": "NgModules — the pattern before standalone",
+          "mod-what-title": "What were they?",
+          "mod-what-1": "Classes with @NgModule that grouped components, directives and pipes",
+          "mod-what-2": "declarations = own pieces, exports = what other modules can see",
+          "mod-what-3": "imports = other modules (FormsModule, HttpClientModule…)",
+          "mod-what-4": "Bootstrap with AppModule + bootstrapModule()",
+          "mod-warn": "Legacy: standalone exists since v14 and is default since v17. @NgModule still works but is no longer recommended for new projects.",
+          "mod-uses-title": "What were they used for?",
+          "mod-card-1-title": "Encapsulation",
+          "mod-card-1-desc": "Compilation scope: which pieces each template was allowed to use",
+          "mod-card-2-title": "Feature routing",
+          "mod-card-2-desc": "RouterModule.forChild() in each module, forRoot() at the root",
+          "mod-card-3-title": "Lazy loading",
+          "mod-card-3-desc": "Lazy-load unit: one .module.ts per chunk",
+          "mod-card-4-title": "SharedModule",
+          "mod-card-4-desc": "Re-export common pieces to avoid repeating imports",
+          "mod-migration-heading": "From AppModule to standalone",
+          "mod-classic-title": "Classic style — app.module.ts",
+          "mod-modern-title": "Modern equivalent",
+          "mod-modern-1": "declarations → gone — each component brings its own imports",
+          "mod-modern-2": "Global providers → app.config.ts (ApplicationConfig)",
+          "mod-modern-3": "RouterModule.forRoot(routes) → provideRouter(routes)",
+          "mod-modern-4": "HttpClientModule → provideHttpClient()",
+          "mod-modern-5": "bootstrap: [AppComponent] → bootstrapApplication(AppComponent, appConfig) in main.ts",
+          "mod-when-info": "When will you run into them? Legacy projects, third-party libraries that still export modules (they can be imported from a standalone component) and Angular ≤ 13 tutorials."
         }
       };
 
