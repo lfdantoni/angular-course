@@ -581,6 +581,137 @@
     .di-tree .di-prov-tag.di-b { fill: var(--success); }
 
     /* ===========================================
+       OBSERVER PATTERN — tight vs loose coupling
+       =========================================== */
+    .op-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--content-gap);
+      flex: 1;
+      min-height: 0;
+    }
+    @media (max-width: 800px) { .op-grid { grid-template-columns: 1fr; } }
+
+    .op-tree { width: 100%; flex: 1; min-height: 0; display: block; }
+
+    .op-tree .op-comp rect {
+      fill: var(--bg-secondary);
+      stroke: var(--border);
+      stroke-width: 1;
+    }
+    .op-tree .op-comp text {
+      fill: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      dominant-baseline: central;
+    }
+    .op-tree .op-comp.op-emitter rect { stroke: var(--error); stroke-width: 1.5; }
+    .op-tree .op-comp.op-subject rect { stroke: var(--success); stroke-width: 1.5; }
+
+    /* Direct (tight) arrows — dashed flowing, same style as loose but red */
+    .op-tree .op-edge-tight {
+      stroke: var(--error);
+      stroke-width: 1.4;
+      stroke-dasharray: 4 3;
+      fill: none;
+      opacity: 0;
+    }
+    @keyframes op-tight-appear {
+      from { opacity: 0; }
+      to   { opacity: 0.9; }
+    }
+    @keyframes op-tight-flow { from { stroke-dashoffset: 14; } to { stroke-dashoffset: 0; } }
+    .slide.visible .op-tree .op-edge-tight,
+    #lightbox.open .op-tree .op-edge-tight {
+      animation: op-tight-appear 0.6s ease-out 0.2s forwards,
+                 op-tight-flow 1.6s linear infinite;
+    }
+
+    /* Loose (subscribe) arrows — dashed flowing */
+    .op-tree .op-edge-loose {
+      stroke: var(--success);
+      stroke-width: 1.4;
+      stroke-dasharray: 4 3;
+      fill: none;
+      opacity: 0;
+    }
+    @keyframes op-loose-appear {
+      from { opacity: 0; }
+      to   { opacity: 0.85; }
+    }
+    @keyframes op-loose-flow { from { stroke-dashoffset: 14; } to { stroke-dashoffset: 0; } }
+    .slide.visible .op-tree .op-edge-loose,
+    #lightbox.open .op-tree .op-edge-loose {
+      animation: op-loose-appear 0.6s ease-out 0.2s forwards,
+                 op-loose-flow 1.6s linear infinite;
+    }
+
+    /* Broadcast ring expanding from Subject */
+    .op-tree .op-broadcast {
+      fill: none;
+      stroke: var(--success);
+      stroke-width: 1.5;
+      opacity: 0;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    @keyframes op-wave {
+      0%   { opacity: 0;    r: 4;  stroke-width: 2.5; }
+      40%  { opacity: 0.85; }
+      100% { opacity: 0;    r: 38; stroke-width: 0.4; }
+    }
+    .slide.visible .op-tree .op-broadcast,
+    #lightbox.open .op-tree .op-broadcast {
+      animation: op-wave 2.2s ease-out infinite;
+    }
+    .slide.visible .op-tree .op-broadcast.op-wave-2,
+    #lightbox.open .op-tree .op-broadcast.op-wave-2 {
+      animation-delay: 0.7s;
+    }
+    .slide.visible .op-tree .op-broadcast.op-wave-3,
+    #lightbox.open .op-tree .op-broadcast.op-wave-3 {
+      animation-delay: 1.4s;
+    }
+
+    /* Coupling annotation labels */
+    .op-tree .op-call-label {
+      font-family: var(--font-mono);
+      font-size: 7px;
+      fill: var(--error);
+      opacity: 0.9;
+    }
+    .op-tree .op-sub-label {
+      font-family: var(--font-mono);
+      font-size: 7px;
+      fill: var(--success);
+      opacity: 0.9;
+    }
+
+    /* Coupling badge in the corner of each panel */
+    .op-coupling-badge {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.6rem;
+      font-size: var(--small-size);
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      z-index: 2;
+    }
+    .op-coupling-badge.tight {
+      background: rgba(239,68,68,0.15);
+      color: var(--error);
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+    .op-coupling-badge.loose {
+      background: rgba(34,197,94,0.15);
+      color: var(--success);
+      border: 1px solid rgba(34,197,94,0.3);
+    }
+
+    /* ===========================================
        LIFECYCLE DIAGRAM (SPA vs MPA)
        =========================================== */
     .lc-diagram {
@@ -1474,6 +1605,107 @@ providers: [
   </section>
 
   <!-- =========================================
+       SLIDE 13b: OBSERVER PATTERN — tight vs loose coupling
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content" style="gap: var(--content-gap);">
+      <div class="section-header reveal">
+        <div class="section-number">03</div>
+        <span class="section-label" data-key="obs-label">Observables</span>
+      </div>
+      <h2 class="reveal" data-key="op-heading">Patrón Observer — del acoplamiento al desacoplamiento</h2>
+      <p class="reveal" style="font-size: var(--small-size); color: var(--text-muted); margin-top: calc(-1 * var(--element-gap));" data-key="op-zoom-hint">Click en cada caja para ver el diagrama en grande</p>
+
+      <div class="op-grid reveal">
+
+        <!-- ====== LEFT: tight coupling — direct calls ====== -->
+        <div class="di-scenario">
+          <span class="op-coupling-badge tight" data-key="op-badge-tight">ACOPLADO</span>
+          <div class="di-scenario-title" data-key="op-tight-title">Sin Observer — llamadas directas</div>
+          <svg class="op-tree" viewBox="0 0 240 140" preserveAspectRatio="xMidYMid meet">
+            <!-- direct arrows (with arrowheads) -->
+            <defs>
+              <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+              </marker>
+              <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#22c55e"/>
+              </marker>
+            </defs>
+
+            <!-- Producer A -->
+            <g class="op-comp op-emitter">
+              <rect x="100" y="12" width="40" height="20" rx="3"/>
+              <text x="120" y="22" text-anchor="middle">A</text>
+            </g>
+
+            <!-- Consumers B, C, D -->
+            <g class="op-comp"><rect x="14"  y="100" width="42" height="20" rx="3"/><text x="35"  y="110" text-anchor="middle">B</text></g>
+            <g class="op-comp"><rect x="99"  y="100" width="42" height="20" rx="3"/><text x="120" y="110" text-anchor="middle">C</text></g>
+            <g class="op-comp"><rect x="184" y="100" width="42" height="20" rx="3"/><text x="205" y="110" text-anchor="middle">D</text></g>
+
+            <!-- Solid red arrows: A → B, A → C, A → D -->
+            <line class="op-edge-tight" x1="120" y1="32" x2="35"  y2="100" marker-end="url(#arrow-red)"/>
+            <line class="op-edge-tight" x1="120" y1="32" x2="120" y2="100" marker-end="url(#arrow-red)"/>
+            <line class="op-edge-tight" x1="120" y1="32" x2="205" y2="100" marker-end="url(#arrow-red)"/>
+
+            <!-- Call labels — placed right above each consumer, well spaced -->
+            <text class="op-call-label" x="35"  y="93" text-anchor="middle">B.update()</text>
+            <text class="op-call-label" x="120" y="93" text-anchor="middle">C.update()</text>
+            <text class="op-call-label" x="205" y="93" text-anchor="middle">D.update()</text>
+          </svg>
+          <p class="di-scenario-sub" data-key="op-tight-desc"><strong>A conoce a B, C y D.</strong> Si agregamos E, hay que modificar A. Si B cambia su API, A se rompe. Cada nuevo destino = un cambio en el emisor.</p>
+        </div>
+
+        <!-- ====== RIGHT: loose coupling — Observer pattern ====== -->
+        <div class="di-scenario">
+          <span class="op-coupling-badge loose" data-key="op-badge-loose">DESACOPLADO</span>
+          <div class="di-scenario-title" data-key="op-loose-title">Con Observer — Subject + subscribe</div>
+          <svg class="op-tree" viewBox="0 0 240 140" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <marker id="arrow-green-2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#22c55e" opacity="0.85"/>
+              </marker>
+            </defs>
+
+            <!-- Subject in the middle -->
+            <g class="op-comp op-subject">
+              <rect x="92" y="60" width="56" height="22" rx="4"/>
+              <text x="120" y="71" text-anchor="middle">Subject</text>
+            </g>
+
+            <!-- Broadcast rings (3 staggered waves emanating from subject center) -->
+            <circle class="op-broadcast" cx="120" cy="71" r="4"/>
+            <circle class="op-broadcast op-wave-2" cx="120" cy="71" r="4"/>
+            <circle class="op-broadcast op-wave-3" cx="120" cy="71" r="4"/>
+
+            <!-- Observers around -->
+            <g class="op-comp"><rect x="6"   y="20"  width="50" height="20" rx="3"/><text x="31"  y="30"  text-anchor="middle">Obs1</text></g>
+            <g class="op-comp"><rect x="184" y="20"  width="50" height="20" rx="3"/><text x="209" y="30"  text-anchor="middle">Obs2</text></g>
+            <g class="op-comp"><rect x="95"  y="110" width="50" height="20" rx="3"/><text x="120" y="120" text-anchor="middle">Obs3</text></g>
+
+            <!-- Dashed lines: observers subscribe to Subject (arrow points TOWARD subject) -->
+            <line class="op-edge-loose" x1="31"  y1="40"  x2="100" y2="64" marker-end="url(#arrow-green-2)"/>
+            <line class="op-edge-loose" x1="209" y1="40"  x2="140" y2="64" marker-end="url(#arrow-green-2)"/>
+            <line class="op-edge-loose" x1="120" y1="110" x2="120" y2="82" marker-end="url(#arrow-green-2)"/>
+
+            <!-- Subscribe labels -->
+            <text class="op-sub-label" x="55"  y="56" text-anchor="middle">.subscribe()</text>
+            <text class="op-sub-label" x="185" y="56" text-anchor="middle">.subscribe()</text>
+            <text class="op-sub-label" x="148" y="100" text-anchor="start">.subscribe()</text>
+          </svg>
+          <p class="di-scenario-sub" data-key="op-loose-desc"><strong>Subject NO conoce a los Observers.</strong> Solo emite y la <em>interface</em> Observer recibe. Sumamos Obs4 sin tocar al Subject — el acoplamiento es solo al contrato <span class="code-inline">next/error/complete</span>.</p>
+        </div>
+
+      </div>
+
+      <div class="info-box reveal" style="padding: var(--element-gap) var(--content-gap);">
+        <p style="font-size: var(--small-size);" data-key="op-rule"><strong>La clave:</strong> el acoplamiento "se mueve" del <em>emisor → receptores concretos</em> hacia <em>todos → una interface común</em>. Por eso podés cambiar implementaciones sin tocar al Subject.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
        SLIDE 14: subscribe + cleanup
        ========================================= -->
   <section class="slide">
@@ -1937,6 +2169,15 @@ filtered = <span class="code-function">computed</span>(() =&gt;
           "obs-3": "Lazy: no emite nada hasta que alguien hace subscribe",
           "obs-4": "Útil para HTTP, eventos del DOM, WebSockets, intervalos",
           "obs-create-title": "Crear y consumir",
+          "op-heading": "Patrón Observer — del acoplamiento al desacoplamiento",
+          "op-zoom-hint": "Click en cada caja para ver el diagrama en grande",
+          "op-badge-tight": "ACOPLADO",
+          "op-tight-title": "Sin Observer — llamadas directas",
+          "op-tight-desc": "A conoce a B, C y D. Si agregamos E, hay que modificar A. Si B cambia su API, A se rompe. Cada nuevo destino = un cambio en el emisor.",
+          "op-badge-loose": "DESACOPLADO",
+          "op-loose-title": "Con Observer — Subject + subscribe",
+          "op-loose-desc": "Subject NO conoce a los Observers. Solo emite y la interface Observer recibe. Sumamos Obs4 sin tocar al Subject — el acoplamiento es solo al contrato next/error/complete.",
+          "op-rule": "La clave: el acoplamiento \"se mueve\" del emisor → receptores concretos hacia todos → una interface común. Por eso podés cambiar implementaciones sin tocar al Subject.",
           "sub-heading": "subscribe + cleanup",
           "sub-warn": "Siempre hacer unsubscribe — si no, memory leak: el observer queda enganchado aunque el componente se destruya.",
           "bs-heading": "Subject & BehaviorSubject",
@@ -2117,6 +2358,15 @@ filtered = <span class="code-function">computed</span>(() =&gt;
           "obs-3": "Lazy: nothing is emitted until someone calls subscribe",
           "obs-4": "Useful for HTTP, DOM events, WebSockets, intervals",
           "obs-create-title": "Create and consume",
+          "op-heading": "Observer Pattern — from coupling to decoupling",
+          "op-zoom-hint": "Click each card to see the diagram full-size",
+          "op-badge-tight": "COUPLED",
+          "op-tight-title": "Without Observer — direct calls",
+          "op-tight-desc": "A knows B, C and D. If we add E, A must change. If B changes its API, A breaks. Every new target = one change in the emitter.",
+          "op-badge-loose": "DECOUPLED",
+          "op-loose-title": "With Observer — Subject + subscribe",
+          "op-loose-desc": "The Subject does NOT know the Observers. It just emits and the Observer interface receives. We add Obs4 without touching the Subject — coupling sits only on the next/error/complete contract.",
+          "op-rule": "The key: coupling \"moves\" from emitter → concrete receivers to everyone → a shared interface. That's why you can swap implementations without touching the Subject.",
           "sub-heading": "subscribe + cleanup",
           "sub-warn": "Always unsubscribe — otherwise memory leak: the observer stays hooked even after the component is destroyed.",
           "bs-heading": "Subject & BehaviorSubject",
