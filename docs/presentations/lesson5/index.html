@@ -2079,6 +2079,8 @@
           content.innerHTML = "";
           const clone = block.cloneNode(true);
           clone.style.cursor = "default";
+          // The "reveal" class keeps opacity:0 until the slide is active — strip it so the clone is visible
+          clone.classList.remove("reveal");
           clone.querySelectorAll(".copy-btn").forEach(b => b.remove());
 
           // Re-attach a working copy button
