@@ -263,6 +263,26 @@
     .route-table td:first-child { color: var(--accent-light); font-family: var(--font-mono); }
 
     /* Export & Lang Switch */
+    .home-btn {
+      position: fixed;
+      top: 1.5rem;
+      right: clamp(16.5rem, 22vw, 19rem);
+      padding: 0.6rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--duration-fast) ease;
+      z-index: 150;
+      text-decoration: none;
+    }
+    .home-btn:hover { background: var(--accent); color: white; border-color: var(--accent); transform: translateY(-2px); text-decoration: none; }
+    .home-btn svg { width: 18px; height: 18px; }
+
     .export-btn {
       position: fixed;
       top: 1.5rem;
@@ -917,7 +937,7 @@
       @page { size: A4 landscape; margin: 0; }
       html, body { height: auto !important; overflow: visible !important; scroll-snap-type: none !important; }
       .slide { height: 100vh !important; width: 100vw !important; page-break-after: always !important; break-after: page !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-      .export-btn, .lang-switch, .nav-dots, .progress-bar, .copy-btn, #lightbox { display: none !important; }
+      .home-btn, .export-btn, .lang-switch, .nav-dots, .progress-bar, .copy-btn, #lightbox { display: none !important; }
       .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
     }
   </style>
@@ -927,6 +947,9 @@
   <div class="progress-bar" id="progressBar"></div>
   <nav class="nav-dots" id="navDots"></nav>
 
+  <a class="home-btn" href="../" title="Volver al índice" aria-label="Volver al índice">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1V9.5z"/></svg>
+  </a>
   <button class="export-btn" id="exportBtn" title="Descargar como PDF">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
     PDF
