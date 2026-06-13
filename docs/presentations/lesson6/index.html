@@ -1150,17 +1150,17 @@
       <div class="two-col reveal">
         <ul class="bullet-list">
           <li data-key="agenda-1">📦 NgModules — referencia legacy</li>
-          <li data-key="agenda-2">Lazy loading moderno (standalone)</li>
-          <li data-key="agenda-3">loadComponent &amp; loadChildren</li>
-          <li data-key="agenda-4">@defer blocks — lazy en el template</li>
-          <li data-key="agenda-5">Triggers: viewport, interaction, idle…</li>
+          <li data-key="agenda-2">Angular Material (opcional)</li>
+          <li data-key="agenda-3">Errores comunes — y cómo resolverlos</li>
+          <li data-key="agenda-4">Deploy a Firebase Hosting</li>
+          <li data-key="agenda-5">Lazy loading — loadComponent &amp; loadChildren</li>
         </ul>
         <ul class="bullet-list">
-          <li data-key="agenda-6">toSignal() — Observable → Signal</li>
-          <li data-key="agenda-7">Patrones reactivos con Signals</li>
-          <li data-key="agenda-8">Angular Material (opcional)</li>
-          <li data-key="agenda-9">Deploy a Firebase Hosting</li>
-          <li data-key="agenda-10">Cierre del curso &amp; recursos</li>
+          <li data-key="agenda-6">@defer blocks — lazy en el template</li>
+          <li data-key="agenda-7">toSignal() — Observable → Signal</li>
+          <li data-key="agenda-8">Patrones reactivos con Signals</li>
+          <li data-key="agenda-9">Recursos para seguir aprendiendo</li>
+          <li data-key="agenda-10">Mapa del curso</li>
         </ul>
       </div>
       <div class="info-box reveal">
@@ -1352,24 +1352,157 @@
   </section>
 
   <!-- =========================================
-       SLIDE 8: SECTION — LAZY LOADING
+       SLIDE 8: Angular Material
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">02</div>
+        <span class="section-label" data-key="mat-label">Angular Material</span>
+      </div>
+      <h2 class="reveal" data-key="mat-heading">Angular Material — opcional</h2>
+      <div class="two-col reveal" style="align-items: start;">
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="mat-install-title">Instalación</h3>
+          <div class="terminal">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">bash</span>
+            </div>
+            <div class="terminal-body">
+              <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-command">ng add @angular/material</span></div>
+              <div class="terminal-line"><span class="terminal-comment" data-key="c-mat-1"># Pregunta: tema, tipografía, animaciones</span></div>
+              <div class="terminal-line"><span class="terminal-comment" data-key="c-mat-2"># Modifica index.html, styles.css, angular.json</span></div>
+            </div>
+          </div>
+          <p style="margin-top: var(--content-gap);" data-key="mat-intro">Librería de componentes UI siguiendo las guías de Material Design de Google. Todos los componentes son standalone-compatible.</p>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="mat-card-title">Ejemplo — mat-card</h3>
+          <div class="code-block zoomable-code" style="font-size: 0.82em;">
+<code>&lt;<span class="code-type">mat-card</span>&gt;
+  &lt;<span class="code-type">mat-card-header</span>&gt;
+    &lt;<span class="code-type">mat-card-title</span>&gt;{{ book.title }}&lt;/<span class="code-type">mat-card-title</span>&gt;
+    &lt;<span class="code-type">mat-card-subtitle</span>&gt;{{ book.author }}&lt;/<span class="code-type">mat-card-subtitle</span>&gt;
+  &lt;/<span class="code-type">mat-card-header</span>&gt;
+  &lt;<span class="code-type">mat-card-content</span>&gt;
+    &lt;p&gt;{{ book.description }}&lt;/p&gt;
+  &lt;/<span class="code-type">mat-card-content</span>&gt;
+  &lt;<span class="code-type">mat-card-actions</span>&gt;
+    &lt;button mat-button color=<span class="code-string">"primary"</span>&gt;Agregar&lt;/button&gt;
+  &lt;/<span class="code-type">mat-card-actions</span>&gt;
+&lt;/<span class="code-type">mat-card</span>&gt;</code>
+          </div>
+          <div class="info-box" style="margin-top: var(--content-gap);">
+            <p data-key="mat-note"><strong>Importar solo lo necesario</strong> en cada componente: <span class="code-inline">MatButtonModule</span>, <span class="code-inline">MatCardModule</span>, <span class="code-inline">MatInputModule</span>…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 9: Errores comunes
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">03</div>
+        <span class="section-label" data-key="recap-label">Repaso</span>
+      </div>
+      <h2 class="reveal" data-key="errs-heading">Errores comunes — y cómo resolverlos</h2>
+      <table class="route-table reveal" style="margin-top: var(--content-gap);">
+        <thead>
+          <tr>
+            <th data-key="errs-col-err">Error</th>
+            <th data-key="errs-col-fix">Causa &amp; solución</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="code-inline">NG0302</span> is not a known element</td><td data-key="errs-r-1">Falta importar el componente en <span class="code-inline">imports</span></td></tr>
+          <tr><td><span class="code-inline">NullInjectorError</span>: No provider for X</td><td data-key="errs-r-2">Falta <span class="code-inline">providedIn: 'root'</span> o el provider en config</td></tr>
+          <tr><td><span class="code-inline">ExpressionChangedAfterItHasBeenChecked</span></td><td data-key="errs-r-3">Estado cambia fuera del ciclo de detección — usar signals o <span class="code-inline">detectChanges()</span></td></tr>
+          <tr><td>Can't bind to <span class="code-inline">'ngModel'</span></td><td data-key="errs-r-4">Falta importar <span class="code-inline">FormsModule</span></td></tr>
+          <tr><td>Can't bind to <span class="code-inline">'formGroup'</span></td><td data-key="errs-r-5">Falta importar <span class="code-inline">ReactiveFormsModule</span></td></tr>
+          <tr><td data-key="errs-r-6-key">Memory leaks en subscripciones</td><td data-key="errs-r-6">Usar <span class="code-inline">takeUntilDestroyed()</span> o <span class="code-inline">| async</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 10: Firebase Hosting
+       ========================================= -->
+  <section class="slide">
+    <div class="slide-content">
+      <div class="section-header reveal">
+        <div class="section-number">04</div>
+        <span class="section-label" data-key="fb-label">Deploy</span>
+      </div>
+      <h2 class="reveal" data-key="fb-heading">Deploy a Firebase Hosting</h2>
+      <div class="two-col reveal" style="align-items: start;">
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="fb-why-title">¿Por qué Firebase?</h3>
+          <ul class="bullet-list">
+            <li data-key="fb-w-1">Deploy en un solo comando</li>
+            <li data-key="fb-w-2">HTTPS automático + CDN global</li>
+            <li data-key="fb-w-3">SPA rewrite a <span class="code-inline">index.html</span> nativo</li>
+            <li data-key="fb-w-4">Dominio gratuito <span class="code-inline">*.web.app</span></li>
+            <li data-key="fb-w-5"><strong>Plan Spark (free)</strong> — sin tarjeta de crédito</li>
+          </ul>
+          <div class="info-box" style="margin-top: var(--content-gap);">
+            <p data-key="fb-spark"><strong>Spark plan:</strong> 10 GB storage, 360 MB/día de transferencia. Más que suficiente para portfolios.</p>
+          </div>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="fb-cmd-title">Build + deploy</h3>
+          <div class="terminal">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">bash</span>
+            </div>
+            <div class="terminal-body">
+              <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-command">npm install -g firebase-tools</span></div>
+              <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-command">firebase login</span></div>
+              <div class="terminal-line" style="margin-top: 0.5rem;"><span class="terminal-prompt">$</span><span class="terminal-command">ng build</span></div>
+              <div class="terminal-line"><span class="terminal-comment" data-key="c-fb-1"># Salida: dist/book-store/browser/</span></div>
+              <div class="terminal-line" style="margin-top: 0.5rem;"><span class="terminal-prompt">$</span><span class="terminal-command">firebase init</span></div>
+              <div class="terminal-line"><span class="terminal-comment" data-key="c-fb-2"># Hosting + public dir + SPA rewrite: Yes</span></div>
+              <div class="terminal-line" style="margin-top: 0.5rem;"><span class="terminal-prompt">$</span><span class="terminal-command">firebase deploy</span></div>
+              <div class="terminal-line"><span class="terminal-comment" data-key="c-fb-3"># → https://[proyecto].web.app</span></div>
+            </div>
+          </div>
+          <div class="warning-box" style="margin-top: var(--content-gap);">
+            <p data-key="fb-rewrite"><strong>SPA rewrite es crítico:</strong> sin él, refrescar <span class="code-inline">/books/1</span> tira 404.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       SLIDE 11: SECTION — LAZY LOADING
        ========================================= -->
   <section class="slide section-slide">
     <div class="ambient-orb"></div>
     <div class="slide-content center-content">
-      <div class="section-number reveal">02</div>
+      <div class="section-number reveal">05</div>
       <h1 class="reveal" data-key="lazy-section-title">Lazy Loading Moderno</h1>
       <p class="subtitle reveal" data-key="lazy-section-sub">Cargar JS solo cuando el usuario lo necesita</p>
     </div>
   </section>
 
   <!-- =========================================
-       SLIDE 9: ¿Por qué lazy loading?
+       SLIDE 12: ¿Por qué lazy loading?
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">02</div>
+        <div class="section-number">05</div>
         <span class="section-label" data-key="lazy-label">Lazy Loading</span>
       </div>
       <h2 class="reveal" data-key="lazy-why-heading">¿Por qué lazy loading?</h2>
@@ -1397,12 +1530,12 @@
   </section>
 
   <!-- =========================================
-       SLIDE 10: loadComponent
+       SLIDE 13: loadComponent
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">02</div>
+        <div class="section-number">05</div>
         <span class="section-label" data-key="lazy-label">Lazy Loading</span>
       </div>
       <h2 class="reveal" data-key="lc-heading"><span class="code-inline" style="font-size: 0.7em;">loadComponent</span> — un componente, un chunk</h2>
@@ -1435,12 +1568,12 @@
   </section>
 
   <!-- =========================================
-       SLIDE 11: loadChildren
+       SLIDE 14: loadChildren
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">02</div>
+        <div class="section-number">05</div>
         <span class="section-label" data-key="lazy-label">Lazy Loading</span>
       </div>
       <h2 class="reveal" data-key="lch-heading"><span class="code-inline" style="font-size: 0.7em;">loadChildren</span> — un grupo de rutas, un chunk</h2>
@@ -1479,12 +1612,12 @@
   </section>
 
   <!-- =========================================
-       SLIDE 12: Providers por ruta (scoped)
+       SLIDE 15: Providers por ruta (scoped)
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">02</div>
+        <div class="section-number">05</div>
         <span class="section-label" data-key="lazy-label">Lazy Loading</span>
       </div>
       <h2 class="reveal" data-key="rp-heading">Providers por ruta — scoped al feature</h2>
@@ -1523,24 +1656,24 @@
   </section>
 
   <!-- =========================================
-       SLIDE 13: SECTION — @defer
+       SLIDE 16: SECTION — @defer
        ========================================= -->
   <section class="slide section-slide">
     <div class="ambient-orb"></div>
     <div class="slide-content center-content">
-      <div class="section-number reveal">03</div>
+      <div class="section-number reveal">05</div>
       <h1 class="reveal" data-key="defer-section-title">@defer blocks</h1>
       <p class="subtitle reveal" data-key="defer-section-sub">Lazy loading nativo en el template — Angular 17+</p>
     </div>
   </section>
 
   <!-- =========================================
-       SLIDE 14: ¿Qué es @defer?
+       SLIDE 17: ¿Qué es @defer?
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">03</div>
+        <div class="section-number">05</div>
         <span class="section-label" data-key="defer-label">@defer</span>
       </div>
       <h2 class="reveal" data-key="defer-what-heading">Carga diferida en el template</h2>
@@ -1567,12 +1700,12 @@
   </section>
 
   <!-- =========================================
-       SLIDE 15: Cómo funciona on viewport (flow)
+       SLIDE 18: Cómo funciona on viewport (flow)
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">03</div>
+        <div class="section-number">05</div>
         <span class="section-label" data-key="defer-label">@defer</span>
       </div>
       <h2 class="reveal" data-key="df-heading">Cómo funciona <span class="code-inline" style="font-size: 0.7em;">on viewport</span> — paso a paso</h2>
@@ -1659,12 +1792,12 @@
   </section>
 
   <!-- =========================================
-       SLIDE 16: ¿Qué ve el usuario? — con vs sin @loading
+       SLIDE 19: ¿Qué ve el usuario? — con vs sin @loading
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">03</div>
+        <div class="section-number">05</div>
         <span class="section-label" data-key="defer-label">@defer</span>
       </div>
       <h2 class="reveal" data-key="dc-heading">¿Qué ve el usuario? — con vs sin <span class="code-inline" style="font-size: 0.7em;">@loading</span></h2>
@@ -1716,12 +1849,12 @@
   </section>
 
   <!-- =========================================
-       SLIDE 17: Triggers de @defer
+       SLIDE 20: Triggers de @defer
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">03</div>
+        <div class="section-number">05</div>
         <span class="section-label" data-key="defer-label">@defer</span>
       </div>
       <h2 class="reveal" data-key="trig-heading">Triggers — cuándo dispara la carga</h2>
@@ -1754,24 +1887,24 @@
   </section>
 
   <!-- =========================================
-       SLIDE 16: SECTION — toSignal
+       SLIDE 21: SECTION — toSignal
        ========================================= -->
   <section class="slide section-slide">
     <div class="ambient-orb"></div>
     <div class="slide-content center-content">
-      <div class="section-number reveal">04</div>
+      <div class="section-number reveal">06</div>
       <h1 class="reveal" data-key="ts-section-title">toSignal()</h1>
       <p class="subtitle reveal" data-key="ts-section-sub">El bridge entre Observables y Signals</p>
     </div>
   </section>
 
   <!-- =========================================
-       SLIDE 17: toSignal — bridge
+       SLIDE 22: toSignal — bridge
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">04</div>
+        <div class="section-number">06</div>
         <span class="section-label" data-key="ts-label">toSignal</span>
       </div>
       <h2 class="reveal" data-key="ts-bridge-heading">Observable → Signal en una línea</h2>
@@ -1799,12 +1932,12 @@
   </section>
 
   <!-- =========================================
-       SLIDE 18: async pipe vs toSignal
+       SLIDE 23: async pipe vs toSignal
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">04</div>
+        <div class="section-number">06</div>
         <span class="section-label" data-key="ts-label">toSignal</span>
       </div>
       <h2 class="reveal" data-key="vs-heading"><span class="code-inline" style="font-size: 0.7em;">async</span> pipe vs <span class="code-inline" style="font-size: 0.7em;">toSignal()</span></h2>
@@ -1845,12 +1978,12 @@
   </section>
 
   <!-- =========================================
-       SLIDE 19: Signal store pattern
+       SLIDE 24: Signal store pattern
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">04</div>
+        <div class="section-number">06</div>
         <span class="section-label" data-key="ts-label">toSignal</span>
       </div>
       <h2 class="reveal" data-key="store-heading">Patrón "store" con Signals — sin librerías</h2>
@@ -1884,157 +2017,24 @@
   </section>
 
   <!-- =========================================
-       SLIDE 20: SECTION — DEPLOY & RESOURCES
+       SLIDE 25: SECTION — DEPLOY & RESOURCES
        ========================================= -->
   <section class="slide section-slide">
     <div class="ambient-orb"></div>
     <div class="slide-content center-content">
-      <div class="section-number reveal">05</div>
-      <h1 class="reveal" data-key="dep-section-title">Deploy &amp; Recursos</h1>
-      <p class="subtitle reveal" data-key="dep-section-sub">Publicar tu BookStore al mundo y seguir aprendiendo</p>
+      <div class="section-number reveal">07</div>
+      <h1 class="reveal" data-key="dep-section-title">Cierre del curso</h1>
+      <p class="subtitle reveal" data-key="dep-section-sub">Recursos para seguir y mapa de lo que cubrimos</p>
     </div>
   </section>
 
   <!-- =========================================
-       SLIDE 21: Angular Material
+       SLIDE 26: Recursos
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">05</div>
-        <span class="section-label" data-key="mat-label">Angular Material</span>
-      </div>
-      <h2 class="reveal" data-key="mat-heading">Angular Material — opcional</h2>
-      <div class="two-col reveal" style="align-items: start;">
-        <div>
-          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="mat-install-title">Instalación</h3>
-          <div class="terminal">
-            <div class="terminal-header">
-              <span class="terminal-dot red"></span>
-              <span class="terminal-dot yellow"></span>
-              <span class="terminal-dot green"></span>
-              <span class="terminal-title">bash</span>
-            </div>
-            <div class="terminal-body">
-              <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-command">ng add @angular/material</span></div>
-              <div class="terminal-line"><span class="terminal-comment" data-key="c-mat-1"># Pregunta: tema, tipografía, animaciones</span></div>
-              <div class="terminal-line"><span class="terminal-comment" data-key="c-mat-2"># Modifica index.html, styles.css, angular.json</span></div>
-            </div>
-          </div>
-          <p style="margin-top: var(--content-gap);" data-key="mat-intro">Librería de componentes UI siguiendo las guías de Material Design de Google. Todos los componentes son standalone-compatible.</p>
-        </div>
-        <div>
-          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="mat-card-title">Ejemplo — mat-card</h3>
-          <div class="code-block zoomable-code" style="font-size: 0.82em;">
-<code>&lt;<span class="code-type">mat-card</span>&gt;
-  &lt;<span class="code-type">mat-card-header</span>&gt;
-    &lt;<span class="code-type">mat-card-title</span>&gt;{{ book.title }}&lt;/<span class="code-type">mat-card-title</span>&gt;
-    &lt;<span class="code-type">mat-card-subtitle</span>&gt;{{ book.author }}&lt;/<span class="code-type">mat-card-subtitle</span>&gt;
-  &lt;/<span class="code-type">mat-card-header</span>&gt;
-  &lt;<span class="code-type">mat-card-content</span>&gt;
-    &lt;p&gt;{{ book.description }}&lt;/p&gt;
-  &lt;/<span class="code-type">mat-card-content</span>&gt;
-  &lt;<span class="code-type">mat-card-actions</span>&gt;
-    &lt;button mat-button color=<span class="code-string">"primary"</span>&gt;Agregar&lt;/button&gt;
-  &lt;/<span class="code-type">mat-card-actions</span>&gt;
-&lt;/<span class="code-type">mat-card</span>&gt;</code>
-          </div>
-          <div class="info-box" style="margin-top: var(--content-gap);">
-            <p data-key="mat-note"><strong>Importar solo lo necesario</strong> en cada componente: <span class="code-inline">MatButtonModule</span>, <span class="code-inline">MatCardModule</span>, <span class="code-inline">MatInputModule</span>…</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================================
-       SLIDE 22: Firebase Hosting
-       ========================================= -->
-  <section class="slide">
-    <div class="slide-content">
-      <div class="section-header reveal">
-        <div class="section-number">05</div>
-        <span class="section-label" data-key="fb-label">Deploy</span>
-      </div>
-      <h2 class="reveal" data-key="fb-heading">Deploy a Firebase Hosting</h2>
-      <div class="two-col reveal" style="align-items: start;">
-        <div>
-          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="fb-why-title">¿Por qué Firebase?</h3>
-          <ul class="bullet-list">
-            <li data-key="fb-w-1">Deploy en un solo comando</li>
-            <li data-key="fb-w-2">HTTPS automático + CDN global</li>
-            <li data-key="fb-w-3">SPA rewrite a <span class="code-inline">index.html</span> nativo</li>
-            <li data-key="fb-w-4">Dominio gratuito <span class="code-inline">*.web.app</span></li>
-            <li data-key="fb-w-5"><strong>Plan Spark (free)</strong> — sin tarjeta de crédito</li>
-          </ul>
-          <div class="info-box" style="margin-top: var(--content-gap);">
-            <p data-key="fb-spark"><strong>Spark plan:</strong> 10 GB storage, 360 MB/día de transferencia. Más que suficiente para portfolios.</p>
-          </div>
-        </div>
-        <div>
-          <h3 style="color: var(--accent-light); margin-bottom: var(--element-gap);" data-key="fb-cmd-title">Build + deploy</h3>
-          <div class="terminal">
-            <div class="terminal-header">
-              <span class="terminal-dot red"></span>
-              <span class="terminal-dot yellow"></span>
-              <span class="terminal-dot green"></span>
-              <span class="terminal-title">bash</span>
-            </div>
-            <div class="terminal-body">
-              <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-command">npm install -g firebase-tools</span></div>
-              <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-command">firebase login</span></div>
-              <div class="terminal-line" style="margin-top: 0.5rem;"><span class="terminal-prompt">$</span><span class="terminal-command">ng build</span></div>
-              <div class="terminal-line"><span class="terminal-comment" data-key="c-fb-1"># Salida: dist/book-store/browser/</span></div>
-              <div class="terminal-line" style="margin-top: 0.5rem;"><span class="terminal-prompt">$</span><span class="terminal-command">firebase init</span></div>
-              <div class="terminal-line"><span class="terminal-comment" data-key="c-fb-2"># Hosting + public dir + SPA rewrite: Yes</span></div>
-              <div class="terminal-line" style="margin-top: 0.5rem;"><span class="terminal-prompt">$</span><span class="terminal-command">firebase deploy</span></div>
-              <div class="terminal-line"><span class="terminal-comment" data-key="c-fb-3"># → https://[proyecto].web.app</span></div>
-            </div>
-          </div>
-          <div class="warning-box" style="margin-top: var(--content-gap);">
-            <p data-key="fb-rewrite"><strong>SPA rewrite es crítico:</strong> sin él, refrescar <span class="code-inline">/books/1</span> tira 404.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================================
-       SLIDE 23: Errores comunes
-       ========================================= -->
-  <section class="slide">
-    <div class="slide-content">
-      <div class="section-header reveal">
-        <div class="section-number">05</div>
-        <span class="section-label" data-key="recap-label">Repaso</span>
-      </div>
-      <h2 class="reveal" data-key="errs-heading">Errores comunes — y cómo resolverlos</h2>
-      <table class="route-table reveal" style="margin-top: var(--content-gap);">
-        <thead>
-          <tr>
-            <th data-key="errs-col-err">Error</th>
-            <th data-key="errs-col-fix">Causa &amp; solución</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td><span class="code-inline">NG0302</span> is not a known element</td><td data-key="errs-r-1">Falta importar el componente en <span class="code-inline">imports</span></td></tr>
-          <tr><td><span class="code-inline">NullInjectorError</span>: No provider for X</td><td data-key="errs-r-2">Falta <span class="code-inline">providedIn: 'root'</span> o el provider en config</td></tr>
-          <tr><td><span class="code-inline">ExpressionChangedAfterItHasBeenChecked</span></td><td data-key="errs-r-3">Estado cambia fuera del ciclo de detección — usar signals o <span class="code-inline">detectChanges()</span></td></tr>
-          <tr><td>Can't bind to <span class="code-inline">'ngModel'</span></td><td data-key="errs-r-4">Falta importar <span class="code-inline">FormsModule</span></td></tr>
-          <tr><td>Can't bind to <span class="code-inline">'formGroup'</span></td><td data-key="errs-r-5">Falta importar <span class="code-inline">ReactiveFormsModule</span></td></tr>
-          <tr><td data-key="errs-r-6-key">Memory leaks en subscripciones</td><td data-key="errs-r-6">Usar <span class="code-inline">takeUntilDestroyed()</span> o <span class="code-inline">| async</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- =========================================
-       SLIDE 24: Recursos
-       ========================================= -->
-  <section class="slide">
-    <div class="slide-content">
-      <div class="section-header reveal">
-        <div class="section-number">05</div>
+        <div class="section-number">07</div>
         <span class="section-label" data-key="recap-label">Repaso</span>
       </div>
       <h2 class="reveal" data-key="res-heading">Recursos para seguir aprendiendo</h2>
@@ -2064,12 +2064,12 @@
   </section>
 
   <!-- =========================================
-       SLIDE 25: Cierre del curso
+       SLIDE 27: Cierre del curso
        ========================================= -->
   <section class="slide">
     <div class="slide-content">
       <div class="section-header reveal">
-        <div class="section-number">05</div>
+        <div class="section-number">07</div>
         <span class="section-label" data-key="recap-label">Repaso</span>
       </div>
       <h2 class="reveal" data-key="map-heading">Mapa del curso — qué cubrimos</h2>
@@ -2217,15 +2217,15 @@
           "agenda-label": "Agenda",
           "agenda-title": "Qué vamos a ver",
           "agenda-1": "📦 NgModules — referencia legacy",
-          "agenda-2": "Lazy loading moderno (standalone)",
-          "agenda-3": "loadComponent & loadChildren",
-          "agenda-4": "@defer blocks — lazy en el template",
-          "agenda-5": "Triggers: viewport, interaction, idle…",
-          "agenda-6": "toSignal() — Observable → Signal",
-          "agenda-7": "Patrones reactivos con Signals",
-          "agenda-8": "Angular Material (opcional)",
-          "agenda-9": "Deploy a Firebase Hosting",
-          "agenda-10": "Cierre del curso & recursos",
+          "agenda-2": "Angular Material (opcional)",
+          "agenda-3": "Errores comunes — y cómo resolverlos",
+          "agenda-4": "Deploy a Firebase Hosting",
+          "agenda-5": "Lazy loading — loadComponent & loadChildren",
+          "agenda-6": "@defer blocks — lazy en el template",
+          "agenda-7": "toSignal() — Observable → Signal",
+          "agenda-8": "Patrones reactivos con Signals",
+          "agenda-9": "Recursos para seguir aprendiendo",
+          "agenda-10": "Mapa del curso",
           "closing-class": "Clase de cierre:",
           "closing-desc": "repaso, consolidación y herramientas para publicar tu BookStore en producción y seguir aprendiendo.",
 
@@ -2372,8 +2372,8 @@
           "c-store-1": "// Readonly para consumidores — no pueden escribir desde afuera",
           "c-store-2": "// Computed — derivado, recalcula cuando _books o _selectedCategory cambian",
 
-          "dep-section-title": "Deploy & Recursos",
-          "dep-section-sub": "Publicar tu BookStore al mundo y seguir aprendiendo",
+          "dep-section-title": "Cierre del curso",
+          "dep-section-sub": "Recursos para seguir y mapa de lo que cubrimos",
           "mat-label": "Angular Material",
           "mat-heading": "Angular Material — opcional",
           "mat-install-title": "Instalación",
@@ -2429,15 +2429,15 @@
           "agenda-label": "Agenda",
           "agenda-title": "What we'll cover",
           "agenda-1": "📦 NgModules — legacy reference",
-          "agenda-2": "Modern lazy loading (standalone)",
-          "agenda-3": "loadComponent & loadChildren",
-          "agenda-4": "@defer blocks — lazy in the template",
-          "agenda-5": "Triggers: viewport, interaction, idle…",
-          "agenda-6": "toSignal() — Observable → Signal",
-          "agenda-7": "Reactive patterns with Signals",
-          "agenda-8": "Angular Material (optional)",
-          "agenda-9": "Deploy to Firebase Hosting",
-          "agenda-10": "Course wrap-up & resources",
+          "agenda-2": "Angular Material (optional)",
+          "agenda-3": "Common errors — and how to fix them",
+          "agenda-4": "Deploy to Firebase Hosting",
+          "agenda-5": "Lazy loading — loadComponent & loadChildren",
+          "agenda-6": "@defer blocks — lazy in the template",
+          "agenda-7": "toSignal() — Observable → Signal",
+          "agenda-8": "Reactive patterns with Signals",
+          "agenda-9": "Resources to keep learning",
+          "agenda-10": "Course map",
           "closing-class": "Wrap-up class:",
           "closing-desc": "review, consolidation and tools to ship your BookStore to production and keep learning.",
 
@@ -2584,8 +2584,8 @@
           "c-store-1": "// Readonly for consumers — they can't write from outside",
           "c-store-2": "// Computed — derived, recomputes when _books or _selectedCategory change",
 
-          "dep-section-title": "Deploy & Resources",
-          "dep-section-sub": "Ship your BookStore to the world and keep learning",
+          "dep-section-title": "Course wrap-up",
+          "dep-section-sub": "Resources to keep learning and a map of what we covered",
           "mat-label": "Angular Material",
           "mat-heading": "Angular Material — optional",
           "mat-install-title": "Installation",
